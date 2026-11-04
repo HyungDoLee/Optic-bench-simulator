@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "table": {
+    "widthMm": 1200,
+    "heightMm": 900,
+    "holeSpacingMm": 25
+  },
+  "components": [
+    {
+      "id": "laser-1",
+      "type": "laser",
+      "x": 125.0,
+      "y": 375.0,
+      "angle": 0.0,
+      "lambdaNm": 780.0,
+      "waistMm": 1.0,
+      "waistOffsetMm": 0.0,
+      "powerMw": 10.0
+    },
+    {
+      "id": "lens-1",
+      "type": "lens",
+      "x": 350.0,
+      "y": 375.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "focalMm": 200.0
+    },
+    {
+      "id": "mirror-1",
+      "type": "mirror",
+      "x": 650.0,
+      "y": 375.0,
+      "angle": -45.0,
+      "diameterMm": 25.4,
+      "reflectivity": 1.0
+    },
+    {
+      "id": "screen-1",
+      "type": "screen",
+      "x": 650.0,
+      "y": 725.0,
+      "angle": 90.0,
+      "diameterMm": 25.4
+    }
+  ]
+}

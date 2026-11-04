@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "table": {"widthMm": 1200, "heightMm": 900, "holeSpacingMm": 25},
+  "components": [
+    {"id":"laser-1", "type":"laser", "x":200, "y":450, "angle":0, "lambdaNm":780, "waistMm":1, "waistOffsetMm":0, "powerMw":10},
+    {"id":"mirror-1", "type":"mirror", "x":1100, "y":450, "angle":0, "diameterMm":25.4, "reflectivity":1},
+    {"id":"mirror-2", "type":"mirror", "x":150, "y":450, "angle":0, "diameterMm":25.4, "reflectivity":1}
+  ]
+}
