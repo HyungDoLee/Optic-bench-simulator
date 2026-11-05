@@ -18,6 +18,49 @@ MAX_BRANCHES = 128
 MIN_POWER_MW = 1e-9
 EPS = 1e-6
 
+
+@dataclass(frozen=True)
+class ABCD:
+    """Paraxial ray matrix in air; B is mm and C is 1/mm.
+
+    ``second @ first`` applies first, then second. Flat reflections use an
+    unfolded local optical axis and therefore have the identity q matrix.
+    """
+    a: float = 1.
+    b: float = 0.
+    c: float = 0.
+    d: float = 1.
+
+    def __matmul__(self, other: 'ABCD') -> 'ABCD':
+        return ABCD(self.a*other.a+self.b*other.c,
+                    self.a*other.b+self.b*other.d,
+                    self.c*other.a+self.d*other.c,
+                    self.c*other.b+self.d*other.d)
+
+    def apply_q(self, q: complex) -> complex:
+        return (self.a*q+self.b)/(self.c*q+self.d)
+
+
+def propagation_matrix(length_mm: float) -> ABCD:
+    if not math.isfinite(length_mm) or length_mm < 0:
+        raise ValueError('Propagation length must be finite and nonnegative')
+    return ABCD(b=length_mm)
+
+
+def lens_matrix(focal_mm: float) -> ABCD:
+    if not math.isfinite(focal_mm) or abs(focal_mm) <= 1e-12:
+        raise ValueError('Focal length must be finite and nonzero')
+    return ABCD(c=-1/focal_mm)
+
+
+def four_f_matrix(f1_mm: float, f2_mm: float) -> ABCD:
+    """Object -> sample: P(f2) L(f2) P(f1+f2) L(f1) P(f1)."""
+    if f1_mm <= 0 or f2_mm <= 0:
+        raise ValueError('4f relay requires positive focal lengths')
+    return (propagation_matrix(f2_mm) @ lens_matrix(f2_mm)
+            @ propagation_matrix(f1_mm+f2_mm) @ lens_matrix(f1_mm)
+            @ propagation_matrix(f1_mm))
+
 @dataclass(frozen=True)
 class Vec:
     x: float
@@ -54,14 +97,12 @@ def q_from_source(src: dict[str, Any]) -> complex:
 
 def free_space(q: complex, length_mm: float) -> complex:
     """ABCD = [[1, L], [0, 1]], q' = q + L."""
-    if length_mm < 0: raise ValueError('Propagation length must be nonnegative')
-    return q + length_mm
+    return propagation_matrix(length_mm).apply_q(q)
 
 
 def thin_lens(q: complex, focal_mm: float) -> complex:
     """ABCD = [[1, 0], [-1/f, 1]], q' = q / (1-q/f)."""
-    if abs(focal_mm) <= 1e-12: raise ValueError('Focal length cannot be zero')
-    return q/(1-q/focal_mm)
+    return lens_matrix(focal_mm).apply_q(q)
 
 
 def beam_radius(q: complex, wavelength_nm: float) -> float:
@@ -129,6 +170,8 @@ class Segment:
     q_end: complex
     wavelength_nm: float
     power_mw: float
+    abcd_start: ABCD = field(default_factory=ABCD)
+    abcd_end: ABCD = field(default_factory=ABCD)
 
 @dataclass
 class Marker:
@@ -140,6 +183,7 @@ class Marker:
 
 @dataclass
 class ScreenReading:
+    """Local Gaussian reading; screen_id also identifies sample/probe planes."""
     screen_id: str
     source_id: str
     branch_id: int
@@ -152,6 +196,7 @@ class ScreenReading:
     incidence_deg: float
     cos_incidence: float
     offset_mm: float
+    abcd: ABCD = field(default_factory=ABCD)
     @property
     def projected_radius_mm(self) -> float:
         return self.beam_radius_mm/max(1e-6, self.cos_incidence)
@@ -175,6 +220,21 @@ class TraceResult:
     capped: int = 0
     exits: int = 0
     branches: int = 0
+    samples: list[ScreenReading] = field(default_factory=list)
+    probes: list[ScreenReading] = field(default_factory=list)
+    branch_parents: dict[int, tuple[int, float]] = field(default_factory=dict)
+
+    def branch_segments(self, branch_id: int) -> list[Segment]:
+        """Include the shared source path before each splitter ancestor."""
+        selected = []
+        end_path = math.inf
+        while True:
+            selected.extend(s for s in self.segments if s.branch_id == branch_id
+                            and s.path_end_mm <= end_path + EPS)
+            if branch_id not in self.branch_parents:
+                break
+            branch_id, end_path = self.branch_parents[branch_id]
+        return sorted(selected, key=lambda s: s.path_start_mm)
 
 
 def simulate(scene: dict[str, Any]) -> TraceResult:
@@ -202,7 +262,7 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
         stack.append(dict(source_id=src['id'], wavelength_nm=float(src['lambdaNm']),
             point=Vec(float(src['x']),float(src['y'])),
             direction=normal(float(src.get('angle',0))), q=q, power_mw=power,
-            path_mm=0., events=0, branch_id=next_id))
+            path_mm=0., events=0, branch_id=next_id, abcd=ABCD()))
     visited = 0
     while stack:
         visited += 1
@@ -225,20 +285,23 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
             nearest = None
             for c in components:
                 found = intersection(state['point'], state['direction'], c)
-                if found and found[0] <= limit + EPS and (nearest is None or found[0] < nearest[0][0]):
+                if found and found[0] <= limit and (nearest is None or found[0] < nearest[0][0]):
                     nearest = (found,c)
             distance = nearest[0][0] if nearest else limit
             end = state['point'] + state['direction']*distance
             q_end = free_space(state['q'], distance)
+            abcd_end = propagation_matrix(distance) @ state['abcd']
             result.segments.append(Segment(state['source_id'],state['branch_id'],
                 state['point'],end,state['direction'],distance,state['path_mm'],
-                state['path_mm']+distance,state['q'],q_end,state['wavelength_nm'],state['power_mw']))
+                state['path_mm']+distance,state['q'],q_end,state['wavelength_nm'],state['power_mw'],
+                state['abcd'],abcd_end))
             waist_at = -state['q'].real
             if 0 <= waist_at <= distance:
                 result.markers.append(Marker('waist',state['point']+state['direction']*waist_at,
                     state['branch_id'],state['path_mm']+waist_at,
                     waist_radius(state['q'],state['wavelength_nm'])))
             state['point'],state['q'] = end,q_end
+            state['abcd'] = abcd_end
             state['path_mm'] += distance
             if nearest is None:
                 if remaining <= exit_mm + EPS:
@@ -249,17 +312,23 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
                 break
             (_, _, along, n), c = nearest
             result.hits.append((c['id'],end,state['branch_id']))
-            state['events'] += 1
             kind = c['type']
-            if kind == 'screen':
+            if kind != 'probe': state['events'] += 1
+            if kind in ('screen', 'sample', 'probe'):
                 cosine = abs(state['direction'].dot(n))
                 offset = (end - Vec(float(c['x']),float(c['y']))).dot(tangent(n))
-                result.screens.append(ScreenReading(c['id'],state['source_id'],state['branch_id'],
+                reading = ScreenReading(c['id'],state['source_id'],state['branch_id'],
                     end,state['path_mm'],state['q'],beam_radius(state['q'],state['wavelength_nm']),
                     state['wavelength_nm'],state['power_mw'],
-                    math.degrees(math.acos(clamp(cosine,0.,1.))),cosine,offset))
-                break
-            if kind == 'mirror':
+                    math.degrees(math.acos(clamp(cosine,0.,1.))),cosine,offset,state['abcd'])
+                if kind == 'screen':
+                    result.screens.append(reading)
+                    break
+                if kind == 'probe':
+                    result.probes.append(reading)
+                    continue  # Virtual, non-intercepting diagnostic plane.
+                result.samples.append(reading)  # Incident power, before reflection.
+            if kind in ('mirror', 'sample'):
                 state['direction'] = mirror_direction(state['direction'],n)
                 state['power_mw'] *= clamp(float(c.get('reflectivity',1.)),0,1)
             elif kind == 'lens':
@@ -274,6 +343,7 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
                     result.warnings.append(f"{c['id']}: large angle, paraxial approximation unreliable")
                 state['direction'] = direction
                 state['q'] = thin_lens(state['q'],f)
+                state['abcd'] = lens_matrix(f) @ state['abcd']
             elif kind == 'splitter':
                 reflectivity = clamp(float(c.get('reflectivity',0.5)),0,1)
                 if state['power_mw']*reflectivity >= MIN_POWER_MW:
@@ -283,6 +353,7 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
                     branch['direction'] = mirror_direction(state['direction'],n)
                     branch['power_mw'] = state['power_mw']*reflectivity
                     stack.append(branch)
+                    result.branch_parents[next_id] = (state['branch_id'], state['path_mm'])
                 state['power_mw'] *= (1-reflectivity)
             else:
                 result.warnings.append(f"{c['id']}: unsupported type {kind}")
@@ -303,6 +374,34 @@ def default_scene() -> dict[str,Any]:
         ])
 
 
+def four_f_scene() -> dict[str, Any]:
+    """720 nm, 200/100 mm reflection relay; object waist is x=250 mm.
+
+    Probes are virtual measurements, not inserted screens. The sample is an
+    ideal flat specular reflector (R=0.8), not a scattering/phase object.
+    Input power is 10 mW; the ideal 50:50 splitter sends 5 mW to the sample
+    and 2 mW of its return to the detector. All distances are in air.
+    """
+    return dict(schemaVersion=1,
+        table=dict(widthMm=1200, heightMm=900, holeSpacingMm=25),
+        components=[
+            dict(id='laser-720', type='laser', x=100., y=450., angle=0.,
+                 lambdaNm=720., waistMm=.5, waistOffsetMm=150., powerMw=10.),
+            dict(id='splitter-1', type='splitter', x=350., y=450., angle=-45.,
+                 diameterMm=25.4, reflectivity=.5),
+            dict(id='object-plane', type='probe', x=250., y=450., angle=0., diameterMm=25.4),
+            dict(id='lens-1', type='lens', x=450., y=450., angle=0.,
+                 diameterMm=25.4, focalMm=200.),
+            dict(id='fourier-plane', type='probe', x=650., y=450., angle=0., diameterMm=25.4),
+            dict(id='lens-2', type='lens', x=750., y=450., angle=0.,
+                 diameterMm=25.4, focalMm=100.),
+            dict(id='sample-1', type='sample', x=850., y=450., angle=0.,
+                 diameterMm=25.4, reflectivity=.8),
+            dict(id='return-screen', type='screen', x=350., y=350., angle=90., diameterMm=25.4),
+            dict(id='dump-screen', type='screen', x=350., y=700., angle=90., diameterMm=25.4),
+        ])
+
+
 def validate_scene(raw: Any) -> dict[str,Any]:
     """Minimal safe JSON validation; accepts the existing v0.2 file format."""
     if not isinstance(raw,dict) or not isinstance(raw.get('table'),dict) or not isinstance(raw.get('components'),list):
@@ -313,11 +412,14 @@ def validate_scene(raw: Any) -> dict[str,Any]:
         raise ValueError('Table dimensions must be 100..10000 mm')
     if len(raw['components']) > 200: raise ValueError('At most 200 components')
     ids = set()
-    allowed = {'laser','lens','mirror','splitter','screen'}
+    spacing = float(table.get('holeSpacingMm',25))
+    if not math.isfinite(spacing) or spacing <= 0:
+        raise ValueError('Hole spacing must be finite and positive')
+    allowed = {'laser','lens','mirror','splitter','screen','sample','probe'}
     cleaned = []
     for c in raw['components']:
         if not isinstance(c,dict) or c.get('type') not in allowed: raise ValueError('Unknown component type')
-        if not isinstance(c.get('id'),str) or c['id'] in ids: raise ValueError('Invalid/duplicate component id')
+        if not isinstance(c.get('id'),str) or not c['id'] or c['id'] in ids: raise ValueError('Invalid/duplicate component id')
         ids.add(c['id'])
         item = c.copy()
         for field_name in ['x','y','angle']:
@@ -333,6 +435,10 @@ def validate_scene(raw: Any) -> dict[str,Any]:
             raise ValueError(f"{item['id']} has invalid laser parameters")
         if item['type']=='lens' and abs(item.get('focalMm',0)) < 1e-12:
             raise ValueError(f"{item['id']} has invalid focal length")
+        if item.get('diameterMm',25.4) <= 0:
+            raise ValueError(f"{item['id']} has invalid aperture")
+        if item['type'] in ('mirror','splitter','sample') and not (0 <= item.get('reflectivity',1) <= 1):
+            raise ValueError(f"{item['id']} has invalid reflectivity")
         cleaned.append(item)
     return {'schemaVersion':1,'table':{'widthMm':width,'heightMm':height,
-        'holeSpacingMm':float(table.get('holeSpacingMm',25))},'components':cleaned}
+        'holeSpacingMm':spacing},'components':cleaned}

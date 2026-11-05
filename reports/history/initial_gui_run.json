@@ -1,0 +1,1196 @@
+{
+  "generated_at": "2026-11-04T15:32:58.507305+09:00",
+  "python": "3.13.5",
+  "counts": {
+    "passed": 26,
+    "failed": 1,
+    "error": 0,
+    "skipped": 0
+  },
+  "tests": [
+    {
+      "test": "test_four_f.FourFGUITests.test_screen_click_shows_profile_and_shared_path",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "screen selected by click",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "profile tab visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "heatmap raster exists",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "profile curve exists",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "readout shows ABCD",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "GUI callback error count",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_720nm_and_saved_example",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "saved example equals preset",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "wavelength [nm]",
+          "actual": 720.0,
+          "expected": 720,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.209999999999999e-08,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_abcd_4f_analytic",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "4f a",
+          "actual": -0.5,
+          "expected": -0.5,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5e-10,
+          "passed": true
+        },
+        {
+          "name": "4f b",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "4f c",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "4f d",
+          "actual": -2.0,
+          "expected": -2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "ABCD determinant",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "traced 4f a",
+          "actual": -0.5,
+          "expected": -0.5,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5e-10,
+          "passed": true
+        },
+        {
+          "name": "traced 4f b",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "traced 4f c",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "traced 4f d",
+          "actual": -2.0,
+          "expected": -2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_fourier_plane_position_and_waist",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "shared focal plane from L1 [mm]",
+          "actual": 650.0,
+          "expected": 650.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6.51e-08,
+          "passed": true
+        },
+        {
+          "name": "shared focal plane from L2 [mm]",
+          "actual": 650.0,
+          "expected": 650.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6.51e-08,
+          "passed": true
+        },
+        {
+          "name": "Fourier plane width [mm]",
+          "actual": 0.0916732472209317,
+          "expected": 0.09167324722093173,
+          "absolute_error": 2.7755575615628914e-17,
+          "relative_error": 3.0276636267436035e-16,
+          "tolerance": 1.0916732472209317e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier plane Re(q) [mm]",
+          "actual": 0.0,
+          "expected": 0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier matrix a",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier matrix b",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "Fourier matrix c",
+          "actual": -0.005,
+          "expected": -0.005,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.005e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier matrix d",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.7755575615628914e-17
+    },
+    {
+      "test": "test_four_f.FourFTests.test_misplaced_lens_is_detectable",
+      "status": "failed",
+      "reason": "Traceback (most recent call last):\n  File \"/workspace/Optic-bench-simulator/tests/test_four_f.py\", line 108, in test_misplaced_lens_is_detectable\n    self.measure('detect waist-size error',int(abs(sample.beam_radius_mm-.25)>1e-4),1)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/Optic-bench-simulator/tests/test_four_f.py\", line 25, in measure\n    self.assertLessEqual(error, tolerance, name)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 not less than or equal to 2e-10 : detect waist-size error\n",
+      "measurements": [
+        {
+          "name": "detect nonzero wavefront curvature",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "detect waist-size error",
+          "actual": 0,
+          "expected": 1,
+          "absolute_error": 1,
+          "relative_error": 1.0,
+          "tolerance": 2e-10,
+          "passed": false
+        }
+      ],
+      "max_absolute_error": 1
+    },
+    {
+      "test": "test_four_f.FourFTests.test_reflected_graph_includes_shared_path",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "graph starts at source [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 100.0,
+          "expected": 100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.01e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 150.0,
+          "expected": 150.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5100000000000003e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 350.0,
+          "expected": 350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.51e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 550.0,
+          "expected": 550.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5.5100000000000004e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 650.0,
+          "expected": 650.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6.51e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 750.0,
+          "expected": 750.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.509999999999999e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 850.0,
+          "expected": 850.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 8.51e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 950.0,
+          "expected": 950.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 9.51e-08,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 1150.0,
+          "expected": 1150.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.151e-07,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 1350.0,
+          "expected": 1350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.351e-07,
+          "passed": true
+        },
+        {
+          "name": "graph continuity [mm]",
+          "actual": 1400.0,
+          "expected": 1400.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.4010000000000002e-07,
+          "passed": true
+        },
+        {
+          "name": "full graph length [mm]",
+          "actual": 1700.0,
+          "expected": 1700.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.7010000000000002e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_round_trip_detector",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "return path [mm]",
+          "actual": 1700.0,
+          "expected": 1700.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.7010000000000002e-07,
+          "passed": true
+        },
+        {
+          "name": "detector Re(q) [mm]",
+          "actual": 350.0,
+          "expected": 350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.51e-08,
+          "passed": true
+        },
+        {
+          "name": "detector Im(q) [mm]",
+          "actual": 1090.830782496456,
+          "expected": 1090.8307824964559,
+          "absolute_error": 2.2737367544323206e-13,
+          "relative_error": 2.0844083160439304e-16,
+          "tolerance": 1.0918307824964558e-07,
+          "passed": true
+        },
+        {
+          "name": "detector radius [mm]",
+          "actual": 0.5251068479691463,
+          "expected": 0.5251068479691462,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": 2.1142802249084175e-16,
+          "tolerance": 1.5251068479691462e-10,
+          "passed": true
+        },
+        {
+          "name": "incident sample power [mW]",
+          "actual": 5.0,
+          "expected": 5.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6e-10,
+          "passed": true
+        },
+        {
+          "name": "detector power [mW]",
+          "actual": 2.0,
+          "expected": 2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "profile peak I/I0",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "profile at w: I/I0",
+          "actual": 0.1353352832366127,
+          "expected": 0.1353352832366127,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.1353352832366127e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.2737367544323206e-13
+    },
+    {
+      "test": "test_four_f.FourFTests.test_round_trip_exceeding_cap_stops_before_detector",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "no return detector beyond cap",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "at least one capped branch",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "maximum branch length [mm]",
+          "actual": 2500.0,
+          "expected": 2500.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.501e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_sample_reflectivity_and_scene_validation",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "absorbing sample has no return hit",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "out-of-range reflectivity rejected",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_sample_waist_and_q",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "sample waist [mm]",
+          "actual": 0.25,
+          "expected": 0.25,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.25e-10,
+          "passed": true
+        },
+        {
+          "name": "sample waist position Re(q) [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "sample Rayleigh length Im(q) [mm]",
+          "actual": 272.707695624114,
+          "expected": 272.70769562411397,
+          "absolute_error": 5.684341886080802e-14,
+          "relative_error": 2.0844083160439304e-16,
+          "tolerance": 2.7370769562411398e-08,
+          "passed": true
+        },
+        {
+          "name": "waist marker at sample",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 5.684341886080802e-14
+    },
+    {
+      "test": "test_four_f.FourFTests.test_strict_cap_and_screen_boundary",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "screen hits at cap-1e-05",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cap overshoot [mm] -1e-05",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 0.0,
+          "passed": true
+        },
+        {
+          "name": "screen hits at cap+0",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cap overshoot [mm] +0",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 0.0,
+          "passed": true
+        },
+        {
+          "name": "screen hits at cap+5e-07",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "cap overshoot [mm] +5e-07",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 0.0,
+          "passed": true
+        },
+        {
+          "name": "screen hits at cap+1",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "cap overshoot [mm] +1",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 0.0,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "segment 0 Re(q)",
+          "actual": -50.0,
+          "expected": -50.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5.1e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 0 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 1 Re(q)",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "segment 1 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 2 Re(q)",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 2 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 3 Re(q)",
+          "actual": 0.0,
+          "expected": -0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "segment 3 Im(q)",
+          "actual": 36.66929888837268,
+          "expected": 36.66929888837268,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.766929888837268e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 4 Re(q)",
+          "actual": 100.0,
+          "expected": 100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.01e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 4 Im(q)",
+          "actual": 36.66929888837268,
+          "expected": 36.66929888837268,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.766929888837268e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 5 Re(q)",
+          "actual": 0.0,
+          "expected": -0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "segment 5 Im(q)",
+          "actual": 272.707695624114,
+          "expected": 272.707695624114,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.7370769562411404e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 6 Re(q)",
+          "actual": 100.0,
+          "expected": 100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.01e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 6 Im(q)",
+          "actual": 272.707695624114,
+          "expected": 272.707695624114,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.7370769562411404e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 7 Re(q)",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "segment 7 Im(q)",
+          "actual": 36.66929888837268,
+          "expected": 36.66929888837268,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.766929888837268e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 8 Re(q)",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 8 Im(q)",
+          "actual": 36.66929888837268,
+          "expected": 36.66929888837268,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.766929888837268e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 9 Re(q)",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "segment 9 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 10 Re(q)",
+          "actual": 50.0,
+          "expected": 50.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5.1e-09,
+          "passed": true
+        },
+        {
+          "name": "segment 10 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 11 Re(q)",
+          "actual": 250.0,
+          "expected": 250.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.5100000000000003e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 11 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 12 Re(q)",
+          "actual": 350.0,
+          "expected": 350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.51e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 12 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        },
+        {
+          "name": "segment 13 Re(q)",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "segment 13 Im(q)",
+          "actual": 1090.830782496456,
+          "expected": 1090.830782496456,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0918307824964561e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_four_f.FourFTests.test_virtual_probes_preserve_beam",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "return-screen radius unchanged",
+          "actual": 0.5251068479691463,
+          "expected": 0.5251068479691463,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5251068479691462e-10,
+          "passed": true
+        },
+        {
+          "name": "return-screen power unchanged",
+          "actual": 2.0,
+          "expected": 2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "return-screen path unchanged",
+          "actual": 1700.0,
+          "expected": 1700.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.7010000000000002e-07,
+          "passed": true
+        },
+        {
+          "name": "dump-screen radius unchanged",
+          "actual": 0.5083345200318684,
+          "expected": 0.5083345200318684,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5083345200318686e-10,
+          "passed": true
+        },
+        {
+          "name": "dump-screen power unchanged",
+          "actual": 5.0,
+          "expected": 5.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6e-10,
+          "passed": true
+        },
+        {
+          "name": "dump-screen path unchanged",
+          "actual": 350.0,
+          "expected": 350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.51e-08,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_optics.OpticsTests.test_branch_inherits_cumulative_length",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_cumulative_2p5m_mirror_cavity",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_default_scene_hits_screen",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_gaussian_free_space",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_legacy_json_accepted",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_lens_abcd",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_lens_chief_ray_off_axis",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_lens_chief_ray_on_axis",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_mirror_90_degree_bend",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_no_screen_outside_aperture",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_reject_bad_scene",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_screen_radius_matches_manual_abcd",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_screen_tilt_projected_beam",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_optics.OpticsTests.test_splitter_branch_powers",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    }
+  ]
+}

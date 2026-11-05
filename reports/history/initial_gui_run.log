@@ -1,0 +1,44 @@
+test_screen_click_shows_profile_and_shared_path (test_four_f.FourFGUITests.test_screen_click_shows_profile_and_shared_path) ... ok
+test_720nm_and_saved_example (test_four_f.FourFTests.test_720nm_and_saved_example) ... ok
+test_abcd_4f_analytic (test_four_f.FourFTests.test_abcd_4f_analytic) ... ok
+test_fourier_plane_position_and_waist (test_four_f.FourFTests.test_fourier_plane_position_and_waist) ... ok
+test_misplaced_lens_is_detectable (test_four_f.FourFTests.test_misplaced_lens_is_detectable) ... FAIL
+test_reflected_graph_includes_shared_path (test_four_f.FourFTests.test_reflected_graph_includes_shared_path) ... ok
+test_round_trip_detector (test_four_f.FourFTests.test_round_trip_detector) ... ok
+test_round_trip_exceeding_cap_stops_before_detector (test_four_f.FourFTests.test_round_trip_exceeding_cap_stops_before_detector) ... ok
+test_sample_reflectivity_and_scene_validation (test_four_f.FourFTests.test_sample_reflectivity_and_scene_validation) ... ok
+test_sample_waist_and_q (test_four_f.FourFTests.test_sample_waist_and_q) ... ok
+test_strict_cap_and_screen_boundary (test_four_f.FourFTests.test_strict_cap_and_screen_boundary) ... ok
+test_traced_abcd_matches_q_on_every_segment (test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment) ... ok
+test_virtual_probes_preserve_beam (test_four_f.FourFTests.test_virtual_probes_preserve_beam) ... ok
+test_branch_inherits_cumulative_length (test_optics.OpticsTests.test_branch_inherits_cumulative_length) ... ok
+test_cumulative_2p5m_mirror_cavity (test_optics.OpticsTests.test_cumulative_2p5m_mirror_cavity) ... ok
+test_default_scene_hits_screen (test_optics.OpticsTests.test_default_scene_hits_screen) ... ok
+test_gaussian_free_space (test_optics.OpticsTests.test_gaussian_free_space) ... ok
+test_legacy_json_accepted (test_optics.OpticsTests.test_legacy_json_accepted) ... ok
+test_lens_abcd (test_optics.OpticsTests.test_lens_abcd) ... ok
+test_lens_chief_ray_off_axis (test_optics.OpticsTests.test_lens_chief_ray_off_axis) ... ok
+test_lens_chief_ray_on_axis (test_optics.OpticsTests.test_lens_chief_ray_on_axis) ... ok
+test_mirror_90_degree_bend (test_optics.OpticsTests.test_mirror_90_degree_bend) ... ok
+test_no_screen_outside_aperture (test_optics.OpticsTests.test_no_screen_outside_aperture) ... ok
+test_reject_bad_scene (test_optics.OpticsTests.test_reject_bad_scene) ... ok
+test_screen_radius_matches_manual_abcd (test_optics.OpticsTests.test_screen_radius_matches_manual_abcd) ... ok
+test_screen_tilt_projected_beam (test_optics.OpticsTests.test_screen_tilt_projected_beam) ... ok
+test_splitter_branch_powers (test_optics.OpticsTests.test_splitter_branch_powers) ... ok
+
+======================================================================
+FAIL: test_misplaced_lens_is_detectable (test_four_f.FourFTests.test_misplaced_lens_is_detectable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/Optic-bench-simulator/tests/test_four_f.py", line 108, in test_misplaced_lens_is_detectable
+    self.measure('detect waist-size error',int(abs(sample.beam_radius_mm-.25)>1e-4),1)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Optic-bench-simulator/tests/test_four_f.py", line 25, in measure
+    self.assertLessEqual(error, tolerance, name)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 not less than or equal to 2e-10 : detect waist-size error
+
+----------------------------------------------------------------------
+Ran 27 tests in 1.360s
+
+FAILED (failures=1)

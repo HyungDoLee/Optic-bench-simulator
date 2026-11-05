@@ -1,5 +1,21 @@
 # Optical Bench — Python Desktop v0.3
 
+## 720 nm 반사형 4f 예제
+
+`Load 720 nm reflection 4f` 버튼 또는 `examples/reflection_4f_720nm.json`으로
+200/100 mm 릴레이를 불러옵니다. 시료의 이상적 정반사와 가상 object/Fourier
+측정면을 추가했으며, Screen·Sample·Probe 클릭 시 프로파일과 q/ABCD를 표시합니다.
+시료 waist 반경은 0.25 mm, 반사광 검출기는 시료의 공액면에 있습니다.
+
+설계·이론·metric 부품 후보·물리 모델 한계는 [4f 설계 문서](docs/4f_design.md),
+검증 결과는 [테스트 보고서](reports/test_results.md)를 참고하세요.
+
+```powershell
+py -3 tools/verify_4f.py --output reports
+```
+
+GUI 테스트는 디스플레이가 필요하며, 없으면 건너뜀으로 기록됩니다.
+
 단일 PC에서 실행되는 **Python / Tkinter** 기반 광학 breadboard 설계 프로그램입니다. 웹 브라우저/HTML/웹서버가 필요 없습니다. UI는 밝은 배경의 단순한 데스크톱 스타일이며, 사용자가 제공한 `svg.zip`의 도형을 활용합니다.
 
 ## Windows + VS Code 실행

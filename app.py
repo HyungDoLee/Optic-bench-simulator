@@ -17,7 +17,7 @@ from PIL import Image, ImageTk
 
 from optics import (
     MAX_PROPAGATION_MM, Vec, beam_radius, default_scene, free_space,
-    simulate, validate_scene,
+    simulate, validate_scene, four_f_scene,
 )
 
 ROOT = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
@@ -30,7 +30,8 @@ LINE = '#dce1e5'
 ACCENT = '#356f9c'
 RAY = '#bc574d'
 LABEL = {'laser':'Laser','lens':'Thin lens','mirror':'Mirror',
-         'splitter':'Beam splitter','screen':'Screen'}
+         'splitter':'Beam splitter','screen':'Screen',
+         'sample':'Sample (specular)', 'probe':'Virtual plane probe'}
 FIELD_LABEL = {
     'x':'X [mm]', 'y':'Y [mm]', 'angle':'Normal angle [deg]',
     'lambdaNm':'Wavelength [nm]', 'waistMm':'Input waist [mm]',
@@ -44,6 +45,8 @@ FIELDS = {
     'mirror':['x','y','angle','reflectivity','diameterMm'],
     'splitter':['x','y','angle','reflectivity','diameterMm'],
     'screen':['x','y','angle','diameterMm'],
+    'sample':['x','y','angle','reflectivity','diameterMm'],
+    'probe':['x','y','angle','diameterMm'],
 }
 
 
@@ -117,6 +120,7 @@ class BenchApp(tk.Tk):
 
     def _component_image(self, c: dict) -> ImageTk.PhotoImage | None:
         kind = 'lens_negative' if c['type']=='lens' and float(c.get('focalMm',1))<0 else c['type']
+        if kind == 'sample': kind = 'mirror'
         if kind not in self.image_sources: return None
         angle=int(round(float(c.get('angle',0))/5)*5)%360
         key=(kind,angle)
@@ -163,7 +167,9 @@ class BenchApp(tk.Tk):
     def _create_left(self,parent):
         self._section_label(parent,'OPTICAL COMPONENTS')
         self.tool_icons={}
-        for kind in ('laser','lens','mirror','splitter','screen'):
+        ttk.Button(parent,text='Load 720 nm reflection 4f',
+                   command=self._load_four_f).pack(fill='x',padx=10,pady=(5,8))
+        for kind in ('laser','lens','mirror','splitter','screen','sample','probe'):
             frame=tk.Frame(parent,bg=PANEL)
             frame.pack(fill='x',padx=10,pady=2)
             icon=self._component_image({'type':kind,'angle':0,'focalMm':200})
@@ -173,7 +179,7 @@ class BenchApp(tk.Tk):
         ttk.Separator(parent).pack(fill='x',pady=(15,0))
         self._section_label(parent,'COMPONENT LIST')
         cols=('position',)
-        self.tree=ttk.Treeview(parent,columns=cols,show='tree headings',selectmode='browse')
+        self.tree=ttk.Treeview(parent,columns=cols,show='tree headings',selectmode='browse',height=6)
         self.tree.heading('#0',text='Name',anchor='w');self.tree.heading('position',text='(X,Y) mm')
         self.tree.column('#0',minwidth=85,width=92,stretch=False)
         self.tree.column('position',minwidth=72,width=79,stretch=True,anchor='e')
@@ -276,7 +282,7 @@ class BenchApp(tk.Tk):
     def _select(self,id_:str | None):
         if id_ == self.selected_id:
             current=self._component(id_)
-            if current and current['type']=='screen':
+            if current and current['type'] in ('screen','sample','probe'):
                 self.notebook.select(self.analysis_tab)
                 self._render_screen()
             return
@@ -285,7 +291,7 @@ class BenchApp(tk.Tk):
         self._render_tree()
         self._render_properties()
         c=self._component(id_)
-        if c and c['type']=='screen': self.notebook.select(self.analysis_tab)
+        if c and c['type'] in ('screen','sample','probe'): self.notebook.select(self.analysis_tab)
         else: self.notebook.select(self.properties_tab)
         self._draw_board()
         self._render_screen()
@@ -302,6 +308,7 @@ class BenchApp(tk.Tk):
         if kind=='lens': c.update(focalMm=200.)
         if kind=='mirror': c.update(angle=-45.,reflectivity=1.)
         if kind=='splitter': c.update(angle=-45.,reflectivity=.5)
+        if kind=='sample': c.update(reflectivity=.8)
         self.scene['components'].append(c)
         self._select(c['id'])
         self._refresh()
@@ -325,6 +332,17 @@ class BenchApp(tk.Tk):
         self.scene=default_scene();self.selected_id='screen-1';self.selected_branch_index=0
         self.project_file=None
         self._refresh()
+
+    def _load_four_f(self):
+        if not messagebox.askyesno('720 nm reflection 4f',
+                                  'Replace current layout with the 720 nm 4f example?'):
+            return
+        self.scene=four_f_scene()
+        self.selected_id='return-screen'
+        self.selected_branch_index=0
+        self.project_file=None
+        self._refresh()
+        self.notebook.select(self.analysis_tab)
 
     def _open(self):
         file=filedialog.askopenfilename(title='Optical bench JSON 열기',filetypes=[('JSON scene','*.json'),('All files','*.*')])
@@ -426,7 +444,7 @@ class BenchApp(tk.Tk):
             if c['type']=='lens' and abs(updated['focalMm'])<1e-12:raise ValueError('f must be nonzero')
             if c['type']=='laser' and (updated['lambdaNm']<=0 or updated['waistMm']<=0 or updated['powerMw']<0):
                 raise ValueError('Invalid laser parameters')
-            if c['type'] in ('mirror','splitter') and not (0<=updated['reflectivity']<=1):
+            if c['type'] in ('mirror','splitter','sample') and not (0<=updated['reflectivity']<=1):
                 raise ValueError('Reflectivity must be between 0 and 1')
         except ValueError as error:
             messagebox.showwarning('입력 확인',str(error));self._render_properties();return
@@ -498,6 +516,10 @@ class BenchApp(tk.Tk):
             if icon:
                 self.icon_refs.append(icon)
                 canvas.create_image(x,y,image=icon)
+            elif c['type']=='probe':
+                angle=math.radians(c.get('angle',0))
+                tx,ty=-math.sin(angle)*24,math.cos(angle)*24
+                canvas.create_line(x-tx,y-ty,x+tx,y+ty,fill='#607e63',dash=(4,3),width=2)
             else:
                 canvas.create_oval(x-9,y-9,x+9,y+9,fill='#dce5eb',outline=ACCENT)
             if c['type']!='laser':
@@ -505,7 +527,8 @@ class BenchApp(tk.Tk):
                 length=13
                 nx=math.cos(angle);ny=math.sin(angle)
                 canvas.create_line(x,y,x+nx*length,y+ny*length,fill='#477da4',width=1.5,arrow='last',arrowshape=(5,6,3))
-            canvas.create_text(x,y+37,text=c['id'],font=('Segoe UI',9),fill=INK)
+            canvas.create_text(x,y-37 if c['type']=='probe' else y+37,
+                               text=c['id'],font=('Segoe UI',9),fill=INK)
         board_x,board_y=self._xy((0,0))
         canvas.create_rectangle(board_x+8,board_y+8,board_x+176,board_y+31,fill='#fff',outline='#dce2e6')
         canvas.create_text(board_x+17,board_y+19,text='Gaussian ray  /  top view',anchor='w',
@@ -560,8 +583,10 @@ class BenchApp(tk.Tk):
 
     def _screen_selection(self):
         c=self._component(self.selected_id)
-        if not c or c['type']!='screen':return []
-        return [r for r in self.result.screens if r.screen_id==c['id']]
+        if not c or c['type'] not in ('screen','sample','probe'):return []
+        pool={'screen':self.result.screens,'sample':self.result.samples,
+              'probe':self.result.probes}[c['type']]
+        return [r for r in pool if r.screen_id==c['id']]
 
     def _branch_changed(self,_event):
         self.selected_branch_index=max(0,self.branch_combo.current())
@@ -595,7 +620,11 @@ class BenchApp(tk.Tk):
             f'Power (input)   {fmt(r.power_mw,4):>9} mW\n'
             f'Peak irradiance {fmt(r.peak_irradiance_w_m2,1):>9} W/m²\n'
             f'Incidence       {fmt(r.incidence_deg,1):>9} deg\n'
-            f'Spot offset     {fmt(r.offset_mm,3):>9} mm')
+            f'Spot offset     {fmt(r.offset_mm,3):>9} mm\n'
+            f'q [mm]  {r.q.real:.4g} + {r.q.imag:.4g}i\n'
+            f'ABCD (source -> plane)\n'
+            f'[{r.abcd.a:.4g}, {r.abcd.b:.4g} mm]\n'
+            f'[{r.abcd.c:.4g}/mm, {r.abcd.d:.4g}]')
         self._draw_heatmap(r)
         self._draw_profile(r)
 
@@ -659,7 +688,12 @@ class BenchApp(tk.Tk):
         # the path distance on that branch rather than X coordinate on table.
         readings=self._screen_selection()
         bid=readings[min(self.selected_branch_index,len(readings)-1)].branch_id if readings else (self.result.segments[0].branch_id if self.result.segments else None)
-        segs=[s for s in self.result.segments if s.branch_id==bid]
+        segs=self.result.branch_segments(bid) if bid is not None else []
+        if readings:
+            # A sample/probe reading is at an intermediate plane. Do not draw
+            # its future propagation or an unrelated continuation of a branch.
+            end_path=readings[min(self.selected_branch_index,len(readings)-1)].path_mm
+            segs=[s for s in segs if s.path_end_mm <= end_path + 1e-6]
         if not segs:
             c.create_text(w/2,h/2,text='Add a laser to see w(s)',fill=MUTED)
             return

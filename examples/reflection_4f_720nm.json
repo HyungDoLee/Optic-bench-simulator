@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "table": {
+    "widthMm": 1200,
+    "heightMm": 900,
+    "holeSpacingMm": 25
+  },
+  "components": [
+    {
+      "id": "laser-720",
+      "type": "laser",
+      "x": 100.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "lambdaNm": 720.0,
+      "waistMm": 0.5,
+      "waistOffsetMm": 150.0,
+      "powerMw": 10.0
+    },
+    {
+      "id": "splitter-1",
+      "type": "splitter",
+      "x": 350.0,
+      "y": 450.0,
+      "angle": -45.0,
+      "diameterMm": 25.4,
+      "reflectivity": 0.5
+    },
+    {
+      "id": "object-plane",
+      "type": "probe",
+      "x": 250.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "diameterMm": 25.4
+    },
+    {
+      "id": "lens-1",
+      "type": "lens",
+      "x": 450.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "focalMm": 200.0
+    },
+    {
+      "id": "fourier-plane",
+      "type": "probe",
+      "x": 650.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "diameterMm": 25.4
+    },
+    {
+      "id": "lens-2",
+      "type": "lens",
+      "x": 750.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "focalMm": 100.0
+    },
+    {
+      "id": "sample-1",
+      "type": "sample",
+      "x": 850.0,
+      "y": 450.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "reflectivity": 0.8
+    },
+    {
+      "id": "return-screen",
+      "type": "screen",
+      "x": 350.0,
+      "y": 350.0,
+      "angle": 90.0,
+      "diameterMm": 25.4
+    },
+    {
+      "id": "dump-screen",
+      "type": "screen",
+      "x": 350.0,
+      "y": 700.0,
+      "angle": 90.0,
+      "diameterMm": 25.4
+    }
+  ]
+}
