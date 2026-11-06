@@ -1,5 +1,9 @@
 # 720 nm 4f reflection experiment
 
+> This document describes the original q/ray baseline. The additive scalar-wave
+> engine, finite detector, corrected splitter artwork and updated validation are
+> documented in [wave_review_response.md](wave_review_response.md).
+
 ## Implemented experiment and assumptions
 
 This is a scalar, paraxial, ideal thin-lens model in air. A 720 nm, 10 mW CW

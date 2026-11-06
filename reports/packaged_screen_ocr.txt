@@ -1,0 +1,189 @@
+Op
+
+al Bench Python desktop - ABCD Gaussian « 2.50 m path cap
+
+[ sony || sonar || ase
+
+OPTICAL COMPONENTS
+
+Optical breadboard
+
+1200 x 900 mm | holes 25 mm
+
+Load 720 nm reflection 4f
+
+SCREEN BEAM PROFILE
+
++ Laser
+
+‘Scalar ASM: finite pupils + complex sample
+
++ Thin lens
+
+Detected branch|Branch/laser-720 ||
+
+Gaussian ray / top view
+
++ Mirror
+
+Scalar wave profile (FFT/ASM)
+
+2D intensity * I /lo
+
++ Beam splitter
+
++ Screen
+
++ Sample (specular)
+
++ Virtual plane probe
+
+COMPONENT LIST
+
+object-plangetuir
+
+Teen
+
+fourier-plane
+
+Laser
+
+100, 450
+
+ASM beam-local FOV: 4 mm.
+
+Beam split.
+
+350, 450
+
+laser-720
+
+lens-1
+
+lens-2
+
+1D profile - screen-local u
+
+Virtual plan
+
+260, 450
+
+splitter-1
+
+sample-1
+
+Thin lens
+
+450, 450
+
+Virtual plan
+
+650, 450
+
+Thin lens
+
+750, 450
+
+Sample (spe
+
+850, 450
+
+creen
+
+3
+
+beam-local u [mm], normalized to peak
+
+), 35
+
+Screen
+
+350, 700
+
+dump-screen
+
+Path
+
+1350 mm
+
+q ideal w
+
+0.5 mm
+
+q [mm] 0+1091i
+
+inf mm
+
+aR
+
+ABCD source ->
+
+plane
+
+(1, 150 mm]
+
+[o/mm, 1]
+
+Wave 20 u,v
+
+0.5, 0.5 mm
+
+Wave incident
+
+2 mW
+
+Collected
+
+2 mW
+
+PD current
+
+not configured
+
+Ae Se Aa
+
+Wave peak
+
+5092.96 W/m?
+
+4: Ideal Gaussian, Wave: scalar local planes;
+
+no RCWA, polarization or branch interference.
+
+VIEW OPTIONS
+
+(s)
+
+Je? radius
+
+Beam radius along optical path
+
+® Gaussian envelope
+
+0.58 jw [mm]
+
+(125mm Bol Ad
+
+0.44
+
+0.29
+
+Envelope exaggeration
+
+016
+
+EE
+
+°
+
+Hae Me}. S2h7 og
+
+°
+
+‘Accumulated propagation s
+
+1350 mm
+
+R /Shift+R 318 - Delete At
+
+9 elements | 14 segments | 2 screen hits | O capped at 2.5m | O warnings

@@ -25,8 +25,21 @@ test_reject_bad_scene (test_optics.OpticsTests.test_reject_bad_scene) ... ok
 test_screen_radius_matches_manual_abcd (test_optics.OpticsTests.test_screen_radius_matches_manual_abcd) ... ok
 test_screen_tilt_projected_beam (test_optics.OpticsTests.test_screen_tilt_projected_beam) ... ok
 test_splitter_branch_powers (test_optics.OpticsTests.test_splitter_branch_powers) ... ok
+test_splitter_artwork_and_wave_screen (test_wave_optics.WaveGUITests.test_splitter_artwork_and_wave_screen) ... ok
+test_890nm_orders_na_and_energy_budget (test_wave_optics.WaveTests.test_890nm_orders_na_and_energy_budget) ... ok
+test_aperture_power_and_actual_diffraction (test_wave_optics.WaveTests.test_aperture_power_and_actual_diffraction) ... ok
+test_asm_gaussian_against_analytic_and_grid_refinement (test_wave_optics.WaveTests.test_asm_gaussian_against_analytic_and_grid_refinement) ... ok
+test_coherent_splitter_unitarity_and_recombination (test_wave_optics.WaveTests.test_coherent_splitter_unitarity_and_recombination) ... ok
+test_complex_sample_phase_and_resolved_grating (test_wave_optics.WaveTests.test_complex_sample_phase_and_resolved_grating) ... ok
+test_defocus_curvature_and_waist_displacement (test_wave_optics.WaveTests.test_defocus_curvature_and_waist_displacement) ... ok
+test_finite_detector_and_responsivity (test_wave_optics.WaveTests.test_finite_detector_and_responsivity) ... ok
+test_fourier_peak_scale_mask_and_image_inversion (test_wave_optics.WaveTests.test_fourier_peak_scale_mask_and_image_inversion) ... ok
+test_image_conjugacy_not_just_waist (test_wave_optics.WaveTests.test_image_conjugacy_not_just_waist) ... ok
+test_phase_sample_changes_fourier_but_not_ideal_image_intensity (test_wave_optics.WaveTests.test_phase_sample_changes_fourier_but_not_ideal_image_intensity) ... ok
+test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_sampling_guards_and_cumulative_cap) ... ok
+test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
 
 ----------------------------------------------------------------------
-Ran 27 tests in 1.301s
+Ran 40 tests in 4.512s
 
 OK

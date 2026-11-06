@@ -38,14 +38,16 @@ FIELD_LABEL = {
     'waistOffsetMm':'Waist offset [mm]', 'powerMw':'Power [mW]',
     'diameterMm':'Aperture diameter [mm]', 'focalMm':'Focal length [mm]',
     'reflectivity':'Reflectivity [0...1]',
+    'phaseRad':'Sample phase [rad]', 'periodMm':'Phase period [mm; 0=off]',
+    'phaseDepthRad':'Phase modulation [rad]', 'responsivityAW':'Responsivity [A/W; assumed]',
 }
 FIELDS = {
     'laser':['x','y','angle','lambdaNm','waistMm','waistOffsetMm','powerMw'],
     'lens':['x','y','angle','focalMm','diameterMm'],
     'mirror':['x','y','angle','reflectivity','diameterMm'],
     'splitter':['x','y','angle','reflectivity','diameterMm'],
-    'screen':['x','y','angle','diameterMm'],
-    'sample':['x','y','angle','reflectivity','diameterMm'],
+    'screen':['x','y','angle','diameterMm','responsivityAW'],
+    'sample':['x','y','angle','reflectivity','diameterMm','phaseRad','periodMm','phaseDepthRad'],
     'probe':['x','y','angle','diameterMm'],
 }
 
@@ -58,6 +60,11 @@ def color_for_normalized_intensity(f: float) -> tuple[int,int,int]:
     # White-to-navy ramp, deliberately neutral and low-saturation.
     f = max(0.0, min(1.0,f))**0.5
     return tuple(round(250*(1-f)+end*f) for end in (36, 91, 145))
+
+
+def artwork_angle(component: dict) -> float:
+    """Native splitter artwork has its coating at +45°, normal at -45°."""
+    return float(component.get('angle',0))+(45 if component['type']=='splitter' else 0)
 
 
 class BenchApp(tk.Tk):
@@ -88,6 +95,9 @@ class BenchApp(tk.Tk):
         self.origin_y = 0.
         self.mm_scale = 1.
         self.current_readings = []
+        self.wave_mode=tk.BooleanVar(value=False)
+        self.wave_cache=None
+        self.wave_display=None
         self._set_styles()
         self._create_ui()
         self._bind_shortcuts()
@@ -122,7 +132,7 @@ class BenchApp(tk.Tk):
         kind = 'lens_negative' if c['type']=='lens' and float(c.get('focalMm',1))<0 else c['type']
         if kind == 'sample': kind = 'mirror'
         if kind not in self.image_sources: return None
-        angle=int(round(float(c.get('angle',0))/5)*5)%360
+        angle=int(round(artwork_angle(c)/5)*5)%360
         key=(kind,angle)
         if key not in self.image_cache:
             widths={'laser':56,'lens':20,'lens_negative':20,'mirror':21,'splitter':43,'screen':27}
@@ -251,6 +261,8 @@ class BenchApp(tk.Tk):
         self.branch_combo=ttk.Combobox(branch_row,state='readonly',width=18)
         self.branch_combo.pack(side='right')
         self.branch_combo.bind('<<ComboboxSelected>>',self._branch_changed)
+        ttk.Checkbutton(self.analysis_tab,text='Scalar wave profile (FFT/ASM)',
+                        variable=self.wave_mode,command=self._render_screen).pack(anchor='w',padx=12,pady=4)
         tk.Label(self.analysis_tab,text='2D intensity  ·  I / I₀',bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
         self.heatmap=tk.Canvas(self.analysis_tab,width=264,height=250,bg='#fff',highlightthickness=1,
@@ -266,7 +278,7 @@ class BenchApp(tk.Tk):
         tk.Label(self.analysis_tab,textvariable=self.readout,justify='left',anchor='nw',
                  bg=PANEL,fg=INK,font=('Consolas',9),wraplength=280).pack(fill='x',padx=12,pady=(11,2))
         tk.Label(self.analysis_tab,
-          text='Ideal Gaussian; finite-aperture clipping,\ndiffraction and interference not modeled.',
+          text='q: ideal Gaussian. Wave: scalar local planes;\nno RCWA, polarization or branch interference.',
           bg=PANEL,fg=MUTED,justify='left',font=('Segoe UI',8)).pack(anchor='w',padx=12,pady=(5,10))
 
     def _bind_shortcuts(self):
@@ -446,6 +458,8 @@ class BenchApp(tk.Tk):
                 raise ValueError('Invalid laser parameters')
             if c['type'] in ('mirror','splitter','sample') and not (0<=updated['reflectivity']<=1):
                 raise ValueError('Reflectivity must be between 0 and 1')
+            if updated.get('periodMm',0)<0 or updated.get('responsivityAW',0)<0:
+                raise ValueError('Period and responsivity must be nonnegative')
         except ValueError as error:
             messagebox.showwarning('입력 확인',str(error));self._render_properties();return
         c.clear();c.update(updated)
@@ -527,6 +541,11 @@ class BenchApp(tk.Tk):
                 length=13
                 nx=math.cos(angle);ny=math.sin(angle)
                 canvas.create_line(x,y,x+nx*length,y+ny*length,fill='#477da4',width=1.5,arrow='last',arrowshape=(5,6,3))
+                if c['type']=='splitter':
+                    # The coating line is explicitly tangent to the PHYSICAL normal.
+                    tx,ty=-ny*21,nx*21
+                    canvas.create_line(x-tx,y-ty,x+tx,y+ty,fill='#345965',width=2,
+                                       tags=('splitter-interface',))
             canvas.create_text(x,y-37 if c['type']=='probe' else y+37,
                                text=c['id'],font=('Segoe UI',9),fill=INK)
         board_x,board_y=self._xy((0,0))
@@ -596,6 +615,7 @@ class BenchApp(tk.Tk):
     def _render_screen(self):
         if not hasattr(self,'analysis_status'):return
         readings=self._screen_selection()
+        self.wave_display=None
         self.current_readings=readings
         self.branch_combo['values']=[f'Branch {r.branch_id} / {r.source_id}' for r in readings]
         if not readings:
@@ -612,6 +632,18 @@ class BenchApp(tk.Tk):
         self.selected_branch_index=min(self.selected_branch_index,len(readings)-1)
         self.branch_combo.current(self.selected_branch_index)
         r=readings[self.selected_branch_index]
+        if self.wave_mode.get():
+            try:
+                from wave_optics import trace_wave
+                key=(json.dumps(self.scene,sort_keys=True),r.screen_id,r.branch_id,r.path_mm)
+                if self.wave_cache is None or self.wave_cache[0]!=key:
+                    self.wave_cache=(key,trace_wave(self.scene,self.result,r))
+                self.wave_display=self.wave_cache[1]
+            except (ValueError,ImportError) as error:
+                self.analysis_status.set('Wave unavailable: '+str(error))
+                self.readout.set('q/ray result retained; wave profile not computed.')
+                self.heatmap.delete('all');self.profile.delete('all')
+                return
         self.analysis_status.set(f'Beam detected  •  {r.source_id}  •  branch {r.branch_id}')
         self.readout.set(
             f'Path length     {fmt(r.path_mm,1):>9} mm\n'
@@ -625,6 +657,27 @@ class BenchApp(tk.Tk):
             f'ABCD (source -> plane)\n'
             f'[{r.abcd.a:.4g}, {r.abcd.b:.4g} mm]\n'
             f'[{r.abcd.c:.4g}/mm, {r.abcd.d:.4g}]')
+        if self.wave_display is not None:
+            v=self.wave_display
+            from wave_optics import second_moment_radius
+            import numpy as np
+            radii=second_moment_radius(v['field'],v['grid'])
+            target=self._component(r.screen_id)
+            current=f'{v["current_a"]:.6g} A' if target.get('responsivityAW',0)>0 else 'not configured'
+            self.analysis_status.set('Scalar ASM: finite pupils + complex sample')
+            self.readout.set(
+                f'Path           {r.path_mm:.6g} mm\n'
+                f'q ideal w      {r.beam_radius_mm:.6g} mm\n'
+                f'q [mm] {r.q.real:.4g}+{r.q.imag:.4g}i\n'
+                f'q R            {r.wavefront_radius_mm:.6g} mm\n'
+                f'ABCD source -> plane\n'
+                f'[{r.abcd.a:.4g}, {r.abcd.b:.4g} mm]\n'
+                f'[{r.abcd.c:.4g}/mm, {r.abcd.d:.4g}]\n'
+                f'Wave 2σ u,v    {radii[0]:.5g}, {radii[1]:.5g} mm\n'
+                f'Wave incident  {v["incident_power_mw"]:.6g} mW'
+                f'\nCollected      {v["collected_power_mw"]:.6g} mW'
+                f'\nPD current     {current}'
+                f'\nWave peak      {float(np.max(abs(v["field"])**2))*1000:.6g} W/m²')
         self._draw_heatmap(r)
         self._draw_profile(r)
 
@@ -632,6 +685,9 @@ class BenchApp(tk.Tk):
         return max(.4,3.35*r.projected_radius_mm,abs(r.offset_mm)+2.5*r.projected_radius_mm)
 
     def _draw_heatmap(self,r):
+        if self.wave_display is not None:
+            self._draw_wave_profile()
+            return
         c=self.heatmap;c.delete('all')
         # The heatmap shows a chosen field of view centered at SCREEN center;
         # this is not the actual finite screen aperture boundary.
@@ -657,6 +713,7 @@ class BenchApp(tk.Tk):
                       font=('Segoe UI',8),fill=MUTED)
 
     def _draw_profile(self,r):
+        if self.wave_display is not None:return  # Both canvases drawn together.
         c=self.profile;c.delete('all')
         width=max(c.winfo_width(),270);height=max(c.winfo_height(),145)
         l,t,rr,b=39,14,width-12,height-29
@@ -678,6 +735,26 @@ class BenchApp(tk.Tk):
         for v in (-half,0,half):
             c.create_text(sx(v),b+14,text=f'{v:.2g}',fill=MUTED,font=('Segoe UI',8))
         c.create_text(width-5,height-8,text='u [mm]',anchor='e',fill=MUTED,font=('Segoe UI',8))
+
+    def _draw_wave_profile(self):
+        import numpy as np
+        data=self.wave_display;grid=data['grid']
+        intensity=np.abs(data['field'])**2
+        peak=float(intensity.max())
+        normalized=intensity/peak if peak else intensity
+        scale=np.sqrt(np.clip(normalized,0,1))[...,None]
+        rgb=np.asarray(250*(1-scale)+np.array([36,91,145])*scale,dtype=np.uint8)
+        image=Image.fromarray(rgb).resize((212,212),Image.Resampling.BILINEAR)
+        self.heatmap_image=ImageTk.PhotoImage(image,master=self)
+        c=self.heatmap;c.delete('all');width=max(c.winfo_width(),264)
+        c.create_image(width/2,4,image=self.heatmap_image,anchor='n')
+        c.create_text(width/2,232,text=f'ASM beam-local FOV: {grid.width_mm:g} mm',fill=MUTED)
+        c=self.profile;c.delete('all');width=max(c.winfo_width(),270)
+        line=normalized[grid.n//2,:]
+        xy=[]
+        for i,value in enumerate(line):xy.extend((30+(width-45)*i/(grid.n-1),112-95*float(value)))
+        c.create_line(*xy,fill=ACCENT,width=2)
+        c.create_text(width/2,132,text='beam-local u [mm], normalized to peak',fill=MUTED)
 
     def _draw_radius_graph(self):
         if not hasattr(self,'radius_graph'):return

@@ -158,7 +158,7 @@ class FourFTests(Measurements, unittest.TestCase):
         self.measure('out-of-range reflectivity rejected',1,1)
 
 
-@unittest.skipUnless(os.environ.get('DISPLAY'), 'Requires a real or virtual DISPLAY')
+@unittest.skipUnless(os.name=='nt' or os.environ.get('DISPLAY'), 'Requires a real or virtual DISPLAY')
 class FourFGUITests(Measurements, unittest.TestCase):
     def test_screen_click_shows_profile_and_shared_path(self):
         from app import BenchApp

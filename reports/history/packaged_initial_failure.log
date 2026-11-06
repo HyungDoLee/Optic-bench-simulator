@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "PIL/ImageTk.py", line 59, in _pyimagingtkcall
+_tkinter.TclError: invalid command name "PyImagingPhoto"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "app.py", line 808, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "app.py", line 804, in main
+    app=BenchApp()
+  File "app.py", line 102, in __init__
+    self._create_ui()
+    ~~~~~~~~~~~~~~~^^
+  File "app.py", line 165, in _create_ui
+    self._create_left(left)
+    ~~~~~~~~~~~~~~~~~^^^^^^
+  File "app.py", line 185, in _create_left
+    icon=self._component_image({'type':kind,'angle':0,'focalMm':200})
+  File "app.py", line 144, in _component_image
+    self.image_cache[key]=ImageTk.PhotoImage(rotated,master=self)
+                          ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "PIL/ImageTk.py", line 132, in __init__
+  File "PIL/ImageTk.py", line 188, in paste
+  File "PIL/ImageTk.py", line 63, in _pyimagingtkcall
+ModuleNotFoundError: No module named 'PIL._tkinter_finder'
+[PYI-269014:ERROR] Failed to execute script 'app' due to unhandled exception!

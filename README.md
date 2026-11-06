@@ -1,5 +1,17 @@
 # Optical Bench — Python Desktop v0.3
 
+## Scalar wave optics 업데이트
+
+기존 Gaussian q 모드를 유지하면서 **Scalar wave profile (FFT/ASM)** 옵션을 추가했습니다.
+유한 렌즈 pupil·회절·복소 시료 반사·유한 검출 면적을 별도 파동 엔진으로 계산합니다.
+빔스플리터 그림의 45° 기준 방향도 수정했습니다. 실행 전 NumPy를 포함한 의존성을
+`python -m pip install -r requirements.txt`로 갱신하세요.
+
+[평가표 반영·수치 검증·지원 범위](docs/wave_review_response.md)를 참고하세요.
+`examples/phase_sample_720nm.json`으로 위상 시료와 유한 검출기 예제를 열 수 있습니다.
+아래의 Gaussian 모델 한계 설명은 기본 q 모드에 해당하며, 파동 모드도 RCWA·편광·
+임의 branch 간 간섭과 실제 시료 재료 효율은 아직 계산하지 않습니다.
+
 ## 720 nm 반사형 4f 예제
 
 `Load 720 nm reflection 4f` 버튼 또는 `examples/reflection_4f_720nm.json`으로

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
+  "sha256": "c4518e7cab2469ad368147f2afa726e3ef5df836d3c3fff565d9348b96663a52",
+  "checks": [
+    "native packaged GUI startup",
+    "load 720 nm 4f preset",
+    "enable scalar ASM",
+    "render collected power"
+  ],
+  "screenshot": "/workspace/Optic-bench-simulator/reports/screenshots/packaged-wave-return.png",
+  "python": "Python 3.13.5",
+  "platform": "Linux x86_64",
+  "windows_exe_tested": false
+}

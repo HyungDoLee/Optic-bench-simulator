@@ -40,6 +40,12 @@ class ABCD:
     def apply_q(self, q: complex) -> complex:
         return (self.a*q+self.b)/(self.c*q+self.d)
 
+    def inverse(self) -> 'ABCD':
+        determinant=self.a*self.d-self.b*self.c
+        if abs(determinant)<1e-15: raise ValueError('Singular ABCD matrix')
+        return ABCD(self.d/determinant,-self.b/determinant,
+                    -self.c/determinant,self.a/determinant)
+
 
 def propagation_matrix(length_mm: float) -> ABCD:
     if not math.isfinite(length_mm) or length_mm < 0:
@@ -197,6 +203,13 @@ class ScreenReading:
     cos_incidence: float
     offset_mm: float
     abcd: ABCD = field(default_factory=ABCD)
+    @property
+    def wavefront_radius_mm(self) -> float:
+        return abs(self.q)**2/self.q.real if abs(self.q.real)>1e-12 else math.inf
+    @property
+    def waist_distance_mm(self) -> float:
+        """Distance to Gaussian waist on the unfolded axis; negative means behind."""
+        return -self.q.real
     @property
     def projected_radius_mm(self) -> float:
         return self.beam_radius_mm/max(1e-6, self.cos_incidence)
@@ -427,7 +440,8 @@ def validate_scene(raw: Any) -> dict[str,Any]:
             if not math.isfinite(item[field_name]): raise ValueError('Nonfinite component coordinate')
         if not (0 <= item['x'] <= width and 0 <= item['y'] <= height):
             raise ValueError(f"{item['id']} is outside the table")
-        for k in ['lambdaNm','waistMm','waistOffsetMm','powerMw','diameterMm','focalMm','reflectivity']:
+        for k in ['lambdaNm','waistMm','waistOffsetMm','powerMw','diameterMm','focalMm','reflectivity',
+                  'phaseRad','periodMm','phaseDepthRad','responsivityAW']:
             if k in item:
                 item[k] = float(item[k])
                 if not math.isfinite(item[k]): raise ValueError('Nonfinite component parameter')
@@ -439,6 +453,8 @@ def validate_scene(raw: Any) -> dict[str,Any]:
             raise ValueError(f"{item['id']} has invalid aperture")
         if item['type'] in ('mirror','splitter','sample') and not (0 <= item.get('reflectivity',1) <= 1):
             raise ValueError(f"{item['id']} has invalid reflectivity")
+        if item.get('periodMm',0)<0 or item.get('responsivityAW',0)<0:
+            raise ValueError('Period and responsivity must be nonnegative')
         cleaned.append(item)
     return {'schemaVersion':1,'table':{'widthMm':width,'heightMm':height,
         'holeSpacingMm':spacing},'components':cleaned}

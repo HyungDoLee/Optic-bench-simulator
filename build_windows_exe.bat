@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 py -3 -m pip install -r requirements.txt pyinstaller
 if errorlevel 1 goto err
-py -3 -m PyInstaller --noconfirm --clean --windowed --onefile --name OpticalBench --add-data "assets;assets" app.py
+py -3 -m PyInstaller --noconfirm --clean OpticalBench.spec
 if errorlevel 1 goto err
 echo.
 echo Finished: dist\OpticalBench.exe

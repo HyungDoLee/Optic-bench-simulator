@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-04T15:38:06.022020+09:00",
+  "generated_at": "2026-11-06T15:06:31.752059+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 27,
+    "passed": 40,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -1599,6 +1599,538 @@
         }
       ],
       "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_optics.WaveGUITests.test_splitter_artwork_and_wave_screen",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "splitter artwork rotation at normal -45 [deg]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "coating is +45 in canvas coordinates",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave screen selection",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave field actually computed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "ASM mode displayed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave screen collected power [mW]",
+          "actual": 1.9999999999999711,
+          "expected": 2.0,
+          "absolute_error": 2.886579864025407e-14,
+          "relative_error": 1.4432899320127035e-14,
+          "tolerance": 1.002e-07,
+          "passed": true
+        },
+        {
+          "name": "GUI callback errors",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.886579864025407e-14
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_890nm_orders_na_and_energy_budget",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "720/890 first order angle [deg]",
+          "actual": 53.997248271712564,
+          "expected": 53.997248271712564,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5.4997248271712565e-09,
+          "passed": true
+        },
+        {
+          "name": "720/890 minimum NA",
+          "actual": 0.8089887640449438,
+          "expected": 0.8089887640449438,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.8089887640449438e-10,
+          "passed": true
+        },
+        {
+          "name": "NA .8 misses first order",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "NA .81 collects declared reflected power",
+          "actual": 0.8,
+          "expected": 0.8,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.8e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_aperture_power_and_actual_diffraction",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Gaussian aperture a=w power fraction",
+          "actual": 0.8643480366587031,
+          "expected": 0.8646647167633873,
+          "absolute_error": 0.00031668010468421937,
+          "relative_error": 0.00036624612817511075,
+          "tolerance": 0.002,
+          "passed": true
+        },
+        {
+          "name": "clipped Fourier DC intensity",
+          "actual": 30.22768552156053,
+          "expected": 30.268766531529366,
+          "absolute_error": 0.04108100996883479,
+          "relative_error": 0.0013572079300305444,
+          "tolerance": 0.12080629959458809,
+          "passed": true
+        },
+        {
+          "name": "aperture creates diffraction wings",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier power conservation [mW]",
+          "actual": 0.8643480366587012,
+          "expected": 0.864348036658701,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 2.5689258898925283e-16,
+          "tolerance": 1.8643480366587011e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.04108100996883479
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_asm_gaussian_against_analytic_and_grid_refinement",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "ASM radius 256 [mm]",
+          "actual": 0.5500226473868611,
+          "expected": 0.5500226373524892,
+          "absolute_error": 1.0034371888956173e-08,
+          "relative_error": 1.8243561641855687e-08,
+          "tolerance": 2e-06,
+          "passed": true
+        },
+        {
+          "name": "ASM power 256 [mW]",
+          "actual": 9.999999999999975,
+          "expected": 10.0,
+          "absolute_error": 2.4868995751603507e-14,
+          "relative_error": 2.4868995751603505e-15,
+          "tolerance": 2e-09,
+          "passed": true
+        },
+        {
+          "name": "ASM radius 512 [mm]",
+          "actual": 0.5500226473868531,
+          "expected": 0.5500226373524892,
+          "absolute_error": 1.0034363895350396e-08,
+          "relative_error": 1.824354710862517e-08,
+          "tolerance": 2e-06,
+          "passed": true
+        },
+        {
+          "name": "ASM power 512 [mW]",
+          "actual": 9.999999999999975,
+          "expected": 10.0,
+          "absolute_error": 2.4868995751603507e-14,
+          "relative_error": 2.4868995751603505e-15,
+          "tolerance": 2e-09,
+          "passed": true
+        },
+        {
+          "name": "grid convergence [mm]",
+          "actual": 0.5500226473868611,
+          "expected": 0.5500226473868531,
+          "absolute_error": 7.993605777301127e-15,
+          "relative_error": 1.4533230250206227e-14,
+          "tolerance": 1e-06,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.0034371888956173e-08
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_coherent_splitter_unitarity_and_recombination",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "two-port power conservation",
+          "actual": 4073.9179019188177,
+          "expected": 4073.9179019188177,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4.074917901918818e-07,
+          "passed": true
+        },
+        {
+          "name": "coherent dark output power",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-20,
+          "passed": true
+        },
+        {
+          "name": "coherent bright output power",
+          "actual": 4042.413025172081,
+          "expected": 4042.4130251720803,
+          "absolute_error": 4.547473508864641e-13,
+          "relative_error": 1.1249403464088287e-16,
+          "tolerance": 4.0434130251720805e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 4.547473508864641e-13
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_complex_sample_phase_and_resolved_grating",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "phase sample power fraction",
+          "actual": 0.8,
+          "expected": 0.8,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.8e-10,
+          "passed": true
+        },
+        {
+          "name": "spatial sample phase error",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_defocus_curvature_and_waist_displacement",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "detuned R [mm]",
+          "actual": 967.479986672715,
+          "expected": 967.4799866727134,
+          "absolute_error": 1.5916157281026244e-12,
+          "relative_error": 1.6451148861243044e-15,
+          "tolerance": 9.684799866727134e-08,
+          "passed": true
+        },
+        {
+          "name": "detuned waist displacement [mm]",
+          "actual": -71.2224062477907,
+          "expected": -71.22240624779079,
+          "absolute_error": 8.526512829121202e-14,
+          "relative_error": 1.1971671947528004e-15,
+          "tolerance": 7.222240624779079e-09,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.5916157281026244e-12
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_finite_detector_and_responsivity",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "finite detector power [mW]",
+          "actual": 8.64348036658701,
+          "expected": 8.646647167633873,
+          "absolute_error": 0.003166801046862844,
+          "relative_error": 0.00036624612817749897,
+          "tolerance": 0.02,
+          "passed": true
+        },
+        {
+          "name": "photodiode current [A]",
+          "actual": 0.004321740183293505,
+          "expected": 0.004323323583816936,
+          "absolute_error": 1.5834005234315746e-06,
+          "relative_error": 0.0003662461281775343,
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        {
+          "name": "offset lowers collected power",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.003166801046862844
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_fourier_peak_scale_mask_and_image_inversion",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Fourier peak x [mm]",
+          "actual": -0.288,
+          "expected": -0.28800000000000003,
+          "absolute_error": 5.551115123125783e-17,
+          "relative_error": 1.9274705288631188e-16,
+          "tolerance": 1.288e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier peak x [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "Fourier peak x [mm]",
+          "actual": 0.288,
+          "expected": 0.28800000000000003,
+          "absolute_error": 5.551115123125783e-17,
+          "relative_error": 1.9274705288631188e-16,
+          "tolerance": 1.288e-10,
+          "passed": true
+        },
+        {
+          "name": "two Fourier transforms pixel pitch [mm]",
+          "actual": 0.0078125,
+          "expected": 0.0078125,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0078125e-10,
+          "passed": true
+        },
+        {
+          "name": "4f intensity inversion error",
+          "actual": 1.3322676295501878e-15,
+          "expected": 0.0,
+          "absolute_error": 1.3322676295501878e-15,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "low-pass removes grating contrast",
+          "actual": 4.440892098500626e-16,
+          "expected": 0.0,
+          "absolute_error": 4.440892098500626e-16,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.3322676295501878e-15
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_image_conjugacy_not_just_waist",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "sample to detector B [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "sample to detector magnification A",
+          "actual": -2.0,
+          "expected": -2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "sample to detector C [1/mm]",
+          "actual": -0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_phase_sample_changes_fourier_but_not_ideal_image_intensity",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "phase-only image waist [mm]",
+          "actual": 0.49999956812138546,
+          "expected": 0.5,
+          "absolute_error": 4.318786145374176e-07,
+          "relative_error": 8.637572290748352e-07,
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        {
+          "name": "phase-only image power [mW]",
+          "actual": 1.9999999999998974,
+          "expected": 2.0,
+          "absolute_error": 1.0258460747536446e-13,
+          "relative_error": 5.129230373768223e-14,
+          "tolerance": 1.02e-08,
+          "passed": true
+        },
+        {
+          "name": "phase-only object changes Fourier intensity",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 4.318786145374176e-07
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_sampling_guards_and_cumulative_cap",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "no wave target past 2500 mm",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "fourier-plane ASM radius [mm]",
+          "actual": 0.09167324724104745,
+          "expected": 0.09167324722093173,
+          "absolute_error": 2.0115714649548977e-11,
+          "relative_error": 2.1942840751642928e-10,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "fourier-plane ASM power [mW]",
+          "actual": 4.999999999999941,
+          "expected": 5.0,
+          "absolute_error": 5.861977570020827e-14,
+          "relative_error": 1.1723955140041652e-14,
+          "tolerance": 1.05e-08,
+          "passed": true
+        },
+        {
+          "name": "sample-1 ASM radius [mm]",
+          "actual": 0.249999999999398,
+          "expected": 0.25,
+          "absolute_error": 6.019906795273755e-13,
+          "relative_error": 2.407962718109502e-12,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "sample-1 ASM power [mW]",
+          "actual": 4.999999999999942,
+          "expected": 5.0,
+          "absolute_error": 5.773159728050814e-14,
+          "relative_error": 1.1546319456101628e-14,
+          "tolerance": 1.05e-08,
+          "passed": true
+        },
+        {
+          "name": "return-screen ASM radius [mm]",
+          "actual": 0.49999999999769273,
+          "expected": 0.5,
+          "absolute_error": 2.3072654897760003e-12,
+          "relative_error": 4.614530979552001e-12,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "return-screen ASM power [mW]",
+          "actual": 1.9999999999999711,
+          "expected": 2.0,
+          "absolute_error": 2.886579864025407e-14,
+          "relative_error": 1.4432899320127035e-14,
+          "tolerance": 1.02e-08,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.0115714649548977e-11
     }
   ]
 }
