@@ -236,6 +236,7 @@ class TraceResult:
     samples: list[ScreenReading] = field(default_factory=list)
     probes: list[ScreenReading] = field(default_factory=list)
     branch_parents: dict[int, tuple[int, float]] = field(default_factory=dict)
+    order_paths: list[dict[str,Any]] = field(default_factory=list)
 
     def branch_segments(self, branch_id: int) -> list[Segment]:
         """Include the shared source path before each splitter ancestor."""
@@ -327,7 +328,18 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
             result.hits.append((c['id'],end,state['branch_id']))
             kind = c['type']
             if kind != 'probe': state['events'] += 1
-            if kind in ('screen', 'sample', 'probe'):
+            if kind=='slm':
+                from slm import validate_slm
+                settings=validate_slm(c)
+                # Nominal (incoherent) reference only; the wave engine includes
+                # interference with residual reflection and actual filtering.
+                state['power_mw'] *= (settings['slmEfficiency']*settings['slmFillFactor']
+                    +settings['slmDeadReflectivity']*(1-settings['slmFillFactor'])+settings['slmResidualPower'])
+                state['direction']=mirror_direction(state['direction'],n)
+                warning=f"{c['id']}: SLM phase/pixel modulation requires scalar wave mode; q is an unmodulated reference"
+                if warning not in result.warnings:result.warnings.append(warning)
+                continue
+            if kind in ('screen', 'sample', 'probe','spatial_filter'):
                 cosine = abs(state['direction'].dot(n))
                 offset = (end - Vec(float(c['x']),float(c['y']))).dot(tangent(n))
                 reading = ScreenReading(c['id'],state['source_id'],state['branch_id'],
@@ -337,8 +349,11 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
                 if kind == 'screen':
                     result.screens.append(reading)
                     break
-                if kind == 'probe':
+                if kind in ('probe','spatial_filter'):
                     result.probes.append(reading)
+                    if kind=='spatial_filter':
+                        warning='Spatial filter affects wave/order paths; Gaussian q trace is a reference axis'
+                        if warning not in result.warnings:result.warnings.append(warning)
                     continue  # Virtual, non-intercepting diagnostic plane.
                 result.samples.append(reading)  # Incident power, before reflection.
             if kind in ('mirror', 'sample'):
@@ -373,6 +388,9 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
                 break
         if state['events'] >= MAX_EVENTS_PER_BRANCH:
             result.warnings.append(f"branch {state['branch_id']}: interaction limit reached")
+    if any(c['type']=='slm' for c in scene['components']):
+        from slm_geometry import order_segments
+        result.order_paths=order_segments(scene,result)
     return result
 
 
@@ -428,7 +446,7 @@ def validate_scene(raw: Any) -> dict[str,Any]:
     spacing = float(table.get('holeSpacingMm',25))
     if not math.isfinite(spacing) or spacing <= 0:
         raise ValueError('Hole spacing must be finite and positive')
-    allowed = {'laser','lens','mirror','splitter','screen','sample','probe'}
+    allowed = {'laser','lens','mirror','splitter','screen','sample','probe','slm','spatial_filter'}
     cleaned = []
     for c in raw['components']:
         if not isinstance(c,dict) or c.get('type') not in allowed: raise ValueError('Unknown component type')
@@ -455,6 +473,51 @@ def validate_scene(raw: Any) -> dict[str,Any]:
             raise ValueError(f"{item['id']} has invalid reflectivity")
         if item.get('periodMm',0)<0 or item.get('responsivityAW',0)<0:
             raise ValueError('Period and responsivity must be nonnegative')
+        if item['type']=='slm':
+            from slm import validate_slm
+            item=validate_slm(item)
+        if item['type']=='spatial_filter':
+            for key,default in [('filterOffsetMm',0.),('filterRadiusMm',.2),('fourierFocalMm',200.)]:
+                item[key]=float(item.get(key,default))
+                if not math.isfinite(item[key]):raise ValueError('Invalid spatial filter parameter')
+            if item['filterRadiusMm']<=0 or item['fourierFocalMm']<=0:raise ValueError('Filter radius/focal length must be positive')
         cleaned.append(item)
-    return {'schemaVersion':1,'table':{'widthMm':width,'heightMm':height,
+    scene={'schemaVersion':1,'table':{'widthMm':width,'heightMm':height,
         'holeSpacingMm':spacing},'components':cleaned}
+    if 'waveGrid' in raw:
+        config=raw['waveGrid']
+        if not isinstance(config,dict):raise ValueError('Saved wave grid must be an object')
+        try:n=int(config['n']);fov=float(config['widthMm'])
+        except (ValueError,TypeError,KeyError) as error:raise ValueError('Invalid saved wave grid') from error
+        if n!=config['n'] or n%2 or not 32<=n<=2048 or not math.isfinite(fov) or fov<=0:
+            raise ValueError('Invalid saved wave grid')
+        scene['waveGrid']=dict(n=n,widthMm=fov)
+    return scene
+
+
+def slm_four_f_scene() -> dict[str,Any]:
+    """5° LCOS, carrier-selected 4f illumination, independent sample pickoff.
+
+    No beamsplitter is used to separate LCOS input/output. One 50:50 splitter
+    near the sample collects its return into a separate 1:1 f=50 mm relay.
+    Residual reflection is a declared engineering assumption, not catalog data.
+    """
+    from slm import slm_component
+    scene=dict(schemaVersion=1,waveGrid=dict(n=2048,widthMm=6.),table=dict(widthMm=1200,heightMm=900,holeSpacingMm=25),components=[
+        dict(id='laser-720',type='laser',x=700.,y=550.,angle=10.,lambdaNm=720.,waistMm=.5,waistOffsetMm=300.,powerMw=10.),
+        slm_component(x=1000.,y=600.,slmPattern='flat',slmEfficiency=.8,
+                      slmResidualPower=.01,slmCarrierPeriodMm=.128,
+                      slmDesignIncidenceDeg=5.,slmIncidentSource='laser-720',slmSourceDistanceMm=300.,slmRelayAxisDeg=180.),
+        dict(id='lens-1',type='lens',x=800.,y=600.,angle=0.,diameterMm=25.4,focalMm=200.),
+        dict(id='fourier-plane',type='spatial_filter',x=600.,y=600.,angle=0.,diameterMm=25.4,
+             filterRadiusMm=.2,filterOffsetMm=1.13,fourierFocalMm=200.,slmLinkedFilter='slm-1'),
+        dict(id='lens-2',type='lens',x=500.,y=600.,angle=0.,diameterMm=25.4,focalMm=100.),
+        dict(id='return-separator',type='splitter',x=450.,y=600.,angle=45.,diameterMm=25.4,reflectivity=.5,orderPickoff=True),
+        dict(id='sample-1',type='sample',x=400.,y=600.,angle=0.,diameterMm=25.4,reflectivity=.8),
+        dict(id='collection-lens',type='lens',x=450.,y=550.,angle=90.,diameterMm=25.4,focalMm=50.),
+        dict(id='return-screen',type='screen',x=450.,y=450.,angle=90.,diameterMm=25.4),
+        dict(id='illumination-dump',type='screen',x=450.,y=850.,angle=90.,diameterMm=25.4),
+    ])
+    from slm_geometry import configure_incidence
+    configure_incidence(scene,scene['components'][1],5.)
+    return scene

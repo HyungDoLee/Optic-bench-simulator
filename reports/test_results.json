@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-06T15:06:31.752059+09:00",
+  "generated_at": "2026-11-06T17:00:15.298341+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 40,
+    "passed": 66,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -1117,6 +1117,709 @@
       "max_absolute_error": 0.0
     },
     {
+      "test": "test_offaxis.OffAxisGUITests.test_incidence_control_order_guides_and_filter_readout",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "0 order drawn separately",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "+1 order drawn separately",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "incidence edit changes physical normal [deg]",
+          "actual": 3.0,
+          "expected": 3.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4e-10,
+          "passed": true
+        },
+        {
+          "name": "spatial-filter selected-order power displayed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "zero-order readout displayed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "entire filter hole visible in magnified view",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "off-axis GUI callback errors",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_3d_tangential_wavevector_and_evanescent_orders",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "3D outgoing norm",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "3D grating tangent k/k0",
+          "actual": 0.04123051899192652,
+          "expected": 0.04123051899192653,
+          "absolute_error": 6.938893903907228e-18,
+          "relative_error": 1.6829508998579315e-16,
+          "tolerance": 1.0412305189919265e-10,
+          "passed": true
+        },
+        {
+          "name": "orthogonal tangent conserved",
+          "actual": 0.019987012661284352,
+          "expected": 0.019987012661284352,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0199870126612843e-10,
+          "passed": true
+        },
+        {
+          "name": "reflected hemisphere",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "evanescent order has no geometric ray",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 6.938893903907228e-18
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_correct_nonzero_532nm_example",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "532nm /64um angle [deg]",
+          "actual": 0.47627665224328225,
+          "expected": 0.4762809,
+          "absolute_error": 4.24775671775679e-06,
+          "relative_error": 8.918595555179286e-06,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "532nm /64um focal separation [mm]",
+          "actual": 1.662557440403523,
+          "expected": 1.6625574,
+          "absolute_error": 4.0403522971743655e-08,
+          "relative_error": 2.4302031900819577e-08,
+          "tolerance": 1e-06,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 4.24775671775679e-06
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_incidence_control_keeps_relay_axis_and_moves_filter",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 1.6653345369377353e-16,
+          "expected": 0.0,
+          "absolute_error": 1.6653345369377353e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.142354938371463,
+          "expected": 1.1423549383714633,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9437444306195868e-16,
+          "tolerance": 2.1423549383714633e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 1.3877787807814457e-16,
+          "expected": 0.0,
+          "absolute_error": 1.3877787807814457e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.1292973172362657,
+          "expected": 1.129297317236266,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9662191836994886e-16,
+          "tolerance": 2.1292973172362658e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 1.249000902703301e-16,
+          "expected": 0.0,
+          "absolute_error": 1.249000902703301e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.1256857373361744,
+          "expected": 1.1256857373361746,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9725274786769369e-16,
+          "tolerance": 2.1256857373361748e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 1.1102230246251568e-16,
+          "expected": 0.0,
+          "absolute_error": 1.1102230246251568e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.1265438892476611,
+          "expected": 1.1265438892476614,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.97102489343153e-16,
+          "tolerance": 2.1265438892476614e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 1.1102230246251565e-16,
+          "expected": 0.0,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.1292973172362657,
+          "expected": 1.129297317236266,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9662191836994886e-16,
+          "tolerance": 2.1292973172362658e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis x",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fixed outgoing axis y",
+          "actual": 5.551115123125784e-17,
+          "expected": 0.0,
+          "absolute_error": 5.551115123125784e-17,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "linked +1 filter center [mm]",
+          "actual": 1.142354938371463,
+          "expected": 1.1423549383714633,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9437444306195868e-16,
+          "tolerance": 2.1423549383714633e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.220446049250313e-16
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_oblique_order_equation_and_small_angle_approximation",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "oblique grating equation",
+          "actual": 0.09278074274765817,
+          "expected": 0.09278074274765817,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0927807427476582e-10,
+          "passed": true
+        },
+        {
+          "name": "small-angle order spacing [rad]",
+          "actual": 0.005647912005966732,
+          "expected": 0.005646486586181329,
+          "absolute_error": 1.4254197854028303e-06,
+          "relative_error": 0.00025244366804859966,
+          "tolerance": 2e-06,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.4254197854028303e-06
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_preset_arm_clearance_incidence_and_image_conjugacy",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "only sample pickoff splitter remains",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "actual LCOS incidence [deg]",
+          "actual": 4.999999999999992,
+          "expected": 5.0,
+          "absolute_error": 7.993605777301127e-15,
+          "relative_error": 1.5987211554602255e-15,
+          "tolerance": 6e-10,
+          "passed": true
+        },
+        {
+          "name": "incoming arm clears 25.4mm relay lens",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "sample return path [mm]",
+          "actual": 1100.0,
+          "expected": 1100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.101e-07,
+          "passed": true
+        },
+        {
+          "name": "independent collection relay B [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "collection image magnification",
+          "actual": -1.0,
+          "expected": -1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 7.993605777301127e-15
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_tilt_separates_arms_but_zero_order_remains_specular",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "zero order equals specular",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "input/output arm separation [deg]",
+          "actual": 0.0,
+          "expected": 0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "zero order equals specular",
+          "actual": 2.0816681711721657e-17,
+          "expected": 0.0,
+          "absolute_error": 2.0816681711721657e-17,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "input/output arm separation [deg]",
+          "actual": 6.000000000000026,
+          "expected": 6,
+          "absolute_error": 2.5757174171303632e-14,
+          "relative_error": 4.292862361883938e-15,
+          "tolerance": 7e-10,
+          "passed": true
+        },
+        {
+          "name": "zero order equals specular",
+          "actual": 2.77555756156289e-17,
+          "expected": 0.0,
+          "absolute_error": 2.77555756156289e-17,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "input/output arm separation [deg]",
+          "actual": 10.000000000000012,
+          "expected": 10,
+          "absolute_error": 1.2434497875801753e-14,
+          "relative_error": 1.2434497875801752e-15,
+          "tolerance": 1.1000000000000001e-09,
+          "passed": true
+        },
+        {
+          "name": "zero order equals specular",
+          "actual": 5.551115123125778e-17,
+          "expected": 0.0,
+          "absolute_error": 5.551115123125778e-17,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "input/output arm separation [deg]",
+          "actual": 19.999999999999993,
+          "expected": 20,
+          "absolute_error": 7.105427357601002e-15,
+          "relative_error": 3.552713678800501e-16,
+          "tolerance": 2.1e-09,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.5757174171303632e-14
+    },
+    {
+      "test": "test_offaxis.OffAxisGeometryTests.test_zero_and_first_order_guides_filter_separately",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "zero order physically blocked",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "zero ends at Fourier plane x [mm]",
+          "actual": 600.0,
+          "expected": 600.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6.01e-08,
+          "passed": true
+        },
+        {
+          "name": "+1 reaches return detector",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "order guide propagation respects cap",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_offaxis.OffAxisWaveTests.test_coherent_residual_passivity_and_dead_space_reflection",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "dead-space unmodulated reflection fraction",
+          "actual": 0.21875000000000006,
+          "expected": 0.21875,
+          "absolute_error": 5.551115123125783e-17,
+          "relative_error": 2.5376526277146434e-16,
+          "tolerance": 1.21875e-10,
+          "passed": true
+        },
+        {
+          "name": "local coherent surface reflection is passive",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "test": "test_offaxis.OffAxisWaveTests.test_real_zero_and_selected_order_regions",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "modulated plus unmodulated Fourier power [mW]",
+          "actual": 8.099999999999328,
+          "expected": 8.1,
+          "absolute_error": 6.714628852932947e-13,
+          "relative_error": 8.289665250534503e-14,
+          "tolerance": 1.0081e-07,
+          "passed": true
+        },
+        {
+          "name": "real residual zero ROI [mW]",
+          "actual": 0.0999927726912888,
+          "expected": 0.1,
+          "absolute_error": 7.227308711207914e-06,
+          "relative_error": 7.227308711207914e-05,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "selected +1 hole power [mW]",
+          "actual": 7.999412997460362,
+          "expected": 8.0,
+          "absolute_error": 0.0005870025396381706,
+          "relative_error": 7.337531745477133e-05,
+          "tolerance": 0.002,
+          "passed": true
+        },
+        {
+          "name": "Fourier order separation [mm]",
+          "actual": 1.1292973172362657,
+          "expected": 1.129297317236266,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9662191836994886e-16,
+          "tolerance": 2.1292973172362658e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0005870025396381706
+    },
+    {
+      "test": "test_offaxis.OffAxisWaveTests.test_sample_and_detector_follow_filtered_field",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "sample receives filtered field [mW]",
+          "actual": 3.999676285246877,
+          "expected": 3.999706498730181,
+          "absolute_error": 3.0213483304120103e-05,
+          "relative_error": 7.5539250976820975e-06,
+          "tolerance": 0.0001,
+          "passed": true
+        },
+        {
+          "name": "collection detects sample return [mW]",
+          "actual": 1.5998569584341527,
+          "expected": 1.5998825994920725,
+          "absolute_error": 2.5641057919800758e-05,
+          "relative_error": 1.6026837174140923e-05,
+          "tolerance": 0.0001,
+          "passed": true
+        },
+        {
+          "name": "field filtering actually applied",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 3.0213483304120103e-05
+    },
+    {
+      "test": "test_offaxis.OffAxisWaveTests.test_tilt_alone_does_not_remove_unmodulated_light",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "tilt retains unmodulated power [mW]",
+          "actual": 0.09999999999999977,
+          "expected": 0.1,
+          "absolute_error": 2.3592239273284576e-16,
+          "relative_error": 2.3592239273284576e-15,
+          "tolerance": 1.1000000000000001e-10,
+          "passed": true
+        },
+        {
+          "name": "zero remains at specular focal origin [mm]",
+          "actual": -5.863763948254936e-18,
+          "expected": 0.0,
+          "absolute_error": 5.863763948254936e-18,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "tilt retains unmodulated power [mW]",
+          "actual": 0.09999999999999977,
+          "expected": 0.1,
+          "absolute_error": 2.3592239273284576e-16,
+          "relative_error": 2.3592239273284576e-15,
+          "tolerance": 1.1000000000000001e-10,
+          "passed": true
+        },
+        {
+          "name": "zero remains at specular focal origin [mm]",
+          "actual": -5.863763948254936e-18,
+          "expected": 0.0,
+          "absolute_error": 5.863763948254936e-18,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "tilt retains unmodulated power [mW]",
+          "actual": 0.09999999999999977,
+          "expected": 0.1,
+          "absolute_error": 2.3592239273284576e-16,
+          "relative_error": 2.3592239273284576e-15,
+          "tolerance": 1.1000000000000001e-10,
+          "passed": true
+        },
+        {
+          "name": "zero remains at specular focal origin [mm]",
+          "actual": -5.863763948254936e-18,
+          "expected": 0.0,
+          "absolute_error": 5.863763948254936e-18,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.3592239273284576e-16
+    },
+    {
+      "test": "test_offaxis.OffAxisWaveTests.test_wrong_hole_selects_zero_instead_of_first",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "zero-order-only detector power [mW]",
+          "actual": 0.019998261359710702,
+          "expected": 0.02,
+          "absolute_error": 1.7386402892984043e-06,
+          "relative_error": 8.693201446492022e-05,
+          "tolerance": 0.0001,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.7386402892984043e-06
+    },
+    {
       "test": "test_optics.OpticsTests.test_branch_inherits_cumulative_length",
       "status": "passed",
       "measurements": [],
@@ -1599,6 +2302,465 @@
         }
       ],
       "max_absolute_error": 0
+    },
+    {
+      "test": "test_slm.SLMGUITests.test_slm_controls_phase_import_json_and_fourier_profile",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "SLM added to GUI scene",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM polygon rendered",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "amplitude controls absent",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave grid selection updates cache",
+          "actual": 1024,
+          "expected": 1024,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 1.025e-07,
+          "passed": true
+        },
+        {
+          "name": "SLM pattern edit applied",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM phase preview window",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "unresolved pure-phase vortex rejected",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM Fourier field rendered",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "LCOS phase-only GUI selected-order centroid [mm]",
+          "actual": -1.1292973082847877,
+          "expected": -1.1292973172362657,
+          "absolute_error": 8.951478003282887e-09,
+          "relative_error": 7.926591046182487e-09,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "phase import stored in scene [rad]",
+          "actual": 3.1539126247803413,
+          "expected": 3.1539126247803413,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4.1539126247803416e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM JSON roundtrip pattern",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM GUI callback errors",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 8.951478003282887e-09
+    },
+    {
+      "test": "test_slm.SLMTests.test_blaze_fourier_spot_position",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "blaze spot x [mm]",
+          "actual": 0.2879999999999999,
+          "expected": 0.28800000000000003,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": 3.8549410577262376e-16,
+          "tolerance": 1.288e-10,
+          "passed": true
+        },
+        {
+          "name": "phase-only power conserved [mW]",
+          "actual": 0.9999999999999974,
+          "expected": 0.9999999999999976,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": 1.1102230246251593e-16,
+          "tolerance": 1.9999999999999977e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "test": "test_slm.SLMTests.test_calibrated_reflected_phase_applied_once",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "total reflection phase applied once",
+          "actual": 1.4823868115664955e-14,
+          "expected": 0.0,
+          "absolute_error": 1.4823868115664955e-14,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.4823868115664955e-14
+    },
+    {
+      "test": "test_slm.SLMTests.test_digital_lens_against_abcd_waist",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "digital lens complex field error",
+          "actual": 1.336885555457667e-15,
+          "expected": 0.0,
+          "absolute_error": 1.336885555457667e-15,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "digital lens waist [mm]",
+          "actual": 0.09017019662224908,
+          "expected": 0.09017019660123077,
+          "absolute_error": 2.101831209078142e-11,
+          "relative_error": 2.3309599937696634e-10,
+          "tolerance": 2e-06,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.101831209078142e-11
+    },
+    {
+      "test": "test_slm.SLMTests.test_example_scene_and_actual_fourier_propagation",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "saved SLM preset matches",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "traced blaze Fourier centroid [mm]",
+          "actual": -1.1292973082847877,
+          "expected": -1.129297317236266,
+          "absolute_error": 8.951478225327492e-09,
+          "relative_error": 7.926591242804404e-09,
+          "tolerance": 2e-05,
+          "passed": true
+        },
+        {
+          "name": "incident Fourier power [mW]",
+          "actual": 8.099999999999328,
+          "expected": 8.1,
+          "absolute_error": 6.714628852932947e-13,
+          "relative_error": 8.289665250534503e-14,
+          "tolerance": 1.0081e-07,
+          "passed": true
+        },
+        {
+          "name": "nominal return power reference [mW]",
+          "actual": 1.6200000000000003,
+          "expected": 1.62,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.3706457094137734e-16,
+          "tolerance": 2.62e-10,
+          "passed": true
+        },
+        {
+          "name": "sample to detector B [mm]",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "LCOS source to first return path [mm]",
+          "actual": 1100.0,
+          "expected": 1100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.101e-07,
+          "passed": true
+        },
+        {
+          "name": "no direct illumination in return detector",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "q limitation explicitly warned",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 8.951478225327492e-09
+    },
+    {
+      "test": "test_slm.SLMTests.test_phase_only_rejects_amplitude_controls_and_accepts_custom_phase",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "embedded phase map complex error",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_slm.SLMTests.test_quantized_blaze_first_order_efficiency",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "4-level blaze first order efficiency",
+          "actual": 0.8112208246716829,
+          "expected": 0.8105694691387021,
+          "absolute_error": 0.0006513555329807907,
+          "relative_error": 0.0008035776793726397,
+          "tolerance": 0.002,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0006513555329807907
+    },
+    {
+      "test": "test_slm.SLMTests.test_rectangular_area_pixel_fill_and_phase_stroke",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "rectangular active area [mm\u00b2]",
+          "actual": 2.0,
+          "expected": 2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "pixel area fill fraction",
+          "actual": 0.5625,
+          "expected": 0.5625,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5625e-10,
+          "passed": true
+        },
+        {
+          "name": "limited phase stroke [rad]",
+          "actual": 3.141592653589793,
+          "expected": 3.141592653589793,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4.1415926535897935e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_slm.SLMTests.test_reflective_slm_routes_return_and_applies_efficiency",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "reflective SLM return path [mm]",
+          "actual": 1350.0,
+          "expected": 1350.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.351e-07,
+          "passed": true
+        },
+        {
+          "name": "reflective SLM output power [mW]",
+          "actual": 1.9999999999999711,
+          "expected": 2.0,
+          "absolute_error": 2.886579864025407e-14,
+          "relative_error": 1.4432899320127035e-14,
+          "tolerance": 1.002e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.886579864025407e-14
+    },
+    {
+      "test": "test_slm.SLMTests.test_slm_keeps_cumulative_2500mm_limit",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "SLM path beyond cap has no detector",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM cumulative cap [mm]",
+          "actual": 2500.0,
+          "expected": 2500.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.501e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_slm.SLMTests.test_uniform_phase_and_uniform_reflection_loss",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "uniform phase complex error",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "uniform LCOS reflection power fraction",
+          "actual": 0.7999999999999998,
+          "expected": 0.8,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 2.7755575615628914e-16,
+          "tolerance": 1.8e-10,
+          "passed": true
+        },
+        {
+          "name": "LCOS mode is reflective",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.220446049250313e-16
+    },
+    {
+      "test": "test_slm.SLMTests.test_validation_and_unresolved_hardware_pixels",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
+      "test": "test_slm.SLMTests.test_vortex_winding_and_dark_fourier_core",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "vortex phase winding [rad]",
+          "actual": 6.283185307179586,
+          "expected": 6.283185307179586,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 7.283185307179586e-10,
+          "passed": true
+        },
+        {
+          "name": "phase-only vortex central peak fraction",
+          "actual": 3.046426582560072e-08,
+          "expected": 0.0,
+          "absolute_error": 3.046426582560072e-08,
+          "relative_error": null,
+          "tolerance": 1e-06,
+          "passed": true
+        },
+        {
+          "name": "vortex modulus error",
+          "actual": 2.220446049250313e-16,
+          "expected": 0.0,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "vortex phase-only power conserved",
+          "actual": 0.9999999999999974,
+          "expected": 0.9999999999999976,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": 1.1102230246251593e-16,
+          "tolerance": 1.9999999999999977e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 3.046426582560072e-08
     },
     {
       "test": "test_wave_optics.WaveGUITests.test_splitter_artwork_and_wave_screen",

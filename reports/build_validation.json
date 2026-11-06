@@ -1,12 +1,12 @@
 {
   "status": "passed",
   "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
-  "sha256": "c4518e7cab2469ad368147f2afa726e3ef5df836d3c3fff565d9348b96663a52",
+  "sha256": "8a34af3f4428739097752643bdffefc3c3828e36c0d90efea9141fc043e23c1b",
   "checks": [
     "native packaged GUI startup",
-    "load 720 nm 4f preset",
-    "enable scalar ASM",
-    "render collected power"
+    "load 720 nm SLM 4f preset",
+    "select Fourier probe",
+    "render off-axis LCOS zero and selected Fourier ROI"
   ],
   "screenshot": "/workspace/Optic-bench-simulator/reports/screenshots/packaged-wave-return.png",
   "python": "Python 3.13.5",

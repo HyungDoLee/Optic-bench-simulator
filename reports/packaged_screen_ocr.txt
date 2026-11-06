@@ -14,23 +14,29 @@ Load 720 nm reflection 4f
 
 SCREEN BEAM PROFILE
 
-+ Laser
+Load 720 nm SLM 4f
 
 ‘Scalar ASM: finite pupils + complex sample
 
-+ Thin lens
++ Laser
 
-Detected branch|Branch/laser-720 ||
+Detected branch[Branch1/laser-720 ||
 
 Gaussian ray / top view
 
++ Thin lens
+
+§® Scalar wave profile (FFT/ASM)
+
 + Mirror
 
-Scalar wave profile (FFT/ASM)
+Grid [2048 || FOV [mm]
 
 2D intensity * I /lo
 
 + Beam splitter
+
+4
 
 + Screen
 
@@ -38,135 +44,149 @@ Scalar wave profile (FFT/ASM)
 
 + Virtual plane probe
 
++ LCOS SLM (phase only)
+
++ Fourier spatial filter
+
+H
+
+i
+
+View 2.7 mm; 10.00% power
+
 COMPONENT LIST
-
-object-plangetuir
-
-Teen
-
-fourier-plane
-
-Laser
-
-100, 450
-
-ASM beam-local FOV: 4 mm.
-
-Beam split.
-
-350, 450
-
-laser-720
-
-lens-1
-
-lens-2
 
 1D profile - screen-local u
 
-Virtual plan
+f
 
-260, 450
+Laser
 
-splitter-1
+705, 548
 
-sample-1
+z
+
+f
+
+Loos SLM
+
+1000, 600
+
+sareplentsepdeato2 fourier-plane
+
+lens-1
+
+slm-t
 
 Thin lens
 
-450, 450
+800, 600
 
-Virtual plan
+Fourier
 
-650, 450
+at
 
 Thin lens
 
-750, 450
-
-Sample (spe
-
-850, 450
-
-creen
-
-3
+500, 600
 
 beam-local u [mm], normalized to peak
 
-), 35
+Beam split.
 
-Screen
-
-350, 700
-
-dump-screen
+450, 600
 
 Path
 
-1350 mm
+700 mm
+
+Sample (spe
+
+400, 600
 
 q ideal w
 
-0.5 mm
+0.0916732 mm
 
-q [mm] 0+1091i
+q [mm] 0+36.67i
 
-inf mm
+Thin lens
+
+450, 550
+
+ww
 
 aR
 
-ABCD source ->
+inf mm
 
-plane
+Screen
 
-(1, 150 mm]
+450450
 
-[o/mm, 1]
+illumination-dump
+
+ABCD source -> plane
+
+[0, 200 mm]
+
+[-0.005/mm,
+
+-1.5]
+
+Ae Se Aa
 
 Wave 20 u,v
 
-0.5, 0.5 mm
+0.26572, 0.091673 mm
 
 Wave incident
 
-2 mW
+8.1 mW
 
 Collected
 
-2 mW
+8.1 mW
 
 PD current
 
 not configured
 
-Ae Se Aa
+VIEW OPTIONS
 
 Wave peak
 
-5092.96 W/m?
+605748 W/m?
 
-4: Ideal Gaussian, Wave: scalar local planes;
+© ROI
 
-no RCWA, polarization or branch interference.
+0.099993 mW
 
-VIEW OPTIONS
+1D Gaussian envelope
 
 (s)
 
 Je? radius
 
++1 / hole ROT
+
+7.9994 mW
+
 Beam radius along optical path
-
-® Gaussian envelope
-
-0.58 jw [mm]
 
 (125mm Bol Ad
 
-0.44
+0.6 jw [mm]
 
-0.29
+4: Ideal Gaussian, Wave: scalar local planes;
+
+no RCWA, polarization or branch interference.
+
+I SLM 0/ # order guides
+
+0.48
+
+os
 
 Envelope exaggeration
 
@@ -182,8 +202,8 @@ Hae Me}. S2h7 og
 
 ‘Accumulated propagation s
 
-1350 mm
+700 mm
 
 R /Shift+R 318 - Delete At
 
-9 elements | 14 segments | 2 screen hits | O capped at 2.5m | O warnings
+10.elements | 15 segments | 2screen hits | 1capped at 2.5m | 2warnings

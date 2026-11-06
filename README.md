@@ -1,5 +1,17 @@
 # Optical Bench — Python Desktop v0.3
 
+## SLM 추가
+
+현재 기본 배치는 **5° 경사 입사 LCOS → carrier → Fourier spatial filter → 시료**입니다.
+LCOS 경로 분리용 splitter를 제거하고, 시료 반사 검출용 pick-off만 남겼습니다.
+0차/+1차 경로와 각 ROI의 실제 광파워를 별도로 표시합니다. 입사각과 차수 선택은
+서로 다른 기능입니다. [현재 배치·가정·검증·제한](docs/slm.md)을 먼저 참고하세요.
+
+**Load 720 nm SLM 4f** 또는 **+ SLM**으로 **반사형 phase-only LCOS**를 추가합니다.
+위상 패턴과 균일 반사 효율·위상 양자화·pixel pitch·fill factor를 설정할 수 있고
+위상 이미지 import와 preview를 지원합니다. 변조 결과는 **Scalar wave profile**로
+Fourier 면/Screen에서 확인하세요. [SLM 사용법·샘플링·한계](docs/slm.md)를 참고하세요.
+
 ## Scalar wave optics 업데이트
 
 기존 Gaussian q 모드를 유지하면서 **Scalar wave profile (FFT/ASM)** 옵션을 추가했습니다.

@@ -11,6 +11,19 @@ test_sample_waist_and_q (test_four_f.FourFTests.test_sample_waist_and_q) ... ok
 test_strict_cap_and_screen_boundary (test_four_f.FourFTests.test_strict_cap_and_screen_boundary) ... ok
 test_traced_abcd_matches_q_on_every_segment (test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment) ... ok
 test_virtual_probes_preserve_beam (test_four_f.FourFTests.test_virtual_probes_preserve_beam) ... ok
+test_incidence_control_order_guides_and_filter_readout (test_offaxis.OffAxisGUITests.test_incidence_control_order_guides_and_filter_readout) ... ok
+test_3d_tangential_wavevector_and_evanescent_orders (test_offaxis.OffAxisGeometryTests.test_3d_tangential_wavevector_and_evanescent_orders) ... ok
+test_correct_nonzero_532nm_example (test_offaxis.OffAxisGeometryTests.test_correct_nonzero_532nm_example) ... ok
+test_incidence_control_keeps_relay_axis_and_moves_filter (test_offaxis.OffAxisGeometryTests.test_incidence_control_keeps_relay_axis_and_moves_filter) ... ok
+test_oblique_order_equation_and_small_angle_approximation (test_offaxis.OffAxisGeometryTests.test_oblique_order_equation_and_small_angle_approximation) ... ok
+test_preset_arm_clearance_incidence_and_image_conjugacy (test_offaxis.OffAxisGeometryTests.test_preset_arm_clearance_incidence_and_image_conjugacy) ... ok
+test_tilt_separates_arms_but_zero_order_remains_specular (test_offaxis.OffAxisGeometryTests.test_tilt_separates_arms_but_zero_order_remains_specular) ... ok
+test_zero_and_first_order_guides_filter_separately (test_offaxis.OffAxisGeometryTests.test_zero_and_first_order_guides_filter_separately) ... ok
+test_coherent_residual_passivity_and_dead_space_reflection (test_offaxis.OffAxisWaveTests.test_coherent_residual_passivity_and_dead_space_reflection) ... ok
+test_real_zero_and_selected_order_regions (test_offaxis.OffAxisWaveTests.test_real_zero_and_selected_order_regions) ... ok
+test_sample_and_detector_follow_filtered_field (test_offaxis.OffAxisWaveTests.test_sample_and_detector_follow_filtered_field) ... ok
+test_tilt_alone_does_not_remove_unmodulated_light (test_offaxis.OffAxisWaveTests.test_tilt_alone_does_not_remove_unmodulated_light) ... ok
+test_wrong_hole_selects_zero_instead_of_first (test_offaxis.OffAxisWaveTests.test_wrong_hole_selects_zero_instead_of_first) ... ok
 test_branch_inherits_cumulative_length (test_optics.OpticsTests.test_branch_inherits_cumulative_length) ... ok
 test_cumulative_2p5m_mirror_cavity (test_optics.OpticsTests.test_cumulative_2p5m_mirror_cavity) ... ok
 test_default_scene_hits_screen (test_optics.OpticsTests.test_default_scene_hits_screen) ... ok
@@ -25,6 +38,19 @@ test_reject_bad_scene (test_optics.OpticsTests.test_reject_bad_scene) ... ok
 test_screen_radius_matches_manual_abcd (test_optics.OpticsTests.test_screen_radius_matches_manual_abcd) ... ok
 test_screen_tilt_projected_beam (test_optics.OpticsTests.test_screen_tilt_projected_beam) ... ok
 test_splitter_branch_powers (test_optics.OpticsTests.test_splitter_branch_powers) ... ok
+test_slm_controls_phase_import_json_and_fourier_profile (test_slm.SLMGUITests.test_slm_controls_phase_import_json_and_fourier_profile) ... ok
+test_blaze_fourier_spot_position (test_slm.SLMTests.test_blaze_fourier_spot_position) ... ok
+test_calibrated_reflected_phase_applied_once (test_slm.SLMTests.test_calibrated_reflected_phase_applied_once) ... ok
+test_digital_lens_against_abcd_waist (test_slm.SLMTests.test_digital_lens_against_abcd_waist) ... ok
+test_example_scene_and_actual_fourier_propagation (test_slm.SLMTests.test_example_scene_and_actual_fourier_propagation) ... ok
+test_phase_only_rejects_amplitude_controls_and_accepts_custom_phase (test_slm.SLMTests.test_phase_only_rejects_amplitude_controls_and_accepts_custom_phase) ... ok
+test_quantized_blaze_first_order_efficiency (test_slm.SLMTests.test_quantized_blaze_first_order_efficiency) ... ok
+test_rectangular_area_pixel_fill_and_phase_stroke (test_slm.SLMTests.test_rectangular_area_pixel_fill_and_phase_stroke) ... ok
+test_reflective_slm_routes_return_and_applies_efficiency (test_slm.SLMTests.test_reflective_slm_routes_return_and_applies_efficiency) ... ok
+test_slm_keeps_cumulative_2500mm_limit (test_slm.SLMTests.test_slm_keeps_cumulative_2500mm_limit) ... ok
+test_uniform_phase_and_uniform_reflection_loss (test_slm.SLMTests.test_uniform_phase_and_uniform_reflection_loss) ... ok
+test_validation_and_unresolved_hardware_pixels (test_slm.SLMTests.test_validation_and_unresolved_hardware_pixels) ... ok
+test_vortex_winding_and_dark_fourier_core (test_slm.SLMTests.test_vortex_winding_and_dark_fourier_core) ... ok
 test_splitter_artwork_and_wave_screen (test_wave_optics.WaveGUITests.test_splitter_artwork_and_wave_screen) ... ok
 test_890nm_orders_na_and_energy_budget (test_wave_optics.WaveTests.test_890nm_orders_na_and_energy_budget) ... ok
 test_aperture_power_and_actual_diffraction (test_wave_optics.WaveTests.test_aperture_power_and_actual_diffraction) ... ok
@@ -40,6 +66,6 @@ test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_samplin
 test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
 
 ----------------------------------------------------------------------
-Ran 40 tests in 4.512s
+Ran 66 tests in 56.538s
 
 OK

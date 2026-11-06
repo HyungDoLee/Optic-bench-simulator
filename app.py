@@ -17,8 +17,9 @@ from PIL import Image, ImageTk
 
 from optics import (
     MAX_PROPAGATION_MM, Vec, beam_radius, default_scene, free_space,
-    simulate, validate_scene, four_f_scene,
+    simulate, validate_scene, four_f_scene, slm_four_f_scene,
 )
+from slm import PATTERNS, slm_component, validate_slm, slm_mask
 
 ROOT = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
 ASSETS = ROOT/'assets'
@@ -31,7 +32,8 @@ ACCENT = '#356f9c'
 RAY = '#bc574d'
 LABEL = {'laser':'Laser','lens':'Thin lens','mirror':'Mirror',
          'splitter':'Beam splitter','screen':'Screen',
-         'sample':'Sample (specular)', 'probe':'Virtual plane probe'}
+         'sample':'Sample (specular)', 'probe':'Virtual plane probe','slm':'LCOS SLM (phase only)',
+         'spatial_filter':'Fourier spatial filter'}
 FIELD_LABEL = {
     'x':'X [mm]', 'y':'Y [mm]', 'angle':'Normal angle [deg]',
     'lambdaNm':'Wavelength [nm]', 'waistMm':'Input waist [mm]',
@@ -40,6 +42,18 @@ FIELD_LABEL = {
     'reflectivity':'Reflectivity [0...1]',
     'phaseRad':'Sample phase [rad]', 'periodMm':'Phase period [mm; 0=off]',
     'phaseDepthRad':'Phase modulation [rad]', 'responsivityAW':'Responsivity [A/W; assumed]',
+    'slmHeightMm':'SLM active height [mm]', 'slmEfficiency':'SLM efficiency [power fraction]',
+    'slmAmplitude':'SLM amplitude [field; 0..1]', 'slmPeriodMm':'Grating period [mm]',
+    'slmFocalMm':'Digital focal length [mm]', 'slmCharge':'Vortex charge [integer]',
+    'slmOffsetRad':'Phase offset [rad]', 'slmStrokeRad':'Phase stroke [rad; <=2π]',
+    'slmPhaseLevels':'Phase bins [0=continuous]', 'slmPitchMm':'Pixel pitch [mm; 0=continuous]',
+    'slmFillFactor':'Pixel area fill factor [0..1]',
+    'slmCoreMm':'Vortex amplitude core [mm; 0=off]',
+    'slmCarrierPeriodMm':'Carrier period [mm; 0=off]', 'slmCarrierSign':'Carrier sign [+1 or -1]',
+    'slmResidualPower':'Unmodulated power coefficient', 'slmResidualPhaseRad':'Unmodulated phase [rad]',
+    'slmDeadReflectivity':'Dead-space reflectivity', 'slmDesignIncidenceDeg':'Preset incidence [deg; |θ|=2..10]',
+    'filterOffsetMm':'Hole center u [mm]', 'filterRadiusMm':'Hole radius [mm]',
+    'fourierFocalMm':'Fourier lens focal length [mm]',
 }
 FIELDS = {
     'laser':['x','y','angle','lambdaNm','waistMm','waistOffsetMm','powerMw'],
@@ -49,6 +63,11 @@ FIELDS = {
     'screen':['x','y','angle','diameterMm','responsivityAW'],
     'sample':['x','y','angle','reflectivity','diameterMm','phaseRad','periodMm','phaseDepthRad'],
     'probe':['x','y','angle','diameterMm'],
+    'slm':['x','y','angle','diameterMm','slmHeightMm','slmEfficiency',
+           'slmPeriodMm','slmFocalMm','slmCharge','slmOffsetRad','slmStrokeRad',
+           'slmPhaseLevels','slmPitchMm','slmFillFactor','slmCarrierPeriodMm','slmCarrierSign',
+           'slmResidualPower','slmResidualPhaseRad','slmDeadReflectivity','slmDesignIncidenceDeg'],
+    'spatial_filter':['x','y','angle','diameterMm','filterOffsetMm','filterRadiusMm','fourierFocalMm'],
 }
 
 
@@ -98,6 +117,9 @@ class BenchApp(tk.Tk):
         self.wave_mode=tk.BooleanVar(value=False)
         self.wave_cache=None
         self.wave_display=None
+        self.show_orders=tk.BooleanVar(value=True)
+        self.wave_n=tk.IntVar(value=512)
+        self.wave_width=tk.DoubleVar(value=4.)
         self._set_styles()
         self._create_ui()
         self._bind_shortcuts()
@@ -179,7 +201,9 @@ class BenchApp(tk.Tk):
         self.tool_icons={}
         ttk.Button(parent,text='Load 720 nm reflection 4f',
                    command=self._load_four_f).pack(fill='x',padx=10,pady=(5,8))
-        for kind in ('laser','lens','mirror','splitter','screen','sample','probe'):
+        ttk.Button(parent,text='Load 720 nm SLM 4f',
+                   command=self._load_slm_four_f).pack(fill='x',padx=10,pady=(0,4))
+        for kind in ('laser','lens','mirror','splitter','screen','sample','probe','slm','spatial_filter'):
             frame=tk.Frame(parent,bg=PANEL)
             frame.pack(fill='x',padx=10,pady=2)
             icon=self._component_image({'type':kind,'angle':0,'focalMm':200})
@@ -201,6 +225,8 @@ class BenchApp(tk.Tk):
         ttk.Checkbutton(parent,text='Gaussian envelope',variable=self.envelope,
                         command=self._draw_board).pack(anchor='w',padx=13,pady=3)
         ttk.Checkbutton(parent,text='25 mm 홀에 스냅',variable=self.snap).pack(anchor='w',padx=13,pady=3)
+        ttk.Checkbutton(parent,text='SLM 0 / +1 order guides',variable=self.show_orders,
+                        command=self._draw_board).pack(anchor='w',padx=13,pady=3)
         tk.Label(parent,text='Envelope exaggeration',bg=PANEL,fg=MUTED,
                  font=('Segoe UI',9)).pack(anchor='w',padx=13,pady=(10,0))
         ttk.Scale(parent,from_=1,to=45,variable=self.beam_scale,
@@ -213,8 +239,9 @@ class BenchApp(tk.Tk):
         options.pack(fill='x',padx=16,pady=(12,6))
         tk.Label(options,text='Optical breadboard',bg=BG,fg=INK,
                  font=('Segoe UI',13,'bold')).pack(side='left')
-        tk.Label(options,text='1200 × 900 mm  |  holes 25 mm',
-                 bg=BG,fg=MUTED,font=('Segoe UI',9)).pack(side='left',padx=12)
+        self.table_label=tk.Label(options,text='1200 × 900 mm  |  holes 25 mm',
+                                  bg=BG,fg=MUTED,font=('Segoe UI',9))
+        self.table_label.pack(side='left',padx=12)
         tk.Label(options,text='Zoom',bg=BG,fg=MUTED).pack(side='right')
         ttk.Scale(options,from_=0.8,to=1.25,variable=self.zoom,
                   command=lambda _=None:self._draw_board()).pack(side='right',padx=(3,12))
@@ -247,8 +274,16 @@ class BenchApp(tk.Tk):
         self.analysis_tab=tk.Frame(notebook,bg=PANEL)
         notebook.add(self.properties_tab,text='Properties')
         notebook.add(self.analysis_tab,text='Screen profile')
-        self.props_holder=tk.Frame(self.properties_tab,bg=PANEL)
-        self.props_holder.pack(fill='both',expand=True,padx=9,pady=7)
+        prop_scroll=ttk.Scrollbar(self.properties_tab,orient='vertical')
+        prop_scroll.pack(side='right',fill='y')
+        self.props_canvas=tk.Canvas(self.properties_tab,bg=PANEL,highlightthickness=0,
+                                    yscrollcommand=prop_scroll.set)
+        self.props_canvas.pack(side='left',fill='both',expand=True,padx=9,pady=7)
+        prop_scroll.configure(command=self.props_canvas.yview)
+        self.props_holder=tk.Frame(self.props_canvas,bg=PANEL)
+        prop_window=self.props_canvas.create_window(0,0,window=self.props_holder,anchor='nw')
+        self.props_canvas.bind('<Configure>',lambda e:self.props_canvas.itemconfigure(prop_window,width=e.width))
+        self.props_holder.bind('<Configure>',lambda _e:self.props_canvas.configure(scrollregion=self.props_canvas.bbox('all')))
         self._section_label(self.analysis_tab,'SCREEN BEAM PROFILE')
         self.analysis_status=tk.StringVar(value='Screen을 선택하세요')
         self.analysis_state=tk.Label(self.analysis_tab,textvariable=self.analysis_status,
@@ -263,6 +298,15 @@ class BenchApp(tk.Tk):
         self.branch_combo.bind('<<ComboboxSelected>>',self._branch_changed)
         ttk.Checkbutton(self.analysis_tab,text='Scalar wave profile (FFT/ASM)',
                         variable=self.wave_mode,command=self._render_screen).pack(anchor='w',padx=12,pady=4)
+        grid_row=ttk.Frame(self.analysis_tab);grid_row.pack(fill='x',padx=12,pady=2)
+        ttk.Label(grid_row,text='Grid').pack(side='left')
+        grid_combo=ttk.Combobox(grid_row,textvariable=self.wave_n,values=(256,512,1024,2048),state='readonly',width=5)
+        grid_combo.pack(side='left',padx=4)
+        grid_combo.bind('<<ComboboxSelected>>',lambda _e:self._render_screen())
+        ttk.Label(grid_row,text='FOV [mm]').pack(side='left')
+        grid_entry=ttk.Entry(grid_row,textvariable=self.wave_width,width=6)
+        grid_entry.pack(side='left',padx=4)
+        grid_entry.bind('<Return>',lambda _e:self._render_screen())
         tk.Label(self.analysis_tab,text='2D intensity  ·  I / I₀',bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
         self.heatmap=tk.Canvas(self.analysis_tab,width=264,height=250,bg='#fff',highlightthickness=1,
@@ -294,7 +338,7 @@ class BenchApp(tk.Tk):
     def _select(self,id_:str | None):
         if id_ == self.selected_id:
             current=self._component(id_)
-            if current and current['type'] in ('screen','sample','probe'):
+            if current and current['type'] in ('screen','sample','probe','spatial_filter'):
                 self.notebook.select(self.analysis_tab)
                 self._render_screen()
             return
@@ -303,7 +347,7 @@ class BenchApp(tk.Tk):
         self._render_tree()
         self._render_properties()
         c=self._component(id_)
-        if c and c['type'] in ('screen','sample','probe'): self.notebook.select(self.analysis_tab)
+        if c and c['type'] in ('screen','sample','probe','spatial_filter'): self.notebook.select(self.analysis_tab)
         else: self.notebook.select(self.properties_tab)
         self._draw_board()
         self._render_screen()
@@ -321,6 +365,8 @@ class BenchApp(tk.Tk):
         if kind=='mirror': c.update(angle=-45.,reflectivity=1.)
         if kind=='splitter': c.update(angle=-45.,reflectivity=.5)
         if kind=='sample': c.update(reflectivity=.8)
+        if kind=='slm':c=slm_component(id=c['id'],x=x,y=y)
+        if kind=='spatial_filter':c.update(filterOffsetMm=0.,filterRadiusMm=.2,fourierFocalMm=200.)
         self.scene['components'].append(c)
         self._select(c['id'])
         self._refresh()
@@ -356,12 +402,23 @@ class BenchApp(tk.Tk):
         self._refresh()
         self.notebook.select(self.analysis_tab)
 
+    def _load_slm_four_f(self):
+        if not messagebox.askyesno('720 nm SLM 4f','Replace current layout with the SLM 4f example?'):return
+        self.scene=slm_four_f_scene()
+        self.envelope.set(False)
+        self.wave_n.set(self.scene['waveGrid']['n']);self.wave_width.set(self.scene['waveGrid']['widthMm'])
+        self.selected_id='slm-1';self.selected_branch_index=0;self.project_file=None
+        self.wave_mode.set(True)
+        self._refresh();self.notebook.select(self.properties_tab)
+
     def _open(self):
         file=filedialog.askopenfilename(title='Optical bench JSON 열기',filetypes=[('JSON scene','*.json'),('All files','*.*')])
         if not file:return
         try:
             with open(file,encoding='utf-8') as f: scene=validate_scene(json.load(f))
             self.scene=scene
+            if 'waveGrid' in scene:
+                self.wave_n.set(scene['waveGrid']['n']);self.wave_width.set(scene['waveGrid']['widthMm'])
             self.project_file=Path(file)
             self.selected_id=next((c['id'] for c in scene['components'] if c['type']=='screen'),
                 scene['components'][0]['id'] if scene['components'] else None)
@@ -387,6 +444,8 @@ class BenchApp(tk.Tk):
         try:self.result=simulate(self.scene)
         except Exception as error:
             messagebox.showerror('계산 실패',str(error));return
+        table=self.scene['table']
+        self.table_label.configure(text=f'{table["widthMm"]:g} × {table["heightMm"]:g} mm  |  holes {table.get("holeSpacingMm",25):g} mm')
         self._render_tree()
         if update_inspector:self._render_properties()
         self._draw_board()
@@ -416,6 +475,7 @@ class BenchApp(tk.Tk):
     def _render_properties(self):
         for child in self.props_holder.winfo_children():child.destroy()
         self.property_vars={}
+        self.props_canvas.yview_moveto(0)
         c=self._component(self.selected_id)
         if not c:
             tk.Label(self.props_holder,text='부품을 클릭해서 선택하세요.',bg=PANEL,fg=MUTED).pack(anchor='w',pady=10)
@@ -423,11 +483,24 @@ class BenchApp(tk.Tk):
         tk.Label(self.props_holder,text=LABEL[c['type']],font=('Segoe UI',13,'bold'),
                  bg=PANEL,fg=INK).pack(anchor='w',pady=(4,3))
         tk.Label(self.props_holder,text=c['id'],bg=PANEL,fg=MUTED).pack(anchor='w',pady=(0,14))
+        if c['type']=='slm':
+            self.slm_pattern_var=tk.StringVar(value=c.get('slmPattern','vortex'))
+            self.slm_mode_var=tk.StringVar(value='reflective')
+            for title,variable,values in [('LCOS: reflective / phase only',self.slm_mode_var,('reflective',)),
+                                           ('SLM pattern',self.slm_pattern_var,PATTERNS)]:
+                ttk.Label(self.props_holder,text=title).pack(anchor='w',pady=(6,2))
+                ttk.Combobox(self.props_holder,textvariable=variable,values=values,state='readonly').pack(fill='x')
+            ttk.Button(self.props_holder,text='Preview applied phase',command=self._preview_slm).pack(fill='x',pady=4)
+            ttk.Button(self.props_holder,text='Import grayscale phase image',command=self._import_slm_phase).pack(fill='x',pady=4)
         for key in FIELDS[c['type']]:
+            if key=='slmDesignIncidenceDeg' and not c.get('slmIncidentSource'):continue
             ttk.Label(self.props_holder,text=FIELD_LABEL[key],style='Muted.TLabel').pack(anchor='w',pady=(6,2))
-            variable=tk.StringVar(value=f'{c.get(key,0):g}')
+            # Preserve exact SLM limits such as 2π; six-digit formatting rounds
+            # the default stroke above its valid maximum on an unchanged Apply.
+            variable=tk.StringVar(value=repr(c.get(key,0)) if c['type']=='slm' else f'{c.get(key,0):g}')
             self.property_vars[key]=variable
             entry=ttk.Entry(self.props_holder,textvariable=variable)
+            if key=='angle' and c.get('slmIncidentSource'):entry.configure(state='readonly')
             entry.pack(fill='x')
             entry.bind('<Return>',lambda _e:self._commit_props())
         ttk.Button(self.props_holder,text='Apply parameters',style='Primary.TButton',
@@ -460,10 +533,63 @@ class BenchApp(tk.Tk):
                 raise ValueError('Reflectivity must be between 0 and 1')
             if updated.get('periodMm',0)<0 or updated.get('responsivityAW',0)<0:
                 raise ValueError('Period and responsivity must be nonnegative')
+            if c['type']=='slm':
+                updated['slmPattern']=self.slm_pattern_var.get()
+                updated['slmMode']=self.slm_mode_var.get()
+                updated=validate_slm(updated)
+            if c['type']=='spatial_filter' and (updated['filterRadiusMm']<=0 or updated['fourierFocalMm']<=0):
+                raise ValueError('Spatial filter radius and Fourier focal length must be positive')
         except ValueError as error:
             messagebox.showwarning('입력 확인',str(error));self._render_properties();return
+        if c['type']=='slm' and c.get('slmIncidentSource'):
+            try:
+                from slm_geometry import configure_incidence
+                scene=copy.deepcopy(self.scene)
+                index=next(i for i,v in enumerate(scene['components']) if v['id']==c['id'])
+                scene['components'][index]=updated
+                configure_incidence(scene,updated,float(updated['slmDesignIncidenceDeg']))
+                self.scene=validate_scene(scene)
+            except ValueError as error:
+                messagebox.showwarning('SLM geometry',str(error));return
+            self._refresh();return
         c.clear();c.update(updated)
         self._refresh()
+
+    def _preview_slm(self):
+        c=self._component(self.selected_id)
+        if not c or c['type']!='slm':return
+        try:
+            from wave_optics import Grid
+            import numpy as np
+            candidate=c.copy()
+            for key,v in self.property_vars.items():candidate[key]=float(v.get())
+            candidate.update(slmPattern=self.slm_pattern_var.get(),slmMode=self.slm_mode_var.get())
+            source=next((c for c in self.scene['components'] if c['type']=='laser'),{})
+            _,phase=slm_mask(candidate,Grid(self.wave_n.get(),self.wave_width.get()),float(source.get('lambdaNm',720)),
+                             incidence_deg=float(candidate.get('slmDesignIncidenceDeg',0)))
+            image=Image.fromarray(np.uint8(phase/(2*math.pi)*255)).resize((384,384),Image.Resampling.NEAREST)
+            window=tk.Toplevel(self);window.title('SLM phase preview — 4 mm FOV, 0..2π')
+            window.phase_image=ImageTk.PhotoImage(image,master=window)
+            tk.Label(window,image=window.phase_image).pack()
+            tk.Label(window,text='Applied phase; grayscale 0..2π. Outside aperture is not shown.').pack()
+        except (ValueError,ImportError,tk.TclError) as error:messagebox.showwarning('SLM phase',str(error))
+
+    def _import_slm_phase(self):
+        c=self._component(self.selected_id)
+        if not c or c['type']!='slm':return
+        path=filedialog.askopenfilename(title='Grayscale phase image (0..255 -> 0..2π)',
+            filetypes=[('Phase image','*.png *.bmp *.tif *.tiff'),('All files','*.*')])
+        if not path:return
+        try:
+            import numpy as np
+            with Image.open(path) as source:
+                if max(source.size)>256:raise ValueError('Maximum phase image size is 256×256. Resize explicitly before import.')
+                image=source.convert('L')
+                candidate=c.copy()
+                candidate.update(slmPattern='custom',slmPhaseMap=(np.asarray(image,dtype=float)*2*math.pi/255).tolist())
+            candidate=validate_slm(candidate)
+            c.clear();c.update(candidate);self._refresh()
+        except (OSError,ValueError) as error:messagebox.showwarning('SLM image import',str(error))
 
     def _coordinates(self):
         width=self.board.winfo_width();height=self.board.winfo_height()
@@ -513,7 +639,15 @@ class BenchApp(tk.Tk):
                 if len(points)>=6:canvas.create_polygon(*points,fill='#f5ddda',outline='')
         for seg in self.result.segments:
             x0,y0=self._xy(seg.start);x1,y1=self._xy(seg.end)
-            canvas.create_line(x0,y0,x1,y1,fill=RAY,width=2)
+            guides=bool(self.result.order_paths) and self.show_orders.get()
+            canvas.create_line(x0,y0,x1,y1,fill='#bac4cb' if guides else RAY,width=1 if guides else 2)
+        if self.show_orders.get():
+            for seg in self.result.order_paths:
+                x0,y0=self._xy(seg['start']);x1,y1=self._xy(seg['end'])
+                color='#b27d26' if seg['order']==0 else '#25815b'
+                canvas.create_line(x0,y0,x1,y1,fill=color,width=2,
+                                   dash=(5,3) if seg['order']==0 else (),tags=(f'slm-order-{seg["order"]}',))
+                if seg['blocked']:canvas.create_text(x1+5,y1-10,text=f'm={seg["order"]} blocked',anchor='w',fill=color)
         for marker in self.result.markers:
             x,y=self._xy(marker.point)
             if marker.kind=='waist':
@@ -530,6 +664,14 @@ class BenchApp(tk.Tk):
             if icon:
                 self.icon_refs.append(icon)
                 canvas.create_image(x,y,image=icon)
+            elif c['type']=='slm':
+                angle=math.radians(c.get('angle',0));nx,ny=math.cos(angle),math.sin(angle)
+                tx,ty=-ny,nx
+                points=[]
+                for a,b in [(-9,-25),(9,-25),(9,25),(-9,25)]:points.extend((x+nx*a+tx*b,y+ny*a+ty*b))
+                canvas.create_polygon(*points,fill='#a99ac7',outline='#665581',width=2,tags=('slm-surface',))
+            elif c['type']=='spatial_filter':
+                canvas.create_oval(x-7,y-22,x+7,y+22,fill='#e4c99c',outline='#89673a',width=2,tags=('spatial-filter',))
             elif c['type']=='probe':
                 angle=math.radians(c.get('angle',0))
                 tx,ty=-math.sin(angle)*24,math.cos(angle)*24
@@ -602,9 +744,9 @@ class BenchApp(tk.Tk):
 
     def _screen_selection(self):
         c=self._component(self.selected_id)
-        if not c or c['type'] not in ('screen','sample','probe'):return []
+        if not c or c['type'] not in ('screen','sample','probe','spatial_filter'):return []
         pool={'screen':self.result.screens,'sample':self.result.samples,
-              'probe':self.result.probes}[c['type']]
+              'probe':self.result.probes,'spatial_filter':self.result.probes}[c['type']]
         return [r for r in pool if r.screen_id==c['id']]
 
     def _branch_changed(self,_event):
@@ -634,12 +776,13 @@ class BenchApp(tk.Tk):
         r=readings[self.selected_branch_index]
         if self.wave_mode.get():
             try:
-                from wave_optics import trace_wave
-                key=(json.dumps(self.scene,sort_keys=True),r.screen_id,r.branch_id,r.path_mm)
+                from wave_optics import trace_wave,Grid
+                grid=Grid(self.wave_n.get(),self.wave_width.get())
+                key=(json.dumps(self.scene,sort_keys=True),r.screen_id,r.branch_id,r.path_mm,grid.n,grid.width_mm)
                 if self.wave_cache is None or self.wave_cache[0]!=key:
-                    self.wave_cache=(key,trace_wave(self.scene,self.result,r))
+                    self.wave_cache=(key,trace_wave(self.scene,self.result,r,grid))
                 self.wave_display=self.wave_cache[1]
-            except (ValueError,ImportError) as error:
+            except (ValueError,ImportError,tk.TclError) as error:
                 self.analysis_status.set('Wave unavailable: '+str(error))
                 self.readout.set('q/ray result retained; wave profile not computed.')
                 self.heatmap.delete('all');self.profile.delete('all')
@@ -678,6 +821,10 @@ class BenchApp(tk.Tk):
                 f'\nCollected      {v["collected_power_mw"]:.6g} mW'
                 f'\nPD current     {current}'
                 f'\nWave peak      {float(np.max(abs(v["field"])**2))*1000:.6g} W/m²')
+            if 'selected_roi_mw' in v:
+                label='+1 / hole ROI' if v.get('has_carrier') else 'Hole ROI'
+                self.readout.set(self.readout.get()+f'\n0 ROI          {v["zero_roi_mw"]:.5g} mW'
+                                 f'\n{label:14} {v["selected_roi_mw"]:.5g} mW')
         self._draw_heatmap(r)
         self._draw_profile(r)
 
@@ -741,18 +888,44 @@ class BenchApp(tk.Tk):
         data=self.wave_display;grid=data['grid']
         intensity=np.abs(data['field'])**2
         peak=float(intensity.max())
-        normalized=intensity/peak if peak else intensity
+        # Crop only the DISPLAY, never the propagated field or power integral.
+        # Large windows required by phase singularities would otherwise hide
+        # the focal spot in a few screen pixels.
+        total=float(intensity.sum())
+        half=.4
+        if total:
+            for marginal in (intensity.sum(axis=0),intensity.sum(axis=1)):
+                cdf=np.cumsum(marginal)/total
+                lo=min(grid.n-1,int(np.searchsorted(cdf,.005)))
+                hi=min(grid.n-1,int(np.searchsorted(cdf,.995)))
+                half=max(half,abs(grid.axis[lo]),abs(grid.axis[hi]))
+        if 'filter_center_mm' in data:
+            half=max(half,abs(data['filter_center_mm'])+1.1*data['filter_radius_mm'])
+        radius=int(np.ceil(half/grid.dx))
+        start=max(0,grid.n//2-radius);end=min(grid.n,grid.n//2+radius+1)
+        view=intensity[start:end,start:end]
+        normalized=view/peak if peak else view
         scale=np.sqrt(np.clip(normalized,0,1))[...,None]
         rgb=np.asarray(250*(1-scale)+np.array([36,91,145])*scale,dtype=np.uint8)
         image=Image.fromarray(rgb).resize((212,212),Image.Resampling.BILINEAR)
         self.heatmap_image=ImageTk.PhotoImage(image,master=self)
         c=self.heatmap;c.delete('all');width=max(c.winfo_width(),264)
         c.create_image(width/2,4,image=self.heatmap_image,anchor='n')
-        c.create_text(width/2,232,text=f'ASM beam-local FOV: {grid.width_mm:g} mm',fill=MUTED)
+        fraction=float(view.sum()/total) if total else 0.
+        c.create_text(width/2,232,text=f'View {(end-start)*grid.dx:.3g} mm; {100*fraction:.2f}% power',fill=MUTED)
+        if 'filter_center_mm' in data:
+            span=(end-start)*grid.dx;left=grid.axis[start]
+            for u,label,color in [(0.,'0','#b27d26'),(data['filter_center_mm'],'+1' if data.get('has_carrier') else 'hole','#25815b')]:
+                position=width/2-106+212*(u-left)/span
+                c.create_line(position,4,position,216,fill=color,dash=(3,3))
+                c.create_text(position,12,text=label,fill=color,anchor='n')
+            position=width/2-106+212*(data['filter_center_mm']-left)/span
+            radius=data['filter_radius_mm']/span*212
+            c.create_oval(position-radius,110-radius,position+radius,110+radius,outline='#25815b',width=2)
         c=self.profile;c.delete('all');width=max(c.winfo_width(),270)
-        line=normalized[grid.n//2,:]
+        line=normalized[grid.n//2-start,:]
         xy=[]
-        for i,value in enumerate(line):xy.extend((30+(width-45)*i/(grid.n-1),112-95*float(value)))
+        for i,value in enumerate(line):xy.extend((30+(width-45)*i/max(1,len(line)-1),112-95*float(value)))
         c.create_line(*xy,fill=ACCENT,width=2)
         c.create_text(width/2,132,text='beam-local u [mm], normalized to peak',fill=MUTED)
 

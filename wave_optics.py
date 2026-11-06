@@ -175,7 +175,8 @@ def trace_wave(scene,result,reading,grid=None):
     Normal-incidence lenses/sample/detector required; ideal splitter folds allowed.
     """
     from optics import MAX_PROPAGATION_MM,q_from_source,normal,tangent,Vec
-    grid=grid or Grid()
+    config=scene.get('waveGrid',{})
+    grid=grid or Grid(config.get('n',512),config.get('widthMm',4.))
     components={c['id']:c for c in scene['components']}
     source=components[reading.source_id]
     lam=float(source['lambdaNm'])
@@ -183,13 +184,14 @@ def trace_wave(scene,result,reading,grid=None):
     segments=[s for s in result.branch_segments(reading.branch_id) if s.path_end_mm<=reading.path_mm+1e-8]
     if not segments or segments[-1].path_end_mm>MAX_PROPAGATION_MM:
         raise ValueError('No supported wave path within 2500 mm')
+    filter_losses=[]
     for i,segment in enumerate(segments):
         field=propagate(field,grid,lam,segment.length_mm)
         hit=next((h for h in result.hits if h[2]==segment.branch_id and abs(h[1].x-segment.end.x)<1e-7 and abs(h[1].y-segment.end.y)<1e-7),None)
         if not hit:raise ValueError('Missing optical interaction')
         component=components[hit[0]];kind=component['type']
         cosine=abs(segment.direction.dot(normal(float(component.get('angle',0)))))
-        if kind in ('lens','sample','screen','probe') and cosine<.99999:
+        if kind in ('lens','sample','screen','probe','spatial_filter') and cosine<.99999:
             raise ValueError('Wave path needs near-normal lens/sample/detector incidence')
         if i==len(segments)-1:break  # Return the incident field at the selected plane.
         if kind=='lens':
@@ -203,6 +205,19 @@ def trace_wave(scene,result,reading,grid=None):
                                  float(component.get('phaseRad',0)),float(component.get('periodMm',0)),
                                  float(component.get('phaseDepthRad',0)))
             field=field*pupil(grid,float(component.get('diameterMm',25.4))/2)
+        if kind=='slm':
+            from slm import slm_mask
+            off=(segment.end-Vec(component['x'],component['y'])).dot(tangent(normal(float(component.get('angle',0)))))
+            if abs(off)>1e-7:raise ValueError('SLM wave plane must be centered on the chief ray')
+            mask,_=slm_mask(component,grid,lam,field,math.degrees(math.acos(min(1.,cosine))))
+            field*=mask
+            field=field[:,(-np.arange(grid.n))%grid.n]
+        if kind=='spatial_filter':
+            orientation=tangent(normal(float(component.get('angle',0)))).dot(tangent(segment.direction))
+            center=component.get('filterOffsetMm',0)*orientation
+            before=power(field,grid)
+            field=field*pupil(grid,component.get('filterRadiusMm',.2),-center)
+            filter_losses.append(dict(component=component['id'],incident_mw=before,passed_mw=power(field,grid)))
         if kind in ('mirror','sample','splitter'):
             reflected=segment.direction.dot(segments[i+1].direction)<.99999
             if kind=='splitter':
@@ -213,4 +228,16 @@ def trace_wave(scene,result,reading,grid=None):
     target=components[reading.screen_id]
     values=detector(field,grid,float(target.get('diameterMm',25.4))/2,
                     float(target.get('responsivityAW',0)),reading.offset_mm)
-    return dict(field=field,grid=grid,**values)
+    out=dict(field=field,grid=grid,filter_losses=filter_losses,**values)
+    if target['type']=='spatial_filter':
+        from slm import carrier_period
+        linked=components.get(target.get('slmLinkedFilter'),{})
+        direction=segments[-1].direction
+        orientation=tangent(normal(float(target.get('angle',0)))).dot(tangent(direction))
+        center=(target.get('filterOffsetMm',0)-reading.offset_mm)*orientation
+        radius=target.get('filterRadiusMm',.2)
+        out.update(filter_center_mm=center,filter_radius_mm=radius,
+                   has_carrier=bool(linked and carrier_period(linked)),
+                   selected_roi_mw=power(field*pupil(grid,radius,-center),grid),
+                   zero_roi_mw=power(field*pupil(grid,radius,reading.offset_mm*orientation),grid))
+    return out
