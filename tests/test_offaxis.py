@@ -149,6 +149,8 @@ class OffAxisGUITests(Measurements,unittest.TestCase):
             a.property_vars['slmDesignIncidenceDeg'].set('3');a._commit_props()
             self.measure('incidence edit changes physical normal [deg]',a._component('slm-1')['angle'],3.)
             a._select('fourier-plane');a.update()
+            from gui_helpers import calculate_wave
+            calculate_wave(a)
             self.measure('spatial-filter selected-order power displayed',int('+1 / hole ROI' in a.readout.get()),1)
             self.measure('zero-order readout displayed',int('0 ROI' in a.readout.get()),1)
             hole=next(i for i in a.heatmap.find_all() if a.heatmap.type(i)=='oval')

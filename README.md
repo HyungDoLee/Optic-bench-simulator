@@ -16,10 +16,16 @@ Fourier 면/Screen에서 확인하세요. [SLM 사용법·샘플링·한계](doc
 
 기존 Gaussian q 모드를 유지하면서 **Scalar wave profile (FFT/ASM)** 옵션을 추가했습니다.
 유한 렌즈 pupil·회절·복소 시료 반사·유한 검출 면적을 별도 파동 엔진으로 계산합니다.
+파동 모드는 Screen·Sample·Probe·Fourier filter를 선택한 뒤 **계산하기**를 눌러
+한 번 실행합니다. 모드 선택·드래그·파라미터 수정·창 크기 변경으로 FFT를 자동 실행하지
+않습니다. 계산은 백그라운드에서 실행하며 **취소**할 수 있습니다. 완료된 프로파일은
+고정되고, 설정을 바꾸면 **재계산 필요**가 표시됩니다. 새 결과는 다시 버튼을 눌러 얻습니다.
 빔스플리터 그림의 45° 기준 방향도 수정했습니다. 실행 전 NumPy를 포함한 의존성을
 `python -m pip install -r requirements.txt`로 갱신하세요.
 
 [평가표 반영·수치 검증·지원 범위](docs/wave_review_response.md)를 참고하세요.
+[53b91f6 재평가 대응·수동 계산·GS 검증 보고서](reports/review_v53b91f6_response.md)에는
+이번 변경, 픽셀/빔 크기 비교, 핀홀 통과율과 남은 제약을 정리했습니다.
 `examples/phase_sample_720nm.json`으로 위상 시료와 유한 검출기 예제를 열 수 있습니다.
 아래의 Gaussian 모델 한계 설명은 기본 q 모드에 해당하며, 파동 모드도 RCWA·편광·
 임의 branch 간 간섭과 실제 시료 재료 효율은 아직 계산하지 않습니다.
@@ -64,7 +70,10 @@ app.py                 Tkinter 편집기/그래프/프로퍼티/화면 프로파
 optics.py              순차 독립형 계산 엔진 (파이썬 기본 라이브러리만 사용)
 assets/                 svg.zip에서 추출한 원본 SVG 및 실행용 PNG
 examples/               JSON 예제
-requirements.txt        Pillow 이미지 표시용
+wave_optics.py         별도 scalar ASM/복소 광장 엔진
+wave_view.py           수동 계산 결과의 고정 미리보기 준비
+hologram_validation.py 국소 pixel-array/GS 검증 모델
+requirements.txt        NumPy 계산 및 Pillow 이미지 표시
 OpticalBench.pyw        Windows GUI 더블클릭 실행
 run_windows.bat         소스 프로그램 시작
 build_windows_exe.bat   Windows EXE 빌드
@@ -79,7 +88,7 @@ tests/test_optics.py    물리 계산 회귀 테스트
 - R/Shift+R 5도 회전, Delete 삭제(입력칸에 포커스가 없을 때).
 - 조정하면 경로·Gaussian envelope·waist 위치가 재계산됩니다.
 - Screen 클릭 시 자동으로 `Screen profile` 탭으로 전환됩니다.
-  - `I(u,v)/I0` 2D heatmap과 `I(u,0)/I0` 1D 곡선 표시
+  - Gaussian q 모드는 프로파일을 즉시 표시하며, Scalar wave 모드는 **계산하기**로 갱신
   - 중심 ray의 도달 경로길이, 입사각, 1/e² 반경, 투영 반경, 출력과 peak irradiance
   - Beam splitter에서 Screen으로 여러 경로가 올 경우 branch를 드롭다운으로 선택
 - JSON 저장/열기 (이전 v0.2 Scene JSON과 호환).

@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-11-07T13:57:34.431853+09:00",
+  "hardware_parameters_are_examples": true,
+  "narrow_beam": {
+    "hologram_diameter_mm": 4.096,
+    "gaussian_1e2_diameter_mm": 1.0,
+    "edge_relative_intensity": 2.6760568726815754e-15,
+    "power_inside_hologram": 0.9999999999999973,
+    "beam_1e2_diameter_pixels": 125.0,
+    "required_n_four_samples": 3012,
+    "next_power_of_two": 4096,
+    "resolved_pixels": false,
+    "dx_um": 2.9296875
+  },
+  "expanded_beam": {
+    "hologram_diameter_mm": 4.096,
+    "gaussian_1e2_diameter_mm": 4.096,
+    "edge_relative_intensity": 0.1353352832366127,
+    "power_inside_hologram": 0.8646647167633873,
+    "beam_1e2_diameter_pixels": 512.0,
+    "required_n_four_samples": 3012,
+    "next_power_of_two": 4096,
+    "resolved_pixels": false,
+    "dx_um": 2.9296875
+  },
+  "benchmark": {
+    "model": "local pixel-array scalar Fourier synthesis; not full-bench ASM or measured hardware",
+    "wavelength_nm": 720.0,
+    "pitch_um": 8.0,
+    "hologram_pixels": 512,
+    "beam_waist_mm": 2.048,
+    "reported_power_unit": "mW",
+    "input_peak_intensity_mw_mm2": 1.0,
+    "carrier_period_um": 128.0,
+    "carrier_center_mm": 1.125,
+    "gs_iterations": 60,
+    "gs_initial_nrmse": 0.9999882592585685,
+    "gs_final_nrmse": 0.13889521442959632,
+    "modulated_primary_zone_power": 5.61343149996405,
+    "input_pupil_power": 5.696507996979742,
+    "higher_lattice_orders_traced": false,
+    "filters": [
+      {
+        "radius_mm": 0.2,
+        "spatial_bandwidth_cycles_mm": 1.388888888888889,
+        "target_pass_fraction": 0.04840829130034651,
+        "residual_pass_fraction": 2.018252029338833e-05,
+        "coherent_reconstruction_nrmse": 1.9733078923757923
+      },
+      {
+        "radius_mm": 0.5,
+        "spatial_bandwidth_cycles_mm": 3.4722222222222223,
+        "target_pass_fraction": 0.9600469153562274,
+        "residual_pass_fraction": 0.00021021282138911296,
+        "coherent_reconstruction_nrmse": 0.13043291628423506
+      }
+    ]
+  }
+}

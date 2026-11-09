@@ -1,13 +1,14 @@
 {
   "status": "passed",
   "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
-  "sha256": "8a34af3f4428739097752643bdffefc3c3828e36c0d90efea9141fc043e23c1b",
+  "sha256": "ada1ed3faaab87b0f579575aec444de30636caf3b13520b32459925d8637fc89",
   "checks": [
     "native packaged GUI startup",
     "load 720 nm SLM 4f preset",
-    "select Fourier probe",
-    "render off-axis LCOS zero and selected Fourier ROI"
+    "select Fourier probe without automatic computation",
+    "click calculate once and render Fourier ROI"
   ],
+  "calculation_observed_seconds": 4.250705229991581,
   "screenshot": "/workspace/Optic-bench-simulator/reports/screenshots/packaged-wave-return.png",
   "python": "Python 3.13.5",
   "platform": "Linux x86_64",

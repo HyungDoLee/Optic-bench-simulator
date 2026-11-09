@@ -7,6 +7,7 @@ Finite FFT windows are periodic. Guard checks reject lost power/edge wrap and
 under-sampled phase masks rather than silently claiming an accurate solution.
 """
 from dataclasses import dataclass
+from concurrent.futures import CancelledError
 import math
 import numpy as np
 
@@ -54,7 +55,30 @@ def second_moment_radius(field,grid):
             2*math.sqrt(float((intensity*(y-my)**2).sum()/total)))
 
 
-def propagate(field,grid,wavelength_nm,length_mm,*,strict=True):
+def field_moments(field,grid,wavelength_nm,spectrum=None):
+    """Power-weighted position and transverse k, distinct from the q/ray axis.
+
+    Angles describe the mean propagating direction, not the entire angular
+    spread. For a multi-order field the mean is not the +1 chief ray.
+    """
+    intensity=np.abs(field)**2;total=float(intensity.sum())
+    if total<=0:raise ValueError('No field power for moments')
+    axis=grid.axis;mx=intensity.sum(axis=0);my=intensity.sum(axis=1)
+    cu=float((mx*axis).sum()/total);cv=float((my*axis).sum()/total)
+    ru=2*math.sqrt(max(0.,float((mx*(axis-cu)**2).sum()/total)))
+    rv=2*math.sqrt(max(0.,float((my*(axis-cv)**2).sum()/total)))
+    spectral=np.abs(np.fft.fft2(field) if spectrum is None else spectrum)**2
+    norm=float(spectral.sum());freq=np.fft.fftfreq(grid.n,grid.dx)
+    fu=float((spectral.sum(axis=0)*freq).sum()/norm)
+    fv=float((spectral.sum(axis=1)*freq).sum()/norm)
+    su=wavelength_nm*1e-6*fu;sv=wavelength_nm*1e-6*fv
+    longitudinal=math.sqrt(max(0.,1-su*su-sv*sv))
+    return dict(centroid_mm=[cu,cv],radius_2sigma_mm=[ru,rv],
+                mean_transverse_sine=[su,sv],mean_k_rad_mm=[2*math.pi*fu,2*math.pi*fv],
+                angle_deg=[math.degrees(math.atan2(su,longitudinal)),math.degrees(math.atan2(sv,longitudinal))])
+
+
+def propagate(field,grid,wavelength_nm,length_mm,*,strict=True,diagnostics=None):
     """Band-limited exact scalar ASM; no artificial power renormalization.
 
     Local derivative of transfer phase must be sampled in both frequency axes.
@@ -63,7 +87,9 @@ def propagate(field,grid,wavelength_nm,length_mm,*,strict=True):
     if not math.isfinite(length_mm) or length_mm<0 or wavelength_nm<=0:
         raise ValueError('Propagation distance must be nonnegative; wavelength positive')
     if np.shape(field)!=(grid.n,grid.n):raise ValueError('Field/grid shape mismatch')
-    if length_mm==0:return np.array(field,copy=True)
+    if length_mm==0:
+        if diagnostics is not None:diagnostics.update(field_moments(field,grid,wavelength_nm))
+        return np.array(field,copy=True)
     lam=wavelength_nm*1e-6
     fx,fy=np.meshgrid(np.fft.fftfreq(grid.n,grid.dx),np.fft.fftfreq(grid.n,grid.dx))
     s2=lam**2*(fx*fx+fy*fy)
@@ -72,7 +98,8 @@ def propagate(field,grid,wavelength_nm,length_mm,*,strict=True):
     # sqrt(1-s²)-1 = -s²/(1+sqrt(1-s²)), avoiding cancellation at low NA.
     phase=-2*math.pi/lam*length_mm*s2/(1+root)
     spectrum=np.fft.fft2(field)
-    out=np.fft.ifft2(spectrum*mask*np.exp(1j*phase))
+    output_spectrum=spectrum*mask*np.exp(1j*phase)
+    out=np.fft.ifft2(output_spectrum)
     if strict:
         before=power(field,grid);after=power(out,grid)
         if before>0 and after < before*(1-1e-5):
@@ -81,6 +108,7 @@ def propagate(field,grid,wavelength_nm,length_mm,*,strict=True):
         rim=np.ones(intensity.shape,dtype=bool);rim[4:-4,4:-4]=False
         if intensity.sum()>0 and intensity[rim].sum()/intensity.sum()>1e-4:
             raise ValueError('FFT window boundary contains power: increase field of view')
+    if diagnostics is not None:diagnostics.update(field_moments(out,grid,wavelength_nm,output_spectrum))
     return out
 
 
@@ -167,7 +195,7 @@ def grating_orders(wavelength_nm,period_nm,efficiencies,incidence_deg=0.,collect
     return rows
 
 
-def trace_wave(scene,result,reading,grid=None):
+def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
     """Propagate one existing ray branch; paraxial local planes in air only.
 
     Gaussian rays provide routing, NOT fields clipped into missing geometric
@@ -185,11 +213,24 @@ def trace_wave(scene,result,reading,grid=None):
     if not segments or segments[-1].path_end_mm>MAX_PROPAGATION_MM:
         raise ValueError('No supported wave path within 2500 mm')
     filter_losses=[]
+    arrivals=[]
     for i,segment in enumerate(segments):
-        field=propagate(field,grid,lam,segment.length_mm)
+        if cancel_event is not None and cancel_event.is_set():raise CancelledError('Wave calculation cancelled')
+        arrival={}
+        field=propagate(field,grid,lam,segment.length_mm,diagnostics=arrival)
+        if cancel_event is not None and cancel_event.is_set():raise CancelledError('Wave calculation cancelled')
         hit=next((h for h in result.hits if h[2]==segment.branch_id and abs(h[1].x-segment.end.x)<1e-7 and abs(h[1].y-segment.end.y)<1e-7),None)
         if not hit:raise ValueError('Missing optical interaction')
         component=components[hit[0]];kind=component['type']
+        reference_normal=normal(float(component.get('angle',0)))
+        u=tangent(segment.direction);su,sv=arrival['mean_transverse_sine']
+        longitudinal=math.sqrt(max(0.,1-su*su-sv*sv))
+        projected=(segment.direction*longitudinal+u*su).dot(reference_normal)
+        arrival.update(component=component['id'],path_mm=segment.path_end_mm,
+                       mean_incidence_deg=math.degrees(math.acos(min(1.,abs(projected)))))
+        if max(abs(a) for a in arrival['angle_deg'])>5:
+            raise ValueError('Mean wave direction exceeds the 5° paraxial transport limit')
+        arrivals.append(arrival)
         cosine=abs(segment.direction.dot(normal(float(component.get('angle',0)))))
         if kind in ('lens','sample','screen','probe','spatial_filter') and cosine<.99999:
             raise ValueError('Wave path needs near-normal lens/sample/detector incidence')
@@ -228,7 +269,7 @@ def trace_wave(scene,result,reading,grid=None):
     target=components[reading.screen_id]
     values=detector(field,grid,float(target.get('diameterMm',25.4))/2,
                     float(target.get('responsivityAW',0)),reading.offset_mm)
-    out=dict(field=field,grid=grid,filter_losses=filter_losses,**values)
+    out=dict(field=field,grid=grid,filter_losses=filter_losses,moments=arrivals[-1],arrivals=arrivals,**values)
     if target['type']=='spatial_filter':
         from slm import carrier_period
         linked=components.get(target.get('slmLinkedFilter'),{})

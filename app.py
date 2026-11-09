@@ -5,11 +5,15 @@ Dependency: Pillow (only for the supplied optical-component icons and heatmaps).
 """
 from __future__ import annotations
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
 import re
 import sys
+import queue
+import threading
+import time
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
@@ -117,12 +121,20 @@ class BenchApp(tk.Tk):
         self.wave_mode=tk.BooleanVar(value=False)
         self.wave_cache=None
         self.wave_display=None
+        self.wave_busy=False
+        self.wave_error=None
+        self._wave_poll_id=None
+        self._wave_cancel=None
+        self._wave_queue=None
+        self._wave_photo_data=None
+        self._closing=False
         self.show_orders=tk.BooleanVar(value=True)
         self.wave_n=tk.IntVar(value=512)
         self.wave_width=tk.DoubleVar(value=4.)
         self._set_styles()
         self._create_ui()
         self._bind_shortcuts()
+        self.protocol('WM_DELETE_WINDOW',self.destroy)
         self.notebook.select(self.analysis_tab)
         self._refresh()
 
@@ -284,21 +296,36 @@ class BenchApp(tk.Tk):
         prop_window=self.props_canvas.create_window(0,0,window=self.props_holder,anchor='nw')
         self.props_canvas.bind('<Configure>',lambda e:self.props_canvas.itemconfigure(prop_window,width=e.width))
         self.props_holder.bind('<Configure>',lambda _e:self.props_canvas.configure(scrollregion=self.props_canvas.bbox('all')))
-        self._section_label(self.analysis_tab,'SCREEN BEAM PROFILE')
+        analysis_scroll=ttk.Scrollbar(self.analysis_tab,orient='vertical')
+        analysis_scroll.pack(side='right',fill='y')
+        self.analysis_canvas=tk.Canvas(self.analysis_tab,bg=PANEL,highlightthickness=0,
+                                       yscrollcommand=analysis_scroll.set)
+        self.analysis_canvas.pack(side='left',fill='both',expand=True)
+        analysis_scroll.configure(command=self.analysis_canvas.yview)
+        analysis_body=tk.Frame(self.analysis_canvas,bg=PANEL)
+        analysis_window=self.analysis_canvas.create_window(0,0,window=analysis_body,anchor='nw')
+        self.analysis_canvas.bind('<Configure>',lambda e:self.analysis_canvas.itemconfigure(analysis_window,width=e.width))
+        analysis_body.bind('<Configure>',lambda _e:self.analysis_canvas.configure(scrollregion=self.analysis_canvas.bbox('all')))
+        self._section_label(analysis_body,'SCREEN BEAM PROFILE')
         self.analysis_status=tk.StringVar(value='Screen을 선택하세요')
-        self.analysis_state=tk.Label(self.analysis_tab,textvariable=self.analysis_status,
+        self.analysis_state=tk.Label(analysis_body,textvariable=self.analysis_status,
             bg='#eef3f7',fg='#426077',wraplength=280,justify='left',anchor='w',
             font=('Segoe UI',9),padx=8,pady=8)
         self.analysis_state.pack(fill='x',padx=10,pady=3)
-        branch_row=tk.Frame(self.analysis_tab,bg=PANEL)
+        branch_row=tk.Frame(analysis_body,bg=PANEL)
         branch_row.pack(fill='x',padx=10,pady=(8,3))
         tk.Label(branch_row,text='Detected branch',bg=PANEL,fg=MUTED).pack(side='left')
         self.branch_combo=ttk.Combobox(branch_row,state='readonly',width=18)
         self.branch_combo.pack(side='right')
         self.branch_combo.bind('<<ComboboxSelected>>',self._branch_changed)
-        ttk.Checkbutton(self.analysis_tab,text='Scalar wave profile (FFT/ASM)',
+        ttk.Checkbutton(analysis_body,text='Scalar wave profile (FFT/ASM)',
                         variable=self.wave_mode,command=self._render_screen).pack(anchor='w',padx=12,pady=4)
-        grid_row=ttk.Frame(self.analysis_tab);grid_row.pack(fill='x',padx=12,pady=2)
+        compute_row=ttk.Frame(analysis_body);compute_row.pack(fill='x',padx=12,pady=3)
+        self.compute_wave_button=ttk.Button(compute_row,text='계산하기',command=self._calculate_wave)
+        self.compute_wave_button.pack(side='left',fill='x',expand=True)
+        self.cancel_wave_button=ttk.Button(compute_row,text='취소',command=self._cancel_wave,state='disabled')
+        self.cancel_wave_button.pack(side='left',padx=(5,0))
+        grid_row=ttk.Frame(analysis_body);grid_row.pack(fill='x',padx=12,pady=2)
         ttk.Label(grid_row,text='Grid').pack(side='left')
         grid_combo=ttk.Combobox(grid_row,textvariable=self.wave_n,values=(256,512,1024,2048),state='readonly',width=5)
         grid_combo.pack(side='left',padx=4)
@@ -307,21 +334,21 @@ class BenchApp(tk.Tk):
         grid_entry=ttk.Entry(grid_row,textvariable=self.wave_width,width=6)
         grid_entry.pack(side='left',padx=4)
         grid_entry.bind('<Return>',lambda _e:self._render_screen())
-        tk.Label(self.analysis_tab,text='2D intensity  ·  I / I₀',bg=PANEL,fg=INK,
+        tk.Label(analysis_body,text='2D intensity  ·  I / I₀',bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
-        self.heatmap=tk.Canvas(self.analysis_tab,width=264,height=250,bg='#fff',highlightthickness=1,
+        self.heatmap=tk.Canvas(analysis_body,width=264,height=250,bg='#fff',highlightthickness=1,
                                highlightbackground=LINE)
         self.heatmap.pack(padx=10,pady=0,fill='x')
-        tk.Label(self.analysis_tab,text='1D profile  ·  screen-local u',bg=PANEL,fg=INK,
+        tk.Label(analysis_body,text='1D profile  ·  screen-local u',bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(12,3))
-        self.profile=tk.Canvas(self.analysis_tab,height=145,bg='#fff',highlightthickness=1,
+        self.profile=tk.Canvas(analysis_body,height=145,bg='#fff',highlightthickness=1,
                                highlightbackground=LINE)
         self.profile.pack(padx=10,fill='x')
         self.profile.bind('<Configure>',lambda _e:self._render_screen())
         self.readout=tk.StringVar(value='—')
-        tk.Label(self.analysis_tab,textvariable=self.readout,justify='left',anchor='nw',
+        tk.Label(analysis_body,textvariable=self.readout,justify='left',anchor='nw',
                  bg=PANEL,fg=INK,font=('Consolas',9),wraplength=280).pack(fill='x',padx=12,pady=(11,2))
-        tk.Label(self.analysis_tab,
+        tk.Label(analysis_body,
           text='q: ideal Gaussian. Wave: scalar local planes;\nno RCWA, polarization or branch interference.',
           bg=PANEL,fg=MUTED,justify='left',font=('Segoe UI',8)).pack(anchor='w',padx=12,pady=(5,10))
 
@@ -754,12 +781,109 @@ class BenchApp(tk.Tk):
         self._render_screen()
         self._draw_radius_graph()
 
+    def _wave_request(self):
+        from wave_optics import Grid
+        readings=self._screen_selection()
+        if not readings:return None
+        r=readings[min(self.selected_branch_index,len(readings)-1)]
+        grid=Grid(self.wave_n.get(),self.wave_width.get())
+        fingerprint=hashlib.sha256(json.dumps(self.scene,sort_keys=True).encode()).hexdigest()
+        return (fingerprint,r.screen_id,r.source_id,r.branch_id,r.path_mm,grid.n,grid.width_mm),r,grid
+
+    @staticmethod
+    def _compute_wave_snapshot(scene,result,reading,grid,cancel_event):
+        from wave_optics import trace_wave
+        from wave_view import prepare_wave_view
+        start=time.monotonic()
+        data=trace_wave(scene,result,reading,grid,cancel_event=cancel_event)
+        target=next(c for c in scene['components'] if c['id']==reading.screen_id)
+        data['preview']=prepare_wave_view(data,reading,target)
+        data['target_label']=f'{reading.screen_id} / {reading.source_id} / branch {reading.branch_id}'
+        data['seconds']=time.monotonic()-start
+        return data
+
+    def _calculate_wave(self):
+        if self.wave_busy or self._closing:return
+        self.wave_mode.set(True)
+        try:request=self._wave_request()
+        except (ValueError,ImportError,tk.TclError) as error:
+            self.analysis_status.set(str(error));return
+        if request is None:
+            self.analysis_status.set('계산할 Screen / Probe를 선택하세요.');return
+        key,reading,grid=request
+        scene=copy.deepcopy(self.scene);result=copy.deepcopy(self.result)
+        reading=copy.deepcopy(reading)
+        cancel=threading.Event();messages=queue.Queue()
+        self._wave_cancel=cancel;self._wave_queue=messages;self.wave_busy=True;self.wave_error=None
+        compute=self._compute_wave_snapshot
+        def worker():
+            try:messages.put((key,compute(scene,result,reading,grid,cancel),None))
+            except Exception as error:messages.put((key,None,error))
+        threading.Thread(target=worker,daemon=True,name='optical-wave-calculation').start()
+        self._render_screen()
+        self._wave_poll_id=self.after(40,self._poll_wave)
+
+    def _poll_wave(self):
+        if self._closing:return
+        try:key,data,error=self._wave_queue.get_nowait()
+        except queue.Empty:
+            self._wave_poll_id=self.after(40,self._poll_wave);return
+        self._wave_poll_id=None;self.wave_busy=False
+        if not self._wave_cancel.is_set():
+            if error is not None:self.wave_error=(key,str(error))
+            else:self.wave_cache=(key,data);self.wave_error=None
+        self._render_screen()
+
+    def _cancel_wave(self):
+        if self._wave_cancel:self._wave_cancel.set()
+        self.analysis_status.set('취소 요청됨 — 현재 연산이 끝나면 중단합니다.')
+
+    def destroy(self):
+        self._closing=True
+        if self._wave_cancel:self._wave_cancel.set()
+        if self._wave_poll_id:
+            try:self.after_cancel(self._wave_poll_id)
+            except tk.TclError:pass
+            self._wave_poll_id=None
+        super().destroy()
+
+    def _render_wave_state(self):
+        self.wave_display=None
+        self.cancel_wave_button.configure(state='normal' if self.wave_busy else 'disabled')
+        try:request=self._wave_request()
+        except (ValueError,ImportError,tk.TclError) as error:
+            self.compute_wave_button.configure(state='disabled')
+            self.analysis_status.set('Grid error: '+str(error))
+            self.heatmap.delete('all');self.profile.delete('all')
+            self.readout.set('설정을 수정하고 계산하기를 누르세요.');return
+        self.compute_wave_button.configure(state='normal' if request and not self.wave_busy else 'disabled')
+        key=request[0] if request else None
+        if not self.wave_busy and self.wave_error and self.wave_error[0]==key:
+            self.analysis_status.set('Wave unavailable: '+self.wave_error[1])
+            self.readout.set('계산 실패. 설정을 수정하고 계산하기를 누르세요.')
+            self.heatmap.delete('all');self.profile.delete('all');return
+        if self.wave_cache and request:
+            cached_key,data=self.wave_cache
+            self.wave_display=data
+            if self.wave_busy:message='계산 중 — 이전 결과 표시: '+data['target_label']
+            elif cached_key!=key:message='이전 설정 결과 / 재계산 필요: '+data['target_label']
+            else:message=f'Scalar ASM 계산 완료 ({data["seconds"]:.2f}s): '+data['target_label']
+            self.analysis_status.set(message)
+            self.readout.set(data['preview']['readout'])
+            self._draw_wave_profile()
+        else:
+            self.analysis_status.set('계산 중… 화면 조작은 계속할 수 있습니다.' if self.wave_busy else 'Screen / Probe 선택 후 계산하기를 누르세요.')
+            self.readout.set('Wave optics는 버튼을 눌렀을 때만 계산합니다.')
+            self.heatmap.delete('all');self.profile.delete('all')
+
     def _render_screen(self):
         if not hasattr(self,'analysis_status'):return
         readings=self._screen_selection()
         self.wave_display=None
         self.current_readings=readings
         self.branch_combo['values']=[f'Branch {r.branch_id} / {r.source_id}' for r in readings]
+        self.compute_wave_button.configure(state='normal' if readings and not self.wave_busy else 'disabled')
+        self.cancel_wave_button.configure(state='normal' if self.wave_busy else 'disabled')
         if not readings:
             self.selected_branch_index=0
             self.branch_combo.set('')
@@ -775,18 +899,7 @@ class BenchApp(tk.Tk):
         self.branch_combo.current(self.selected_branch_index)
         r=readings[self.selected_branch_index]
         if self.wave_mode.get():
-            try:
-                from wave_optics import trace_wave,Grid
-                grid=Grid(self.wave_n.get(),self.wave_width.get())
-                key=(json.dumps(self.scene,sort_keys=True),r.screen_id,r.branch_id,r.path_mm,grid.n,grid.width_mm)
-                if self.wave_cache is None or self.wave_cache[0]!=key:
-                    self.wave_cache=(key,trace_wave(self.scene,self.result,r,grid))
-                self.wave_display=self.wave_cache[1]
-            except (ValueError,ImportError,tk.TclError) as error:
-                self.analysis_status.set('Wave unavailable: '+str(error))
-                self.readout.set('q/ray result retained; wave profile not computed.')
-                self.heatmap.delete('all');self.profile.delete('all')
-                return
+            self._render_wave_state();return
         self.analysis_status.set(f'Beam detected  •  {r.source_id}  •  branch {r.branch_id}')
         self.readout.set(
             f'Path length     {fmt(r.path_mm,1):>9} mm\n'
@@ -800,31 +913,6 @@ class BenchApp(tk.Tk):
             f'ABCD (source -> plane)\n'
             f'[{r.abcd.a:.4g}, {r.abcd.b:.4g} mm]\n'
             f'[{r.abcd.c:.4g}/mm, {r.abcd.d:.4g}]')
-        if self.wave_display is not None:
-            v=self.wave_display
-            from wave_optics import second_moment_radius
-            import numpy as np
-            radii=second_moment_radius(v['field'],v['grid'])
-            target=self._component(r.screen_id)
-            current=f'{v["current_a"]:.6g} A' if target.get('responsivityAW',0)>0 else 'not configured'
-            self.analysis_status.set('Scalar ASM: finite pupils + complex sample')
-            self.readout.set(
-                f'Path           {r.path_mm:.6g} mm\n'
-                f'q ideal w      {r.beam_radius_mm:.6g} mm\n'
-                f'q [mm] {r.q.real:.4g}+{r.q.imag:.4g}i\n'
-                f'q R            {r.wavefront_radius_mm:.6g} mm\n'
-                f'ABCD source -> plane\n'
-                f'[{r.abcd.a:.4g}, {r.abcd.b:.4g} mm]\n'
-                f'[{r.abcd.c:.4g}/mm, {r.abcd.d:.4g}]\n'
-                f'Wave 2σ u,v    {radii[0]:.5g}, {radii[1]:.5g} mm\n'
-                f'Wave incident  {v["incident_power_mw"]:.6g} mW'
-                f'\nCollected      {v["collected_power_mw"]:.6g} mW'
-                f'\nPD current     {current}'
-                f'\nWave peak      {float(np.max(abs(v["field"])**2))*1000:.6g} W/m²')
-            if 'selected_roi_mw' in v:
-                label='+1 / hole ROI' if v.get('has_carrier') else 'Hole ROI'
-                self.readout.set(self.readout.get()+f'\n0 ROI          {v["zero_roi_mw"]:.5g} mW'
-                                 f'\n{label:14} {v["selected_roi_mw"]:.5g} mW')
         self._draw_heatmap(r)
         self._draw_profile(r)
 
@@ -884,37 +972,16 @@ class BenchApp(tk.Tk):
         c.create_text(width-5,height-8,text='u [mm]',anchor='e',fill=MUTED,font=('Segoe UI',8))
 
     def _draw_wave_profile(self):
-        import numpy as np
-        data=self.wave_display;grid=data['grid']
-        intensity=np.abs(data['field'])**2
-        peak=float(intensity.max())
-        # Crop only the DISPLAY, never the propagated field or power integral.
-        # Large windows required by phase singularities would otherwise hide
-        # the focal spot in a few screen pixels.
-        total=float(intensity.sum())
-        half=.4
-        if total:
-            for marginal in (intensity.sum(axis=0),intensity.sum(axis=1)):
-                cdf=np.cumsum(marginal)/total
-                lo=min(grid.n-1,int(np.searchsorted(cdf,.005)))
-                hi=min(grid.n-1,int(np.searchsorted(cdf,.995)))
-                half=max(half,abs(grid.axis[lo]),abs(grid.axis[hi]))
-        if 'filter_center_mm' in data:
-            half=max(half,abs(data['filter_center_mm'])+1.1*data['filter_radius_mm'])
-        radius=int(np.ceil(half/grid.dx))
-        start=max(0,grid.n//2-radius);end=min(grid.n,grid.n//2+radius+1)
-        view=intensity[start:end,start:end]
-        normalized=view/peak if peak else view
-        scale=np.sqrt(np.clip(normalized,0,1))[...,None]
-        rgb=np.asarray(250*(1-scale)+np.array([36,91,145])*scale,dtype=np.uint8)
-        image=Image.fromarray(rgb).resize((212,212),Image.Resampling.BILINEAR)
-        self.heatmap_image=ImageTk.PhotoImage(image,master=self)
+        data=self.wave_display;preview=data['preview']
+        if self._wave_photo_data is not data:
+            self._wave_photo=ImageTk.PhotoImage(preview['image'],master=self)
+            self._wave_photo_data=data
+        self.heatmap_image=self._wave_photo
         c=self.heatmap;c.delete('all');width=max(c.winfo_width(),264)
         c.create_image(width/2,4,image=self.heatmap_image,anchor='n')
-        fraction=float(view.sum()/total) if total else 0.
-        c.create_text(width/2,232,text=f'View {(end-start)*grid.dx:.3g} mm; {100*fraction:.2f}% power',fill=MUTED)
+        span=preview['span_mm'];left=preview['min_u_mm']
+        c.create_text(width/2,232,text=f'View {span:.3g} mm; {100*preview["visible_fraction"]:.2f}% power',fill=MUTED)
         if 'filter_center_mm' in data:
-            span=(end-start)*grid.dx;left=grid.axis[start]
             for u,label,color in [(0.,'0','#b27d26'),(data['filter_center_mm'],'+1' if data.get('has_carrier') else 'hole','#25815b')]:
                 position=width/2-106+212*(u-left)/span
                 c.create_line(position,4,position,216,fill=color,dash=(3,3))
@@ -923,9 +990,8 @@ class BenchApp(tk.Tk):
             radius=data['filter_radius_mm']/span*212
             c.create_oval(position-radius,110-radius,position+radius,110+radius,outline='#25815b',width=2)
         c=self.profile;c.delete('all');width=max(c.winfo_width(),270)
-        line=normalized[grid.n//2-start,:]
-        xy=[]
-        for i,value in enumerate(line):xy.extend((30+(width-45)*i/max(1,len(line)-1),112-95*float(value)))
+        xy=[];curve=preview['curve']
+        for i,value in enumerate(curve):xy.extend((30+(width-45)*i/max(1,len(curve)-1),112-95*value))
         c.create_line(*xy,fill=ACCENT,width=2)
         c.create_text(width/2,132,text='beam-local u [mm], normalized to peak',fill=MUTED)
 

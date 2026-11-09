@@ -170,8 +170,10 @@ class SLMGUITests(Measurements,unittest.TestCase):
             self.measure('SLM added to GUI scene',int(a._component('slm-1') is not None),1)
             self.measure('SLM polygon rendered',len(a.board.find_withtag('slm-surface')),1)
             self.measure('amplitude controls absent',int('slmAmplitude' not in a.property_vars and 'slmCoreMm' not in a.property_vars),1)
+            from gui_helpers import calculate_wave
             a._select('fourier-plane');a.update()
-            a.wave_n.set(1024);a._render_screen()
+            self.measure('SLM selection does not auto calculate',int(a.wave_cache is None),1)
+            a.wave_n.set(1024);a._render_screen();calculate_wave(a)
             self.measure('wave grid selection updates cache',a.wave_display['grid'].n,1024)
             a.wave_n.set(2048);a._render_screen()
             a._select('slm-1')
@@ -182,11 +184,12 @@ class SLMGUITests(Measurements,unittest.TestCase):
             self.measure('SLM phase preview window',int(bool(previews)),1)
             for w in previews:w.destroy()
             a._select('fourier-plane');a.update()
+            calculate_wave(a)
             self.measure('unresolved pure-phase vortex rejected',int(a.wave_display is None and 'Wave unavailable' in a.analysis_status.get()),1)
             # Do not reintroduce amplitude apodization to hide this limitation.
             # The valid phase-only blaze provides the full-path GUI regression.
             a._select('slm-1');a.slm_pattern_var.set('blaze');a._commit_props()
-            a._select('fourier-plane');a.update()
+            a._select('fourier-plane');a.update();calculate_wave(a)
             self.measure('SLM Fourier field rendered',int(a.wave_display is not None),1)
             field=a.wave_display['field'];n=field.shape[0]
             intensity=abs(field)**2;x,_=a.wave_display['grid'].xy

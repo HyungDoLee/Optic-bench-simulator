@@ -1,8 +1,8 @@
 # 720 nm 4f automated verification
 
-2026-11-06T17:00:15.298341+09:00
+2026-11-07T13:53:49.842920+09:00
 
-{'passed': 66, 'failed': 0, 'error': 0, 'skipped': 0}
+{'passed': 78, 'failed': 0, 'error': 0, 'skipped': 0}
 
 Errors are absolute differences in the measurement units. The maximum per test mixes units; see JSON for each measurement and tolerance.
 Existing regression assertions retain their original verdict/tolerance. Inequality error means constraint violation. N/A means the test has no scalar numerical comparison (e.g. JSON validation or list comparison).
@@ -22,6 +22,11 @@ Existing regression assertions retain their original verdict/tolerance. Inequali
 | test_four_f.FourFTests.test_strict_cap_and_screen_boundary | passed | 0 |
 | test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment | passed | 0 |
 | test_four_f.FourFTests.test_virtual_probes_preserve_beam | passed | 0 |
+| test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative | passed | 0 |
+| test_manual_wave.ManualWaveTests.test_only_button_starts_one_job_and_worker_keeps_ui_alive | passed | 0 |
+| test_manual_wave.ManualWaveTests.test_resize_selection_and_repaint_use_fixed_preview | passed | 0 |
+| test_manual_wave.ManualWaveTests.test_sampling_failure_stops_and_does_not_retry_on_redraw | passed | 0 |
+| test_manual_wave.ManualWaveTests.test_scene_grid_and_plane_changes_mark_stale_until_click | passed | 0 |
 | test_offaxis.OffAxisGUITests.test_incidence_control_order_guides_and_filter_readout | passed | 0 |
 | test_offaxis.OffAxisGeometryTests.test_3d_tangential_wavevector_and_evanescent_orders | passed | 6.93889e-18 |
 | test_offaxis.OffAxisGeometryTests.test_correct_nonzero_532nm_example | passed | 4.24776e-06 |
@@ -49,6 +54,13 @@ Existing regression assertions retain their original verdict/tolerance. Inequali
 | test_optics.OpticsTests.test_screen_radius_matches_manual_abcd | passed | 0 |
 | test_optics.OpticsTests.test_screen_tilt_projected_beam | passed | 0 |
 | test_optics.OpticsTests.test_splitter_branch_powers | passed | 0 |
+| test_review_diagnostics.GSReviewTests.test_gs_phase_improves_reconstruction_and_filter_tradeoff | passed | 0 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_n_and_fov_convergence_are_checked_separately | passed | 1.00344e-08 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_pixel_envelope_predicts_16_pixel_blaze_main_order | passed | 2.498e-14 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_real_pixel_sampling_and_hologram_illumination_are_explicit | passed | 0 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_sample_actual_mean_angle_matches_selected_order_guide | passed | 0.000154083 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_wave_centroid_and_mean_direction_independent_of_reference_ray | passed | 3.28817e-07 |
+| test_review_diagnostics.ReviewDiagnosticsTests.test_wave_job_cancellation_preserves_sampling_guards | passed | N/A |
 | test_slm.SLMGUITests.test_slm_controls_phase_import_json_and_fourier_profile | passed | 8.95148e-09 |
 | test_slm.SLMTests.test_blaze_fourier_spot_position | passed | 1.11022e-16 |
 | test_slm.SLMTests.test_calibrated_reflected_phase_applied_once | passed | 1.48239e-14 |

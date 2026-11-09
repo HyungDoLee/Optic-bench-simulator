@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-06T17:00:15.298341+09:00",
+  "generated_at": "2026-11-07T13:53:49.842920+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 66,
+    "passed": 78,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -1115,6 +1115,257 @@
         }
       ],
       "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "cancelled job keeps no fabricated result",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cancel finishes worker",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "window close signals cancellation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_manual_wave.ManualWaveTests.test_only_button_starts_one_job_and_worker_keeps_ui_alive",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "mode/refresh starts no FFT",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "Tk processes events while worker waits",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "double click runs one job",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "editing during calculation queues nothing",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "worker used original immutable scene",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "snapshot result explicitly stale",
+          "actual": true,
+          "expected": true,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "no automatic follow-up computation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_manual_wave.ManualWaveTests.test_resize_selection_and_repaint_use_fixed_preview",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "all redraws reuse one calculation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cached numerical result unchanged",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave raster reused across mode toggle",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "selection causes no recalculation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "profile readout can scroll at laptop height",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_manual_wave.ManualWaveTests.test_sampling_failure_stops_and_does_not_retry_on_redraw",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "sampling failure displayed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "failed job is not retried automatically",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "error leaves button enabled",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_manual_wave.ManualWaveTests.test_scene_grid_and_plane_changes_mark_stale_until_click",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "grid change marks stale",
+          "actual": true,
+          "expected": true,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "grid change does not calculate",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "explicit click recomputes once",
+          "actual": 2,
+          "expected": 2,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "new grid stored",
+          "actual": 512,
+          "expected": 512,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 5.13e-08,
+          "passed": true
+        },
+        {
+          "name": "scene edit marks stale",
+          "actual": true,
+          "expected": true,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "scene edit does not calculate",
+          "actual": 2,
+          "expected": 2,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
     },
     {
       "test": "test_offaxis.OffAxisGUITests.test_incidence_control_order_guides_and_filter_readout",
@@ -2304,6 +2555,252 @@
       "max_absolute_error": 0
     },
     {
+      "test": "test_review_diagnostics.GSReviewTests.test_gs_phase_improves_reconstruction_and_filter_tradeoff",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "GS NRMSE improves over random phase",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "GS final NRMSE bounded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "large pinhole passes more desired hologram power",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "larger pinhole improves coherent image error",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "large pinhole still rejects residual",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "pixel envelope zone power is not falsely normalized",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_n_and_fov_convergence_are_checked_separately",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Gaussian N=256, FOV=4 radius [mm]",
+          "actual": 0.550022647386861,
+          "expected": 0.5500226373524892,
+          "absolute_error": 1.003437177793387e-08,
+          "relative_error": 1.824356144000526e-08,
+          "tolerance": 2e-06,
+          "passed": true
+        },
+        {
+          "name": "Gaussian N=512, FOV=4 radius [mm]",
+          "actual": 0.550022647386853,
+          "expected": 0.5500226373524892,
+          "absolute_error": 1.0034363784328093e-08,
+          "relative_error": 1.8243546906774745e-08,
+          "tolerance": 2e-06,
+          "passed": true
+        },
+        {
+          "name": "Gaussian N=512, FOV=8 radius [mm]",
+          "actual": 0.5500226473843167,
+          "expected": 0.5500226373524892,
+          "absolute_error": 1.0031827479828337e-08,
+          "relative_error": 1.823893563384248e-08,
+          "tolerance": 2e-06,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.003437177793387e-08
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_pixel_envelope_predicts_16_pixel_blaze_main_order",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "16 pixel carrier sinc envelope efficiency",
+          "actual": 0.987214830766683,
+          "expected": 0.9872148307666581,
+          "absolute_error": 2.4980018054066022e-14,
+          "relative_error": 2.5303527940992203e-14,
+          "tolerance": 1.987214830766658e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.4980018054066022e-14
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_real_pixel_sampling_and_hologram_illumination_are_explicit",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "512 pixel hologram diameter [mm]",
+          "actual": 4.096,
+          "expected": 4.096,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5.096e-10,
+          "passed": true
+        },
+        {
+          "name": "default beam illuminates only 125 pixels at 1/e2 diameter",
+          "actual": 125.0,
+          "expected": 125.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.26e-08,
+          "passed": true
+        },
+        {
+          "name": "8um pixels unresolved in 2048/6mm grid",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "pixel-resolved next power of two",
+          "actual": 4096,
+          "expected": 4096,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 4.097e-07,
+          "passed": true
+        },
+        {
+          "name": "hologram edge is practically dark",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "expanded Gaussian edge intensity",
+          "actual": 0.1353352832366127,
+          "expected": 0.1353352832366127,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.1353352832366127e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_sample_actual_mean_angle_matches_selected_order_guide",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "sample wave vs +1 guide angle [deg]",
+          "actual": 0.647048959418182,
+          "expected": 0.6472030420063223,
+          "absolute_error": 0.00015408258814031406,
+          "relative_error": 0.0002380745734177326,
+          "tolerance": 0.002,
+          "passed": true
+        },
+        {
+          "name": "sample actual incidence is nonzero",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "per-plane wave diagnostics recorded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.00015408258814031406
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_wave_centroid_and_mean_direction_independent_of_reference_ray",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "mean wave sine from carrier",
+          "actual": 0.0014399999999999994,
+          "expected": 0.00144,
+          "absolute_error": 6.505213034913027e-19,
+          "relative_error": 4.517509052022934e-16,
+          "tolerance": 1.00144e-10,
+          "passed": true
+        },
+        {
+          "name": "wave centroid walks off reference [mm]",
+          "actual": 0.28800032881703924,
+          "expected": 0.28800000000000003,
+          "absolute_error": 3.2881703920795147e-07,
+          "relative_error": 1.1417258305831647e-06,
+          "tolerance": 2e-06,
+          "passed": true
+        },
+        {
+          "name": "propagation preserves angular centroid",
+          "actual": 0.0014399999999999994,
+          "expected": 0.00144,
+          "absolute_error": 6.505213034913027e-19,
+          "relative_error": 4.517509052022934e-16,
+          "tolerance": 1.00144e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 3.2881703920795147e-07
+    },
+    {
+      "test": "test_review_diagnostics.ReviewDiagnosticsTests.test_wave_job_cancellation_preserves_sampling_guards",
+      "status": "passed",
+      "measurements": [],
+      "max_absolute_error": null
+    },
+    {
       "test": "test_slm.SLMGUITests.test_slm_controls_phase_import_json_and_fourier_profile",
       "status": "passed",
       "measurements": [
@@ -2327,6 +2824,15 @@
         },
         {
           "name": "amplitude controls absent",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM selection does not auto calculate",
           "actual": 1,
           "expected": 1,
           "absolute_error": 0,
@@ -2786,6 +3292,15 @@
         },
         {
           "name": "wave screen selection",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "wave selection does not auto calculate",
           "actual": 1,
           "expected": 1,
           "absolute_error": 0,

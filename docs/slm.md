@@ -101,13 +101,22 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
    |angle|=2..10°만 허용한다. 이는 제조사 보장 범위가 아니다.
 3. Carrier period/sign은 target pattern(flat/lens/vortex/custom)과 독립적이다.
    Legacy blaze는 별도 carrier가 없을 때 slmPeriodMm을 사용하며 이중 carrier를 더하지 않는다.
-4. Fourier filter를 클릭하면 incoming 0/+1 intensity, 각 ROI power와 hole 윤곽을 표시한다.
+4. Fourier filter를 클릭하고 **계산하기**를 누르면 incoming 0/+1 intensity, 각 ROI power와 hole 윤곽을 표시한다.
    Filter offset/radius로 원하는 차수를 선택한다. 화면 표시 crop은 계산장/출력을 바꾸지 않는다.
 5. 0차 guide는 amber/dashed, +1 guide는 green이다. 이들은 carrier 방향 진단용이며
    회절 효율 예측이나 full field를 대신하지 않는다. 0 guide는 filter에서 종료한다.
    얇은 회색 q 경로는 filter/위상에 영향받지 않는 기준 축이다.
-6. Input shape/phase와 실제 0차 항은 Scalar wave mode에서만 계산된다. 상단 ROI와
-   downstream Sample/Camera의 power를 확인한다.
+6. Input shape/phase와 실제 0차 항은 Scalar wave mode에서만 계산된다. 각 측정면에서
+   **계산하기**를 눌러 상단 ROI와 downstream Sample/Camera의 power를 확인한다.
+7. Wave 계산은 선택된 장면의 복사본으로 한 번만 실행한다. UI 조작은 계속 가능하고
+   **취소**는 현재 전파 연산이 끝난 뒤 적용된다. 모드 선택·드래그·창 크기 변경으로
+   FFT를 실행하지 않는다. 결과는 고정된 미리보기로 유지하고, 설정/측정면/Grid가 바뀌면
+   이전 결과의 측정면과 **재계산 필요**를 표시한다. 새 결과는 버튼으로 갱신한다.
+   긴 수치 readout은 분석 패널의 스크롤바로 볼 수 있다.
+8. 실제 광장의 centroid, 2σ 반경, 평균 local 방향을 readout에 표시한다.
+   평균 횡방향 파수와 법선에 대한 평균 입사각도 각 도착면의 계산 데이터에 기록한다.
+   0/+1이 공존하는 면의 평균 방향은 +1 chief ray와 같지 않다. 필터 이후 선택 차수의
+   방향과 guide를 비교한다. q 경로는 계속 기준 축이며 광장 중심 경로로 바꾸지 않는다.
 
 새 preset의 waveGrid는 JSON에 저장한다. 예전 scene은 선택한 session grid를 그대로 쓸 수 있다.
 기존 slm_blaze_720nm.json/slm_vortex_720nm.json은 새 경사 입사 배치로 갱신했다.
@@ -117,6 +126,11 @@ Old two-splitter 및 amplitude-core 화면은 현행 설계의 근거가 아니�
 
 기존 검사를 유지하고 test_offaxis.py에 incidence/3D direction/carrier/filter 검증을 추가했다.
 최종 수치·GUI 결과는 reports/test_results.md와 JSON을 참고한다. 실제 장비 실측 비교는 0건이다.
+픽셀 pitch·조사 빔 크기·GS와 핀홀에 관한 후속 평가는
+[재평가 대응 보고서](../reports/review_v53b91f6_response.md)와
+[국소 GS 검증](../reports/hologram_validation.md)을 참고한다. 512×512, 8 µm 예시는
+실제 보유 장비 사양이 아니다. 국소 pixel-array Fourier 모델은 전체 bench ASM과 별개이며,
+기존 pixel-resolved 모드의 4 samples/pixel 제한을 완화하지 않는다.
 
 전체 bench는 공면, wave는 local projected scalar 모델이다. 고 NA/tilted-plane 재구성,
 full Jones/LCOS response, RCWA, 실제 gray-voltage LUT, source isolator/beam dump의 열설계는

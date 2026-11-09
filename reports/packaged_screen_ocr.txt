@@ -12,17 +12,21 @@ Optical breadboard
 
 Load 720 nm reflection 4f
 
+eS)
+
 SCREEN BEAM PROFILE
 
 Load 720 nm SLM 4f
 
-‘Scalar ASM: finite pupils + complex sample
+Scalar ASM Alét 243 (2.625): fourier-plane /
+
+laser-720 / branch
 
 + Laser
 
-Detected branch[Branch1/laser-720 ||
-
 Gaussian ray / top view
+
+Detected branch|Branch1/laser-720 |v
 
 + Thin lens
 
@@ -30,15 +34,13 @@ Gaussian ray / top view
 
 + Mirror
 
-Grid [2048 || FOV [mm]
-
-2D intensity * I /lo
-
 + Beam splitter
 
-4
+Grid [2048 || FOV [mm]
 
 + Screen
+
+2D intensity * I /lo
 
 + Sample (specular)
 
@@ -48,17 +50,15 @@ Grid [2048 || FOV [mm]
 
 + Fourier spatial filter
 
+COMPONENT LIST
+
 H
 
 i
 
-View 2.7 mm; 10.00% power
-
-COMPONENT LIST
-
-1D profile - screen-local u
-
 f
+
+View 2.7 mm; 10.00% power
 
 Laser
 
@@ -67,6 +67,8 @@ Laser
 z
 
 f
+
+1D profile - screen-local u
 
 Loos SLM
 
@@ -90,25 +92,15 @@ Thin lens
 
 500, 600
 
-beam-local u [mm], normalized to peak
-
 Beam split.
 
 450, 600
-
-Path
-
-700 mm
 
 Sample (spe
 
 400, 600
 
-q ideal w
-
-0.0916732 mm
-
-q [mm] 0+36.67i
+beam-local u [mm], normalized to peak
 
 Thin lens
 
@@ -116,15 +108,23 @@ Thin lens
 
 ww
 
-aR
+Path
 
-inf mm
+700 mm
 
 Screen
 
-450450
+450 450
 
 illumination-dump
+
+q ideal w
+
+0.0916732 mm
+
+q [mm] 0+36.67i
+
+Ae Se Aa
 
 ABCD source -> plane
 
@@ -134,11 +134,35 @@ ABCD source -> plane
 
 -1.5]
 
-Ae Se Aa
-
 Wave 20 u,v
 
-0.26572, 0.091673 mm
+0.26572, @.091673 m
+
+VIEW OPTIONS
+
+Centroid u,v
+
+-1.1154,
+
+-1,9275e-1
+
+mm
+
+1D Gaussian envelope
+
+(s)
+
+Je? radius
+
+Mean angle u,v 5.1274e-06,
+
+Beam radius along optical path
+
+5.0889e-18 deg
+
+(125mm Bol Ad
+
+0.6 jw [mm]
 
 Wave incident
 
@@ -148,53 +172,37 @@ Collected
 
 8.1 mW
 
+I SLM 0/ # order guides
+
+0.48
+
 PD current
 
 not configured
-
-VIEW OPTIONS
 
 Wave peak
 
 605748 W/m?
 
+os
+
 © ROI
 
 0.099993 mW
 
-1D Gaussian envelope
-
-(s)
-
-Je? radius
-
-+1 / hole ROT
+Envelope exaggeration
 
 7.9994 mW
 
-Beam radius along optical path
-
-(125mm Bol Ad
-
-0.6 jw [mm]
-
-4: Ideal Gaussian, Wave: scalar local planes;
-
-no RCWA, polarization or branch interference.
-
-I SLM 0/ # order guides
-
-0.48
-
-os
-
-Envelope exaggeration
-
 016
+
++1 / hole ROT
 
 EE
 
 °
+
+4: Ideal Gaussian, Wave: scalar local planes;
 
 Hae Me}. S2h7 og
 
@@ -203,6 +211,8 @@ Hae Me}. S2h7 og
 ‘Accumulated propagation s
 
 700 mm
+
+no RCWA, polarization or branch interference.
 
 R /Shift+R 318 - Delete At
 

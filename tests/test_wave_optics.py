@@ -178,6 +178,9 @@ class WaveGUITests(Measurements,unittest.TestCase):
             a.board.event_generate('<ButtonPress-1>',x=round(x),y=round(y))
             a.board.event_generate('<ButtonRelease-1>',x=round(x),y=round(y));a.update()
             self.measure('wave screen selection',int(a.selected_id=='return-screen'),1)
+            self.measure('wave selection does not auto calculate',int(a.wave_cache is None),1)
+            from gui_helpers import calculate_wave
+            calculate_wave(a)
             self.measure('wave field actually computed',int(a.wave_display is not None),1)
             self.measure('ASM mode displayed',int('Scalar ASM' in a.analysis_status.get()),1)
             self.measure('wave screen collected power [mW]',a.wave_display['collected_power_mw'],2.,atol=1e-7)
@@ -185,7 +188,7 @@ class WaveGUITests(Measurements,unittest.TestCase):
             if os.environ.get('OPTICS_CAPTURE_DIR'):
                 folder=Path(os.environ['OPTICS_CAPTURE_DIR']);folder.mkdir(parents=True,exist_ok=True)
                 for component,name in [('return-screen','wave-return'),('sample-1','wave-sample'),('fourier-plane','wave-fourier')]:
-                    a._select(component);a.update();a.after(200,a.quit);a.mainloop()
+                    a._select(component);a.update();calculate_wave(a);a.after(200,a.quit);a.mainloop()
                     x,y=a.winfo_rootx(),a.winfo_rooty()
                     ImageGrab.grab(bbox=(x,y,x+a.winfo_width(),y+a.winfo_height())).save(folder/(name+'.png'))
         finally:a.destroy()

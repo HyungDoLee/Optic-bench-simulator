@@ -11,6 +11,11 @@ test_sample_waist_and_q (test_four_f.FourFTests.test_sample_waist_and_q) ... ok
 test_strict_cap_and_screen_boundary (test_four_f.FourFTests.test_strict_cap_and_screen_boundary) ... ok
 test_traced_abcd_matches_q_on_every_segment (test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment) ... ok
 test_virtual_probes_preserve_beam (test_four_f.FourFTests.test_virtual_probes_preserve_beam) ... ok
+test_cancel_and_close_are_cooperative (test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative) ... ok
+test_only_button_starts_one_job_and_worker_keeps_ui_alive (test_manual_wave.ManualWaveTests.test_only_button_starts_one_job_and_worker_keeps_ui_alive) ... ok
+test_resize_selection_and_repaint_use_fixed_preview (test_manual_wave.ManualWaveTests.test_resize_selection_and_repaint_use_fixed_preview) ... ok
+test_sampling_failure_stops_and_does_not_retry_on_redraw (test_manual_wave.ManualWaveTests.test_sampling_failure_stops_and_does_not_retry_on_redraw) ... ok
+test_scene_grid_and_plane_changes_mark_stale_until_click (test_manual_wave.ManualWaveTests.test_scene_grid_and_plane_changes_mark_stale_until_click) ... ok
 test_incidence_control_order_guides_and_filter_readout (test_offaxis.OffAxisGUITests.test_incidence_control_order_guides_and_filter_readout) ... ok
 test_3d_tangential_wavevector_and_evanescent_orders (test_offaxis.OffAxisGeometryTests.test_3d_tangential_wavevector_and_evanescent_orders) ... ok
 test_correct_nonzero_532nm_example (test_offaxis.OffAxisGeometryTests.test_correct_nonzero_532nm_example) ... ok
@@ -38,6 +43,13 @@ test_reject_bad_scene (test_optics.OpticsTests.test_reject_bad_scene) ... ok
 test_screen_radius_matches_manual_abcd (test_optics.OpticsTests.test_screen_radius_matches_manual_abcd) ... ok
 test_screen_tilt_projected_beam (test_optics.OpticsTests.test_screen_tilt_projected_beam) ... ok
 test_splitter_branch_powers (test_optics.OpticsTests.test_splitter_branch_powers) ... ok
+test_gs_phase_improves_reconstruction_and_filter_tradeoff (test_review_diagnostics.GSReviewTests.test_gs_phase_improves_reconstruction_and_filter_tradeoff) ... ok
+test_n_and_fov_convergence_are_checked_separately (test_review_diagnostics.ReviewDiagnosticsTests.test_n_and_fov_convergence_are_checked_separately) ... ok
+test_pixel_envelope_predicts_16_pixel_blaze_main_order (test_review_diagnostics.ReviewDiagnosticsTests.test_pixel_envelope_predicts_16_pixel_blaze_main_order) ... ok
+test_real_pixel_sampling_and_hologram_illumination_are_explicit (test_review_diagnostics.ReviewDiagnosticsTests.test_real_pixel_sampling_and_hologram_illumination_are_explicit) ... ok
+test_sample_actual_mean_angle_matches_selected_order_guide (test_review_diagnostics.ReviewDiagnosticsTests.test_sample_actual_mean_angle_matches_selected_order_guide) ... ok
+test_wave_centroid_and_mean_direction_independent_of_reference_ray (test_review_diagnostics.ReviewDiagnosticsTests.test_wave_centroid_and_mean_direction_independent_of_reference_ray) ... ok
+test_wave_job_cancellation_preserves_sampling_guards (test_review_diagnostics.ReviewDiagnosticsTests.test_wave_job_cancellation_preserves_sampling_guards) ... ok
 test_slm_controls_phase_import_json_and_fourier_profile (test_slm.SLMGUITests.test_slm_controls_phase_import_json_and_fourier_profile) ... ok
 test_blaze_fourier_spot_position (test_slm.SLMTests.test_blaze_fourier_spot_position) ... ok
 test_calibrated_reflected_phase_applied_once (test_slm.SLMTests.test_calibrated_reflected_phase_applied_once) ... ok
@@ -66,6 +78,6 @@ test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_samplin
 test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
 
 ----------------------------------------------------------------------
-Ran 66 tests in 56.538s
+Ran 78 tests in 48.609s
 
 OK
