@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "waveGrid": {
+    "n": 512,
+    "widthMm": 6.0
+  },
+  "table": {
+    "widthMm": 1200,
+    "heightMm": 900,
+    "holeSpacingMm": 25
+  },
+  "components": [
+    {
+      "id": "laser-720",
+      "type": "laser",
+      "x": 704.5576740963376,
+      "y": 547.9055466999208,
+      "angle": 10.000000000000005,
+      "lambdaNm": 720.0,
+      "waistMm": 0.5,
+      "waistOffsetMm": 300.0,
+      "powerMw": 10.0
+    },
+    {
+      "id": "slm-1",
+      "type": "slm",
+      "x": 1000.0,
+      "y": 600.0,
+      "angle": 5.0,
+      "diameterMm": 12.0,
+      "slmHeightMm": 8.0,
+      "slmMode": "reflective",
+      "slmPattern": "flat",
+      "slmCoreMm": 0.0,
+      "slmEfficiency": 0.8,
+      "slmAmplitude": 1.0,
+      "slmPhaseLevels": 0,
+      "slmStrokeRad": 6.283185307179586,
+      "slmPitchMm": 0.0,
+      "slmFillFactor": 1.0,
+      "slmPeriodMm": 0.5,
+      "slmFocalMm": 200.0,
+      "slmCharge": 1,
+      "slmOffsetRad": 0.0,
+      "slmCarrierPeriodMm": 0.128,
+      "slmCarrierSign": 1,
+      "slmResidualPower": 0.01,
+      "slmResidualPhaseRad": 0.0,
+      "slmDeadReflectivity": 0.0,
+      "slmDesignIncidenceDeg": 5.0,
+      "slmIncidentSource": "laser-720",
+      "slmSourceDistanceMm": 300.0,
+      "slmRelayAxisDeg": 180.0
+    },
+    {
+      "id": "lens-1",
+      "type": "lens",
+      "x": 800.0,
+      "y": 600.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "focalMm": 200.0
+    },
+    {
+      "id": "fourier-plane",
+      "type": "spatial_filter",
+      "x": 600.0,
+      "y": 600.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "filterRadiusMm": 0.2,
+      "filterOffsetMm": 1.1292973172362657,
+      "fourierFocalMm": 200.0,
+      "slmLinkedFilter": "slm-1"
+    },
+    {
+      "id": "lens-2",
+      "type": "lens",
+      "x": 500.0,
+      "y": 600.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "focalMm": 100.0
+    },
+    {
+      "id": "return-separator",
+      "type": "splitter",
+      "x": 450.0,
+      "y": 600.0,
+      "angle": 45.0,
+      "diameterMm": 25.4,
+      "reflectivity": 0.5,
+      "orderPickoff": true
+    },
+    {
+      "id": "sample-1",
+      "type": "sample",
+      "x": 400.0,
+      "y": 600.0,
+      "angle": 0.0,
+      "diameterMm": 25.4,
+      "reflectivity": 0.8
+    },
+    {
+      "id": "collection-lens",
+      "type": "lens",
+      "x": 450.0,
+      "y": 550.0,
+      "angle": 90.0,
+      "diameterMm": 25.4,
+      "focalMm": 50.0
+    },
+    {
+      "id": "return-screen",
+      "type": "screen",
+      "x": 450.0,
+      "y": 450.0,
+      "angle": 90.0,
+      "diameterMm": 25.4
+    },
+    {
+      "id": "illumination-dump",
+      "type": "screen",
+      "x": 450.0,
+      "y": 850.0,
+      "angle": 90.0,
+      "diameterMm": 25.4
+    }
+  ],
+  "wavePropagation": "fresnel"
+}

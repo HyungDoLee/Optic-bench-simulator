@@ -143,6 +143,8 @@ class OffAxisGUITests(Measurements,unittest.TestCase):
             a.report_callback_exception=lambda *e:errors.append(str(e))
             a.geometry('1490x1250+0+0')
             with patch('app.messagebox.askyesno',return_value=True):a._load_slm_four_f()
+            a.wave_method.set('ASM');a._wave_method_changed()
+            a.wave_n.set(2048)
             a.update()
             self.measure('0 order drawn separately',int(bool(a.board.find_withtag('slm-order-0'))),1)
             self.measure('+1 order drawn separately',int(bool(a.board.find_withtag('slm-order-1'))),1)

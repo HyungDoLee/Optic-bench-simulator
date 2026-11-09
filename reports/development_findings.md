@@ -48,5 +48,6 @@ input/sample relay and return detector are now explicit conjugate planes.
 - Coplanar/overlapping component surfaces are not supported: the tracer selects
   one nearest surface, then skips zero-distance intersections. Keep virtual
   probes at distinct locations, as in the supplied preset.
-- Source elements do not absorb returning light; real source isolation and
-  rejected-port dumps still need hardware design.
+- Resolved 2026-11-09: source surfaces now terminate returning rays and order
+  guides. See `fresnel_forward_validation.md` for regression evidence. Detailed
+  source feedback physics and rejected-port hardware remain separate work.

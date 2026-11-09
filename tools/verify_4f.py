@@ -88,10 +88,13 @@ def main():
     args.output.mkdir(parents=True,exist_ok=True)
     counts={name:sum(r['status']==name for r in result.records)
             for name in ('passed','failed','error','skipped')}
-    payload=dict(generated_at=datetime.now(timezone(timedelta(hours=9))).isoformat(),
+    generated=datetime.now(timezone(timedelta(hours=9),name='KST'))
+    payload=dict(generated_at=generated.isoformat(),
                  python=sys.version.split()[0],counts=counts,tests=result.records)
     (args.output/'test_results.json').write_text(json.dumps(payload,indent=2),encoding='utf-8')
-    lines=['# 720 nm 4f automated verification','',payload['generated_at'],'',
+    lines=['# 720 nm 4f automated verification','',
+           f'작성일: {generated:%Y-%m-%d}','',
+           f'작성 시각: {generated:%H:%M:%S} KST (UTC+09:00)','',
            str(counts),'',
            'Errors are absolute differences in the measurement units. The maximum per test mixes units; see JSON for each measurement and tolerance.',
            'Existing regression assertions retain their original verdict/tolerance. Inequality error means constraint violation. N/A means the test has no scalar numerical comparison (e.g. JSON validation or list comparison).','',

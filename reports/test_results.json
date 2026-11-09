@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-07T13:53:49.842920+09:00",
+  "generated_at": "2026-11-09T17:59:39.891426+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 78,
+    "passed": 92,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -1000,11 +1000,11 @@
         },
         {
           "name": "segment 11 Re(q)",
-          "actual": 250.0,
-          "expected": 250.0,
+          "actual": 150.0,
+          "expected": 150.0,
           "absolute_error": 0.0,
           "relative_error": 0.0,
-          "tolerance": 2.5100000000000003e-08,
+          "tolerance": 1.5100000000000003e-08,
           "passed": true
         },
         {
@@ -1115,6 +1115,653 @@
         }
       ],
       "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_fresnel.FresnelGUITests.test_manual_fresnel_intensity_phase_and_model_selection",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "ideal default uses 512 grid",
+          "actual": 512,
+          "expected": 512,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 5.13e-08,
+          "passed": true
+        },
+        {
+          "name": "SLM preset selects Fresnel",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "return-to-laser absorption marker visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "finite-pinhole guides absent in ideal mode",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "selecting Fresnel starts no job",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Fresnel output computed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Fresnel status visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "output physical sampling displayed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "phase toggle retains original field",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "phase is selected",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "phase image rendered",
+          "actual": true,
+          "expected": true,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "phase-only vortex GUI Fresnel result",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "model change marks result stale",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "GUI callback errors",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_custom_phase_forward_bench_matches_fourier_and_bypasses_filters",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "custom phase full bench complex Fourier error",
+          "actual": 3.494134952257491e-16,
+          "expected": 0.0,
+          "absolute_error": 3.494134952257491e-16,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "phase input not optimized or overwritten",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "custom phase absolute power [mW]",
+          "actual": 10.000000000000002,
+          "expected": 10.0,
+          "absolute_error": 1.7763568394002505e-15,
+          "relative_error": 1.7763568394002506e-16,
+          "tolerance": 1.1000000000000001e-09,
+          "passed": true
+        },
+        {
+          "name": "pinhole bypassed in ideal mode",
+          "actual": 5.000000000000002,
+          "expected": 5.0,
+          "absolute_error": 1.7763568394002505e-15,
+          "relative_error": 3.552713678800501e-16,
+          "tolerance": 6e-10,
+          "passed": true
+        },
+        {
+          "name": "sample output dx [mm]",
+          "actual": 0.005859375,
+          "expected": 0.005859375,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0058593750000001e-10,
+          "passed": true
+        },
+        {
+          "name": "pinhole bypass explicitly recorded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "blaze Fourier centroid [mm]",
+          "actual": -1.1292973172362657,
+          "expected": -1.129297317236266,
+          "absolute_error": 2.220446049250313e-16,
+          "relative_error": 1.9662191836994886e-16,
+          "tolerance": 1.1129297317236267e-09,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.7763568394002505e-15
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_free_space_against_independent_fresnel_quadrature",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "direct Fresnel quadrature complex relative error",
+          "actual": 4.227280919867235e-15,
+          "expected": 0.0,
+          "absolute_error": 4.227280919867235e-15,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "Fresnel quadrature absolute power",
+          "actual": 0.1413716694115407,
+          "expected": 0.14137166941154067,
+          "absolute_error": 2.7755575615628914e-17,
+          "relative_error": 1.963305358928097e-16,
+          "tolerance": 1.513716694115407e-11,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 4.227280919867235e-15
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_output_phase_and_detuning_are_retained",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "defocused Fresnel complex error",
+          "actual": 5.210980698216435e-16,
+          "expected": 0.0,
+          "absolute_error": 5.210980698216435e-16,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "defocus changes complex wave",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "back-focus output quadratic phase retained",
+          "actual": 9.267430225119146e-17,
+          "expected": 0.0,
+          "absolute_error": 9.267430225119146e-17,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 5.210980698216435e-16
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_phase_only_vortex_has_fourier_dark_core_without_asm",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "pure phase vortex center/peak",
+          "actual": 1.5361880627513375e-07,
+          "expected": 0.0,
+          "absolute_error": 1.5361880627513375e-07,
+          "relative_error": null,
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        {
+          "name": "vortex absolute power retained",
+          "actual": 10.000000000000005,
+          "expected": 10.0,
+          "absolute_error": 5.329070518200751e-15,
+          "relative_error": 5.329070518200751e-16,
+          "tolerance": 1.1000000000000001e-09,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.5361880627513375e-07
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_same_n_different_sampling_and_gaussian_fourier_width",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Fourier N unchanged",
+          "actual": 512,
+          "expected": 512,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 5.13e-08,
+          "passed": true
+        },
+        {
+          "name": "512/8um Fourier dx [mm]",
+          "actual": 0.03515625,
+          "expected": 0.03515625,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0351562500000001e-10,
+          "passed": true
+        },
+        {
+          "name": "512/8um Fourier FOV [mm]",
+          "actual": 18.0,
+          "expected": 18.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.9e-09,
+          "passed": true
+        },
+        {
+          "name": "Gaussian Fourier intensity NRMSE",
+          "actual": 2.3053091543889015e-08,
+          "expected": 0.0,
+          "absolute_error": 2.3053091543889015e-08,
+          "relative_error": null,
+          "tolerance": 2e-07,
+          "passed": true
+        },
+        {
+          "name": "Gaussian Fourier power [mW]",
+          "actual": 0.9999999999999997,
+          "expected": 1.0,
+          "absolute_error": 3.3306690738754696e-16,
+          "relative_error": 3.3306690738754696e-16,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 2.3053091543889015e-08
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_sampling_path_limit_and_cancellation_remain_explicit",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Fresnel respects 2500mm route limit",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "Fresnel JSON model preserved",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_two_fresnel_steps_and_lens_form_fourier_transform",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "P(f) L(f) P(f) vs Fourier complex error",
+          "actual": 1.1999010458070738e-15,
+          "expected": 0.0,
+          "absolute_error": 1.1999010458070738e-15,
+          "relative_error": null,
+          "tolerance": 2e-12,
+          "passed": true
+        },
+        {
+          "name": "Fourier output dx [mm]",
+          "actual": 0.016770509831248424,
+          "expected": 0.01677050983124842,
+          "absolute_error": 3.469446951953614e-18,
+          "relative_error": 2.0687784610393946e-16,
+          "tolerance": 1.0167705098312485e-10,
+          "passed": true
+        },
+        {
+          "name": "two-step absolute power",
+          "actual": 0.2513274122871835,
+          "expected": 0.2513274122871835,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.6132741228718354e-11,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.1999010458070738e-15
+    },
+    {
+      "test": "test_fresnel.FresnelTests.test_unequal_4f_image_and_negative_b_transform",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "4f complex image inversion",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        },
+        {
+          "name": "4f image FOV [mm]",
+          "actual": 2.0,
+          "expected": 2.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "4f image power",
+          "actual": 0.1924225500323748,
+          "expected": 0.1924225500323748,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.024225500323748e-11,
+          "passed": true
+        },
+        {
+          "name": "negative B Fourier sign",
+          "actual": 3.079611270002375e-16,
+          "expected": 0.0,
+          "absolute_error": 3.079611270002375e-16,
+          "relative_error": null,
+          "tolerance": 1e-12,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 3.079611270002375e-16
+    },
+    {
+      "test": "test_laser_stop.LaserStopTests.test_missed_laser_does_not_become_an_infinite_wall",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "beam passing clear of source reaches screen",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "missed source has no absorption",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_laser_stop.LaserStopTests.test_other_laser_is_also_opaque",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "beam stops at other laser x [mm]",
+          "actual": 400.0,
+          "expected": 400.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4.01e-08,
+          "passed": true
+        },
+        {
+          "name": "other source absorbs ray",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "no transmitted beam through other source",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_laser_stop.LaserStopTests.test_reflected_slm_order_guides_stop_at_laser",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "order 0 terminates at source x [mm]",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "order 0 marked blocked",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "order 1 terminates at source x [mm]",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "order 1 marked blocked",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "SLM return cannot reach rear detector",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_laser_stop.LaserStopTests.test_return_stops_at_emitting_laser_before_rear_screen",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "emitted and reflected segments",
+          "actual": 2,
+          "expected": 2,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "return stops at source x [mm]",
+          "actual": 200.0,
+          "expected": 200.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2.01e-08,
+          "passed": true
+        },
+        {
+          "name": "return path [mm]",
+          "actual": 800.0,
+          "expected": 800.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 8.01e-08,
+          "passed": true
+        },
+        {
+          "name": "no rear screen after laser",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "one source absorption",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "absorbed ray reference power [mW]",
+          "actual": 10.0,
+          "expected": 10.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.1000000000000001e-09,
+          "passed": true
+        },
+        {
+          "name": "absorption is not a path cap",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_laser_stop.LaserStopTests.test_slm_presets_have_no_segment_past_a_hit_laser",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "default SLM stray branch is absorbed",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "no post-laser segments",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
     },
     {
       "test": "test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative",
@@ -2081,32 +2728,6 @@
       "status": "passed",
       "measurements": [
         {
-          "name": "assertEqual",
-          "actual": 1,
-          "expected": 1,
-          "absolute_error": 0,
-          "relative_error": null,
-          "passed": true,
-          "criterion": {
-            "assertion": "assertEqual",
-            "args": [],
-            "kwargs": {}
-          }
-        },
-        {
-          "name": "assertEqual",
-          "actual": 0,
-          "expected": 0,
-          "absolute_error": 0,
-          "relative_error": null,
-          "passed": true,
-          "criterion": {
-            "assertion": "assertEqual",
-            "args": [],
-            "kwargs": {}
-          }
-        },
-        {
           "name": "assertAlmostEqual",
           "actual": 2500.0,
           "expected": 2500.0,
@@ -2131,22 +2752,9 @@
             "args": [],
             "kwargs": {}
           }
-        },
-        {
-          "name": "assertEqual",
-          "actual": 4,
-          "expected": 4,
-          "absolute_error": 0,
-          "relative_error": null,
-          "passed": true,
-          "criterion": {
-            "assertion": "assertEqual",
-            "args": [],
-            "kwargs": {}
-          }
         }
       ],
-      "max_absolute_error": 0
+      "max_absolute_error": 0.0
     },
     {
       "test": "test_optics.OpticsTests.test_default_scene_hits_screen",

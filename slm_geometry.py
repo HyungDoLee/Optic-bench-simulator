@@ -82,7 +82,6 @@ def order_segments(scene,result):
                 if limit<=EPS:break
                 candidates=[]
                 for c in scene['components']:
-                    if c['type']=='laser':continue
                     found=intersection(p,d,c)
                     if found and found[0]<=limit:candidates.append((found,c))
                 chosen=min(candidates,key=lambda v:v[0][0]) if candidates else None
@@ -91,7 +90,9 @@ def order_segments(scene,result):
                 rows.append(dict(order=order,start=p,end=end,path_mm=path,blocked=False))
                 if chosen is None:break
                 (_,_,along,cn),c=chosen;p=end
-                if c['type']=='spatial_filter':
+                if c['type']=='laser':
+                    rows[-1]['blocked']=True;break
+                elif c['type']=='spatial_filter':
                     if abs(along-c.get('filterOffsetMm',0))>c.get('filterRadiusMm',.2):
                         rows[-1]['blocked']=True;break
                 elif c['type']=='lens':

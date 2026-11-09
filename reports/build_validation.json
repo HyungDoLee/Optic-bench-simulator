@@ -1,16 +1,21 @@
 {
   "status": "passed",
-  "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
-  "sha256": "ada1ed3faaab87b0f579575aec444de30636caf3b13520b32459925d8637fc89",
-  "checks": [
-    "native packaged GUI startup",
-    "load 720 nm SLM 4f preset",
-    "select Fourier probe without automatic computation",
-    "click calculate once and render Fourier ROI"
-  ],
-  "calculation_observed_seconds": 4.250705229991581,
-  "screenshot": "/workspace/Optic-bench-simulator/reports/screenshots/packaged-wave-return.png",
-  "python": "Python 3.13.5",
   "platform": "Linux x86_64",
-  "windows_exe_tested": false
+  "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
+  "sha256": "971e065632559cd5de4c06c3749b34a3cbb9683111a526f1edc4b8887796f651",
+  "source_base_commit": "222180564e8fea5c526f61ba80e4f339520d4263",
+  "source_has_uncommitted_changes": true,
+  "python": "3.13.5",
+  "windows_exe_tested": false,
+  "checks": [
+    "native GUI startup",
+    "load ideal Fresnel SLM preset",
+    "select plane without auto calculation",
+    "click calculate and render scaled Fourier intensity",
+    "switch cached phase display with real key/mouse events"
+  ],
+  "screenshots": [
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-fresnel-intensity.png",
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-fresnel-phase.png"
+  ]
 }

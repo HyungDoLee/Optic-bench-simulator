@@ -86,19 +86,22 @@ class OpticsTests(unittest.TestCase):
 
     def test_cumulative_2p5m_mirror_cavity(self):
         scene={'table':{'widthMm':1200,'heightMm':900},'components':[
-            {'id':'laser-1','type':'laser','x':300,'y':450,'angle':0,
+            # Inject from outside the resonator: an opaque laser cannot sit
+            # on the intracavity axis and be passed on every round trip.
+            {'id':'laser-1','type':'laser','x':300,'y':100,'angle':90,
              'lambdaNm':780,'waistMm':1,'powerMw':10},
+            {'id':'injection','type':'splitter','x':300,'y':450,'angle':45,
+             'diameterMm':50,'reflectivity':.5},
             {'id':'mirror-a','type':'mirror','x':900,'y':450,'angle':0,
              'diameterMm':50,'reflectivity':1},
             {'id':'mirror-b','type':'mirror','x':100,'y':450,'angle':0,
              'diameterMm':50,'reflectivity':1}
         ]}
         r=simulate(scene)
-        self.assertEqual(r.capped,1)
-        self.assertEqual(r.exits,0)
-        self.assertAlmostEqual(r.segments[-1].path_end_mm,MAX_PROPAGATION_MM)
+        self.assertGreaterEqual(r.capped,1)
+        self.assertAlmostEqual(max(s.path_end_mm for s in r.segments),MAX_PROPAGATION_MM)
         self.assertEqual(len(r.screens),0)
-        self.assertEqual(len(r.segments),4)
+        self.assertTrue(r.laser_absorptions)
 
     def test_branch_inherits_cumulative_length(self):
         scene={'table':{'widthMm':1200,'heightMm':900},'components':[

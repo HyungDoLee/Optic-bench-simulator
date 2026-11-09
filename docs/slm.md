@@ -1,5 +1,10 @@
 # 경사 입사 phase-only LCOS와 Fourier 차수 선택
 
+2026-11-09: GUI의 SLM preset은 **Fresnel 이상 모드**로 시작한다. 렌즈/시료/검출기
+clipping과 pinhole을 생략해 주어진 위상의 Fourier 변환을 먼저 확인한다.
+아래의 필터 통과율과 차수 선택 설계는 기존 **ASM 유한 구경 모드**에 해당한다.
+최신 구현과 검사 결과는 [Fresnel 보고서](../reports/fresnel_forward_validation.md)를 참고한다.
+
 ## 현재 설계
 
 이 문서는 이전의 수직 입사·두 splitter 구성을 대체한다. LCOS 입출력 분리와
@@ -95,19 +100,27 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
 
 ## GUI 사용
 
-1. Load 720 nm SLM 4f를 누른다. incidence=5°, carrier=0.128 mm, saved Grid=2048/FOV=6 mm다.
+1. Load 720 nm SLM 4f를 누른다. incidence=5°, carrier=0.128 mm,
+   Propagation=Fresnel, input Grid=512/FOV=6 mm다. 이 N은 실제 LCOS 픽셀 수가 아니다.
+   legacy slm_blaze/slm_vortex JSON은 기존 ASM/Grid2048 설정을 유지한다.
 2. LCOS Properties의 Preset incidence를 바꾸면 입력 source 위치/방향만 바꿔 output axis를
    유지하고, 연동된 Fourier hole 위치를 갱신한다. 이 preset은 렌즈 clearance 때문에
    |angle|=2..10°만 허용한다. 이는 제조사 보장 범위가 아니다.
 3. Carrier period/sign은 target pattern(flat/lens/vortex/custom)과 독립적이다.
    Legacy blaze는 별도 carrier가 없을 때 slmPeriodMm을 사용하며 이중 carrier를 더하지 않는다.
-4. Fourier filter를 클릭하고 **계산하기**를 누르면 incoming 0/+1 intensity, 각 ROI power와 hole 윤곽을 표시한다.
-   Filter offset/radius로 원하는 차수를 선택한다. 화면 표시 crop은 계산장/출력을 바꾸지 않는다.
-5. 0차 guide는 amber/dashed, +1 guide는 green이다. 이들은 carrier 방향 진단용이며
+4. Fourier filter를 클릭하고 **계산하기**를 누른다. Fresnel에서는 차단 전 광장을 보여준다.
+   2D display를 Intensity/Phase로 전환하면 동일한 결과의 강도/위상을 볼 수 있다.
+   Phase는 −π..π의 cyclic 색상이며 I/Ipeak<1e-6은 어둡게 표시한다. 전체 piston은 기준에서 제외한다.
+   ASM으로 전환하고 Grid=2048/FOV=6 mm로 설정하면 incoming 0/+1 intensity,
+   각 ROI power와 hole 윤곽을 확인할 수 있다. Filter offset/radius로 원하는 차수를 선택한다.
+   화면 표시 crop은 계산장/출력을 바꾸지 않는다.
+5. ASM의 0차 guide는 amber/dashed, +1 guide는 green이다. 이들은 carrier 방향 진단용이며
    회절 효율 예측이나 full field를 대신하지 않는다. 0 guide는 filter에서 종료한다.
-   얇은 회색 q 경로는 filter/위상에 영향받지 않는 기준 축이다.
+   q 경로는 filter/위상에 영향받지 않는 기준 축이다. Fresnel에서는 유한 pinhole에
+   따른 차수 차단 guide를 숨기고 q 경로만 기준으로 표시한다.
 6. Input shape/phase와 실제 0차 항은 Scalar wave mode에서만 계산된다. 각 측정면에서
-   **계산하기**를 눌러 상단 ROI와 downstream Sample/Camera의 power를 확인한다.
+   **계산하기**를 눌러 downstream Sample/Camera의 power를 확인한다.
+   Fresnel은 pinhole을 우회하므로 ASM과 전달 파워가 다르다.
 7. Wave 계산은 선택된 장면의 복사본으로 한 번만 실행한다. UI 조작은 계속 가능하고
    **취소**는 현재 전파 연산이 끝난 뒤 적용된다. 모드 선택·드래그·창 크기 변경으로
    FFT를 실행하지 않는다. 결과는 고정된 미리보기로 유지하고, 설정/측정면/Grid가 바뀌면
@@ -118,7 +131,7 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
    0/+1이 공존하는 면의 평균 방향은 +1 chief ray와 같지 않다. 필터 이후 선택 차수의
    방향과 guide를 비교한다. q 경로는 계속 기준 축이며 광장 중심 경로로 바꾸지 않는다.
 
-새 preset의 waveGrid는 JSON에 저장한다. 예전 scene은 선택한 session grid를 그대로 쓸 수 있다.
+waveGrid와 wavePropagation은 JSON에 저장한다. 모델 키가 없는 예전 scene은 ASM으로 연다.
 기존 slm_blaze_720nm.json/slm_vortex_720nm.json은 새 경사 입사 배치로 갱신했다.
 Old two-splitter 및 amplitude-core 화면은 현행 설계의 근거가 아니다.
 
@@ -139,3 +152,8 @@ full Jones/LCOS response, RCWA, 실제 gray-voltage LUT, source isolator/beam du
 선택된 carrier의 +1 guide와 실제 ROI power를 구분하며, 모든 산란 차수를 새 branch로
 탐색하거나 coherent하게 합치지는 않는다. 돌아오는 미검출 포트는 실험에서 반드시
 분석/차단해야 하며 이 구성만으로 완전한 source isolation을 달성했다고 해석하면 안 된다.
+
+레이저는 돌아온 빔에 대해 불투명한 종단이다. 발광면 위치의 유한 선분(기본 Ø25.4 mm,
+JSON diameterMm으로 변경 가능)에 다시 닿으면 해당 ray/차수 guide를 중단한다.
+이상적인 Fresnel 모드에서도 이 경로 종단은 적용한다. 되먹임이 레이저의 동작을 바꾸는
+효과나 케이싱의 상세 3D 형상은 모델링하지 않는다.

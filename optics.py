@@ -181,7 +181,7 @@ class Segment:
 
 @dataclass
 class Marker:
-    kind: str  # waist, limit
+    kind: str  # waist, limit, absorbed
     point: Vec
     branch_id: int
     path_mm: float
@@ -237,6 +237,7 @@ class TraceResult:
     probes: list[ScreenReading] = field(default_factory=list)
     branch_parents: dict[int, tuple[int, float]] = field(default_factory=dict)
     order_paths: list[dict[str,Any]] = field(default_factory=list)
+    laser_absorptions: list[dict[str,Any]] = field(default_factory=list)
 
     def branch_segments(self, branch_id: int) -> list[Segment]:
         """Include the shared source path before each splitter ancestor."""
@@ -252,14 +253,16 @@ class TraceResult:
 
 
 def simulate(scene: dict[str, Any]) -> TraceResult:
-    """Trace until screen, table edge, power threshold, or 2500mm cap.
+    """Trace until screen/opaque laser, table edge, power threshold, or 2500mm cap.
 
     Every split branch inherits its cumulative path length. In particular,
     mirror-to-mirror travel counts against the cap; it does not reset.
     """
     table = scene['table']
     width, height = float(table['widthMm']), float(table['heightMm'])
-    components = [c for c in scene['components'] if c['type'] != 'laser']
+    # The source starts on its own surface, which intersection() excludes at
+    # zero distance. A later positive-distance hit is an opaque beam stop.
+    components = scene['components']
     sources = [c for c in scene['components'] if c['type'] == 'laser']
     result = TraceResult()
     stack: list[dict[str, Any]] = []
@@ -328,6 +331,12 @@ def simulate(scene: dict[str, Any]) -> TraceResult:
             result.hits.append((c['id'],end,state['branch_id']))
             kind = c['type']
             if kind != 'probe': state['events'] += 1
+            if kind=='laser':
+                result.laser_absorptions.append(dict(component=c['id'],source=state['source_id'],
+                    branch=state['branch_id'],path_mm=state['path_mm'],
+                    ray_reference_power_mw=state['power_mw']))
+                result.markers.append(Marker('absorbed',end,state['branch_id'],state['path_mm']))
+                break
             if kind=='slm':
                 from slm import validate_slm
                 settings=validate_slm(c)
@@ -484,6 +493,9 @@ def validate_scene(raw: Any) -> dict[str,Any]:
         cleaned.append(item)
     scene={'schemaVersion':1,'table':{'widthMm':width,'heightMm':height,
         'holeSpacingMm':spacing},'components':cleaned}
+    if 'wavePropagation' in raw:
+        if raw['wavePropagation'] not in ('asm','fresnel'):raise ValueError('Unknown wave propagation method')
+        scene['wavePropagation']=raw['wavePropagation']
     if 'waveGrid' in raw:
         config=raw['waveGrid']
         if not isinstance(config,dict):raise ValueError('Saved wave grid must be an object')

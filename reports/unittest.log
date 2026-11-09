@@ -11,6 +11,20 @@ test_sample_waist_and_q (test_four_f.FourFTests.test_sample_waist_and_q) ... ok
 test_strict_cap_and_screen_boundary (test_four_f.FourFTests.test_strict_cap_and_screen_boundary) ... ok
 test_traced_abcd_matches_q_on_every_segment (test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment) ... ok
 test_virtual_probes_preserve_beam (test_four_f.FourFTests.test_virtual_probes_preserve_beam) ... ok
+test_manual_fresnel_intensity_phase_and_model_selection (test_fresnel.FresnelGUITests.test_manual_fresnel_intensity_phase_and_model_selection) ... ok
+test_custom_phase_forward_bench_matches_fourier_and_bypasses_filters (test_fresnel.FresnelTests.test_custom_phase_forward_bench_matches_fourier_and_bypasses_filters) ... ok
+test_free_space_against_independent_fresnel_quadrature (test_fresnel.FresnelTests.test_free_space_against_independent_fresnel_quadrature) ... ok
+test_output_phase_and_detuning_are_retained (test_fresnel.FresnelTests.test_output_phase_and_detuning_are_retained) ... ok
+test_phase_only_vortex_has_fourier_dark_core_without_asm (test_fresnel.FresnelTests.test_phase_only_vortex_has_fourier_dark_core_without_asm) ... ok
+test_same_n_different_sampling_and_gaussian_fourier_width (test_fresnel.FresnelTests.test_same_n_different_sampling_and_gaussian_fourier_width) ... ok
+test_sampling_path_limit_and_cancellation_remain_explicit (test_fresnel.FresnelTests.test_sampling_path_limit_and_cancellation_remain_explicit) ... ok
+test_two_fresnel_steps_and_lens_form_fourier_transform (test_fresnel.FresnelTests.test_two_fresnel_steps_and_lens_form_fourier_transform) ... ok
+test_unequal_4f_image_and_negative_b_transform (test_fresnel.FresnelTests.test_unequal_4f_image_and_negative_b_transform) ... ok
+test_missed_laser_does_not_become_an_infinite_wall (test_laser_stop.LaserStopTests.test_missed_laser_does_not_become_an_infinite_wall) ... ok
+test_other_laser_is_also_opaque (test_laser_stop.LaserStopTests.test_other_laser_is_also_opaque) ... ok
+test_reflected_slm_order_guides_stop_at_laser (test_laser_stop.LaserStopTests.test_reflected_slm_order_guides_stop_at_laser) ... ok
+test_return_stops_at_emitting_laser_before_rear_screen (test_laser_stop.LaserStopTests.test_return_stops_at_emitting_laser_before_rear_screen) ... ok
+test_slm_presets_have_no_segment_past_a_hit_laser (test_laser_stop.LaserStopTests.test_slm_presets_have_no_segment_past_a_hit_laser) ... ok
 test_cancel_and_close_are_cooperative (test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative) ... ok
 test_only_button_starts_one_job_and_worker_keeps_ui_alive (test_manual_wave.ManualWaveTests.test_only_button_starts_one_job_and_worker_keeps_ui_alive) ... ok
 test_resize_selection_and_repaint_use_fixed_preview (test_manual_wave.ManualWaveTests.test_resize_selection_and_repaint_use_fixed_preview) ... ok
@@ -78,6 +92,6 @@ test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_samplin
 test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
 
 ----------------------------------------------------------------------
-Ran 78 tests in 48.609s
+Ran 92 tests in 50.002s
 
 OK

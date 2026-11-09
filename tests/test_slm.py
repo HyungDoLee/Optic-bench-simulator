@@ -146,7 +146,7 @@ class SLMTests(Measurements,unittest.TestCase):
     def test_slm_keeps_cumulative_2500mm_limit(self):
         scene=dict(table=dict(widthMm=4000,heightMm=900,holeSpacingMm=25),components=[
             dict(id='laser',type='laser',x=100,y=450,angle=0,lambdaNm=720,waistMm=.5,powerMw=1),
-            slm_component(x=500,y=450),
+            slm_component(x=1500,y=450),
             dict(id='mirror',type='mirror',x=50,y=450,angle=0,diameterMm=25.4,reflectivity=1.),
             dict(id='screen',type='screen',x=2700,y=450,angle=0,diameterMm=25.4)])
         result=simulate(validate_scene(scene))
@@ -166,6 +166,9 @@ class SLMGUITests(Measurements,unittest.TestCase):
             a.report_callback_exception=lambda *e:errors.append(str(e))
             a.geometry('1490x1250+0+0')
             with patch('app.messagebox.askyesno',return_value=True):a._load_slm_four_f()
+            # Retain the original finite-aperture ASM regression independently
+            # of the new ideal Fresnel default used by the GUI SLM preset.
+            a.wave_method.set('ASM');a._wave_method_changed()
             a.update()
             self.measure('SLM added to GUI scene',int(a._component('slm-1') is not None),1)
             self.measure('SLM polygon rendered',len(a.board.find_withtag('slm-surface')),1)

@@ -1,10 +1,26 @@
 # Optical Bench — Python Desktop v0.3
 
+## Fresnel forward diffraction
+
+**GS 없이 입력한 SLM 위상이 만드는 광장을 전파합니다.**
+`Load 720 nm SLM 4f`는 이제 `Propagation: Fresnel`, 계산 격자 512×512/FOV 6 mm로 시작합니다.
+Screen·Sample·Fourier 면 선택 → **계산하기** → `2D display: Intensity / Phase`로 확인하세요.
+보기 전환은 FFT를 다시 실행하지 않습니다. `examples/slm_fresnel_720nm.json`도 같은 설정입니다.
+
+Fresnel 이상 모드는 렌즈·시료·검출기의 clipping과 pinhole 차단을 생략하고,
+자유 전파/렌즈의 Fresnel 적분을 계산합니다. SLM active area·pixel response는 유지합니다.
+입출력 N은 같아도 샘플 간격/FOV는 달라지며 출력 좌표는 readout에 표시합니다.
+기존 유한 구경 계산은 `Propagation: ASM`으로 선택할 수 있습니다.
+레이저에 되돌아온 경로는 레이저에서 흡수 종단되며 뒤쪽으로 연장되지 않습니다.
+
+[Fresnel 구현·수치/GUI 검증 보고서](reports/fresnel_forward_validation.md)를 참고하세요.
+GS는 별도 선택 검증 코드로만 남겨두고 GUI의 forward 경로에서 호출하지 않습니다.
+
 ## SLM 추가
 
 현재 기본 배치는 **5° 경사 입사 LCOS → carrier → Fourier spatial filter → 시료**입니다.
 LCOS 경로 분리용 splitter를 제거하고, 시료 반사 검출용 pick-off만 남겼습니다.
-0차/+1차 경로와 각 ROI의 실제 광파워를 별도로 표시합니다. 입사각과 차수 선택은
+ASM 모드에서 0차/+1차 경로와 각 ROI의 광파워를 별도로 표시합니다. 입사각과 차수 선택은
 서로 다른 기능입니다. [현재 배치·가정·검증·제한](docs/slm.md)을 먼저 참고하세요.
 
 **Load 720 nm SLM 4f** 또는 **+ SLM**으로 **반사형 phase-only LCOS**를 추가합니다.
@@ -71,6 +87,7 @@ optics.py              순차 독립형 계산 엔진 (파이썬 기본 라이�
 assets/                 svg.zip에서 추출한 원본 SVG 및 실행용 PNG
 examples/               JSON 예제
 wave_optics.py         별도 scalar ASM/복소 광장 엔진
+fresnel_optics.py      이상적 Fresnel/Collins 전파와 초점면 scaled FFT
 wave_view.py           수동 계산 결과의 고정 미리보기 준비
 hologram_validation.py 국소 pixel-array/GS 검증 모델
 requirements.txt        NumPy 계산 및 Pillow 이미지 표시

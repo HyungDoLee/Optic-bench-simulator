@@ -1,6 +1,8 @@
 # Local pixel-array / GS / pinhole validation
 
-2026-11-07T13:57:34.431853+09:00
+작성일: 2026-11-07
+
+작성 시각: 13:57:34 KST (UTC+09:00)
 
 This is an example 512×512, 8 µm pixel-array synthesis benchmark at normal
 incidence, not a complete 5° bench ASM run, manufacturer calibration or experiment.

@@ -9,7 +9,8 @@ from hologram_validation import illumination_sampling,gs_filter_benchmark
 
 
 def main():
-    report=dict(generated_at=datetime.now(timezone(timedelta(hours=9))).isoformat(),
+    generated=datetime.now(timezone(timedelta(hours=9),name='KST'))
+    report=dict(generated_at=generated.isoformat(),
         hardware_parameters_are_examples=True,
         narrow_beam=illumination_sampling(.5,.008,512,6,2048,5),
         expanded_beam=illumination_sampling(2.048,.008,512,6,2048,5),
@@ -19,7 +20,9 @@ def main():
     b=report['benchmark'];small,large=b['filters']
     text=f'''# Local pixel-array / GS / pinhole validation
 
-{report['generated_at']}
+작성일: {generated:%Y-%m-%d}
+
+작성 시각: {generated:%H:%M:%S} KST (UTC+09:00)
 
 This is an example 512×512, 8 µm pixel-array synthesis benchmark at normal
 incidence, not a complete 5° bench ASM run, manufacturer calibration or experiment.

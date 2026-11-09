@@ -202,6 +202,11 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
     branches. Does not discover scattered paths or recombine separate branches.
     Normal-incidence lenses/sample/detector required; ideal splitter folds allowed.
     """
+    method=scene.get('wavePropagation','asm')
+    if method=='fresnel':
+        from fresnel_optics import trace_fresnel
+        return trace_fresnel(scene,result,reading,grid,cancel_event=cancel_event)
+    if method!='asm':raise ValueError('Unknown wave propagation method')
     from optics import MAX_PROPAGATION_MM,q_from_source,normal,tangent,Vec
     config=scene.get('waveGrid',{})
     grid=grid or Grid(config.get('n',512),config.get('widthMm',4.))

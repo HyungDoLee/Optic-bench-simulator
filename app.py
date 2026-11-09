@@ -5,6 +5,7 @@ Dependency: Pillow (only for the supplied optical-component icons and heatmaps).
 """
 from __future__ import annotations
 import copy
+import colorsys
 import hashlib
 import json
 import math
@@ -119,6 +120,8 @@ class BenchApp(tk.Tk):
         self.mm_scale = 1.
         self.current_readings = []
         self.wave_mode=tk.BooleanVar(value=False)
+        self.wave_method=tk.StringVar(value='ASM')
+        self.wave_quantity=tk.StringVar(value='Intensity')
         self.wave_cache=None
         self.wave_display=None
         self.wave_busy=False
@@ -237,7 +240,7 @@ class BenchApp(tk.Tk):
         ttk.Checkbutton(parent,text='Gaussian envelope',variable=self.envelope,
                         command=self._draw_board).pack(anchor='w',padx=13,pady=3)
         ttk.Checkbutton(parent,text='25 mm 홀에 스냅',variable=self.snap).pack(anchor='w',padx=13,pady=3)
-        ttk.Checkbutton(parent,text='SLM 0 / +1 order guides',variable=self.show_orders,
+        ttk.Checkbutton(parent,text='SLM 0 / +1 guides (ASM)',variable=self.show_orders,
                         command=self._draw_board).pack(anchor='w',padx=13,pady=3)
         tk.Label(parent,text='Envelope exaggeration',bg=PANEL,fg=MUTED,
                  font=('Segoe UI',9)).pack(anchor='w',padx=13,pady=(10,0))
@@ -334,7 +337,22 @@ class BenchApp(tk.Tk):
         grid_entry=ttk.Entry(grid_row,textvariable=self.wave_width,width=6)
         grid_entry.pack(side='left',padx=4)
         grid_entry.bind('<Return>',lambda _e:self._render_screen())
-        tk.Label(analysis_body,text='2D intensity  ·  I / I₀',bg=PANEL,fg=INK,
+        method_row=ttk.Frame(analysis_body);method_row.pack(fill='x',padx=12,pady=2)
+        ttk.Label(method_row,text='Propagation').pack(side='left')
+        method_combo=ttk.Combobox(method_row,textvariable=self.wave_method,
+            values=('ASM','Fresnel'),state='readonly',width=10)
+        method_combo.pack(side='right')
+        method_combo.bind('<<ComboboxSelected>>',self._wave_method_changed)
+        tk.Label(analysis_body,text='Fresnel: ideal lenses, no clipping/pinhole.\nASM: existing finite-aperture model.',
+            bg=PANEL,fg=MUTED,justify='left',font=('Segoe UI',8)).pack(anchor='w',padx=12,pady=2)
+        quantity_row=ttk.Frame(analysis_body);quantity_row.pack(fill='x',padx=12,pady=2)
+        ttk.Label(quantity_row,text='2D display').pack(side='left')
+        quantity_combo=ttk.Combobox(quantity_row,textvariable=self.wave_quantity,
+            values=('Intensity','Phase'),state='readonly',width=10)
+        quantity_combo.pack(side='right')
+        quantity_combo.bind('<<ComboboxSelected>>',lambda _e:self._render_screen())
+        self.heatmap_caption=tk.StringVar(value='2D intensity  ·  I / I₀')
+        tk.Label(analysis_body,textvariable=self.heatmap_caption,bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
         self.heatmap=tk.Canvas(analysis_body,width=264,height=250,bg='#fff',highlightthickness=1,
                                highlightbackground=LINE)
@@ -415,6 +433,7 @@ class BenchApp(tk.Tk):
     def _reset(self):
         if not messagebox.askyesno('예제 복원','현재 배치를 기본 예제로 바꿀까요?'): return
         self.scene=default_scene();self.selected_id='screen-1';self.selected_branch_index=0
+        self.wave_method.set('ASM')
         self.project_file=None
         self._refresh()
 
@@ -423,6 +442,7 @@ class BenchApp(tk.Tk):
                                   'Replace current layout with the 720 nm 4f example?'):
             return
         self.scene=four_f_scene()
+        self.wave_method.set('ASM')
         self.selected_id='return-screen'
         self.selected_branch_index=0
         self.project_file=None
@@ -432,6 +452,8 @@ class BenchApp(tk.Tk):
     def _load_slm_four_f(self):
         if not messagebox.askyesno('720 nm SLM 4f','Replace current layout with the SLM 4f example?'):return
         self.scene=slm_four_f_scene()
+        self.scene['wavePropagation']='fresnel';self.wave_method.set('Fresnel')
+        self.scene['waveGrid']=dict(n=512,widthMm=6.)
         self.envelope.set(False)
         self.wave_n.set(self.scene['waveGrid']['n']);self.wave_width.set(self.scene['waveGrid']['widthMm'])
         self.selected_id='slm-1';self.selected_branch_index=0;self.project_file=None
@@ -444,6 +466,7 @@ class BenchApp(tk.Tk):
         try:
             with open(file,encoding='utf-8') as f: scene=validate_scene(json.load(f))
             self.scene=scene
+            self.wave_method.set('Fresnel' if scene.get('wavePropagation')=='fresnel' else 'ASM')
             if 'waveGrid' in scene:
                 self.wave_n.set(scene['waveGrid']['n']);self.wave_width.set(scene['waveGrid']['widthMm'])
             self.project_file=Path(file)
@@ -460,6 +483,7 @@ class BenchApp(tk.Tk):
             defaultextension='.json',filetypes=[('JSON scene','*.json')])
         if not file:return
         try:
+            self.scene['wavePropagation']=self.wave_method.get().lower()
             with open(file,'w',encoding='utf-8') as f:
                 json.dump(self.scene,f,ensure_ascii=False,indent=2)
             self.project_file=Path(file)
@@ -480,7 +504,7 @@ class BenchApp(tk.Tk):
         self._draw_radius_graph()
         self.status.set(f'{len(self.scene["components"])} elements  |  {len(self.result.segments)} segments  |  '
                         f'{len(self.result.screens)} screen hits  |  {self.result.capped} capped at 2.5 m  |  '
-                        f'{len(self.result.warnings)} warnings')
+                        f'{len(self.result.laser_absorptions)} stopped at laser  |  {len(self.result.warnings)} warnings')
 
     def _render_tree(self):
         self.tree_lock=True
@@ -666,9 +690,9 @@ class BenchApp(tk.Tk):
                 if len(points)>=6:canvas.create_polygon(*points,fill='#f5ddda',outline='')
         for seg in self.result.segments:
             x0,y0=self._xy(seg.start);x1,y1=self._xy(seg.end)
-            guides=bool(self.result.order_paths) and self.show_orders.get()
+            guides=bool(self.result.order_paths) and self.show_orders.get() and self.wave_method.get()!='Fresnel'
             canvas.create_line(x0,y0,x1,y1,fill='#bac4cb' if guides else RAY,width=1 if guides else 2)
-        if self.show_orders.get():
+        if self.show_orders.get() and self.wave_method.get()!='Fresnel':
             for seg in self.result.order_paths:
                 x0,y0=self._xy(seg['start']);x1,y1=self._xy(seg['end'])
                 color='#b27d26' if seg['order']==0 else '#25815b'
@@ -682,6 +706,8 @@ class BenchApp(tk.Tk):
             elif marker.kind=='limit':
                 canvas.create_line(x-6,y-6,x+6,y+6,fill='#af3e35',width=2)
                 canvas.create_line(x-6,y+6,x+6,y-6,fill='#af3e35',width=2)
+            elif marker.kind=='absorbed':
+                canvas.create_oval(x-6,y-6,x+6,y+6,outline='#a86628',width=2,tags=('laser-absorption',))
         self.icon_refs=[]
         for c in self.scene['components']:
             x,y=self._xy((c['x'],c['y']))
@@ -788,7 +814,12 @@ class BenchApp(tk.Tk):
         r=readings[min(self.selected_branch_index,len(readings)-1)]
         grid=Grid(self.wave_n.get(),self.wave_width.get())
         fingerprint=hashlib.sha256(json.dumps(self.scene,sort_keys=True).encode()).hexdigest()
-        return (fingerprint,r.screen_id,r.source_id,r.branch_id,r.path_mm,grid.n,grid.width_mm),r,grid
+        return (fingerprint,r.screen_id,r.source_id,r.branch_id,r.path_mm,grid.n,grid.width_mm,self.wave_method.get()),r,grid
+
+    def _wave_method_changed(self,_event=None):
+        self.scene['wavePropagation']=self.wave_method.get().lower()
+        self._draw_board()
+        self._render_screen()
 
     @staticmethod
     def _compute_wave_snapshot(scene,result,reading,grid,cancel_event):
@@ -812,6 +843,7 @@ class BenchApp(tk.Tk):
             self.analysis_status.set('계산할 Screen / Probe를 선택하세요.');return
         key,reading,grid=request
         scene=copy.deepcopy(self.scene);result=copy.deepcopy(self.result)
+        scene['wavePropagation']=self.wave_method.get().lower()
         reading=copy.deepcopy(reading)
         cancel=threading.Event();messages=queue.Queue()
         self._wave_cancel=cancel;self._wave_queue=messages;self.wave_busy=True;self.wave_error=None
@@ -867,7 +899,7 @@ class BenchApp(tk.Tk):
             self.wave_display=data
             if self.wave_busy:message='계산 중 — 이전 결과 표시: '+data['target_label']
             elif cached_key!=key:message='이전 설정 결과 / 재계산 필요: '+data['target_label']
-            else:message=f'Scalar ASM 계산 완료 ({data["seconds"]:.2f}s): '+data['target_label']
+            else:message=f'{data.get("method_label","Scalar ASM")} 계산 완료 ({data["seconds"]:.2f}s): '+data['target_label']
             self.analysis_status.set(message)
             self.readout.set(data['preview']['readout'])
             self._draw_wave_profile()
@@ -900,6 +932,7 @@ class BenchApp(tk.Tk):
         r=readings[self.selected_branch_index]
         if self.wave_mode.get():
             self._render_wave_state();return
+        self.heatmap_caption.set('2D intensity  ·  I / I₀ (Gaussian)')
         self.analysis_status.set(f'Beam detected  •  {r.source_id}  •  branch {r.branch_id}')
         self.readout.set(
             f'Path length     {fmt(r.path_mm,1):>9} mm\n'
@@ -974,13 +1007,25 @@ class BenchApp(tk.Tk):
     def _draw_wave_profile(self):
         data=self.wave_display;preview=data['preview']
         if self._wave_photo_data is not data:
-            self._wave_photo=ImageTk.PhotoImage(preview['image'],master=self)
+            self._wave_photos={name:ImageTk.PhotoImage(preview[key],master=self)
+                for name,key in [('Intensity','image'),('Phase','phase_image')]}
             self._wave_photo_data=data
+        self._wave_photo=self._wave_photos[self.wave_quantity.get()]
+        self.heatmap_caption.set('2D phase  ·  −π..π rad (dark: low intensity)'
+            if self.wave_quantity.get()=='Phase' else '2D intensity  ·  I / I₀')
         self.heatmap_image=self._wave_photo
         c=self.heatmap;c.delete('all');width=max(c.winfo_width(),264)
         c.create_image(width/2,4,image=self.heatmap_image,anchor='n')
         span=preview['span_mm'];left=preview['min_u_mm']
-        c.create_text(width/2,232,text=f'View {span:.3g} mm; {100*preview["visible_fraction"]:.2f}% power',fill=MUTED)
+        if self.wave_quantity.get()=='Phase':
+            for i in range(32):
+                rgb=colorsys.hsv_to_rgb(i/31,220/255,235/255)
+                color='#'+''.join(f'{round(v*255):02x}' for v in rgb)
+                c.create_rectangle(width/2-106+212*i/32,219,width/2-106+212*(i+1)/32,225,fill=color,outline='')
+            for u,label in [(-106,'−π'),(0,'0'),(106,'+π')]:
+                c.create_text(width/2+u,231,text=label,font=('Segoe UI',7),fill=MUTED)
+        c.create_text(width/2,245 if self.wave_quantity.get()=='Phase' else 232,
+            text=f'View {span:.3g} mm; {100*preview["visible_fraction"]:.2f}% power',font=('Segoe UI',8),fill=MUTED)
         if 'filter_center_mm' in data:
             for u,label,color in [(0.,'0','#b27d26'),(data['filter_center_mm'],'+1' if data.get('has_carrier') else 'hole','#25815b')]:
                 position=width/2-106+212*(u-left)/span

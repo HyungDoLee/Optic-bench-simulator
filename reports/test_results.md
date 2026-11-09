@@ -1,8 +1,10 @@
 # 720 nm 4f automated verification
 
-2026-11-07T13:53:49.842920+09:00
+작성일: 2026-11-09
 
-{'passed': 78, 'failed': 0, 'error': 0, 'skipped': 0}
+작성 시각: 17:59:39 KST (UTC+09:00)
+
+{'passed': 92, 'failed': 0, 'error': 0, 'skipped': 0}
 
 Errors are absolute differences in the measurement units. The maximum per test mixes units; see JSON for each measurement and tolerance.
 Existing regression assertions retain their original verdict/tolerance. Inequality error means constraint violation. N/A means the test has no scalar numerical comparison (e.g. JSON validation or list comparison).
@@ -22,6 +24,20 @@ Existing regression assertions retain their original verdict/tolerance. Inequali
 | test_four_f.FourFTests.test_strict_cap_and_screen_boundary | passed | 0 |
 | test_four_f.FourFTests.test_traced_abcd_matches_q_on_every_segment | passed | 0 |
 | test_four_f.FourFTests.test_virtual_probes_preserve_beam | passed | 0 |
+| test_fresnel.FresnelGUITests.test_manual_fresnel_intensity_phase_and_model_selection | passed | 0 |
+| test_fresnel.FresnelTests.test_custom_phase_forward_bench_matches_fourier_and_bypasses_filters | passed | 1.77636e-15 |
+| test_fresnel.FresnelTests.test_free_space_against_independent_fresnel_quadrature | passed | 4.22728e-15 |
+| test_fresnel.FresnelTests.test_output_phase_and_detuning_are_retained | passed | 5.21098e-16 |
+| test_fresnel.FresnelTests.test_phase_only_vortex_has_fourier_dark_core_without_asm | passed | 1.53619e-07 |
+| test_fresnel.FresnelTests.test_same_n_different_sampling_and_gaussian_fourier_width | passed | 2.30531e-08 |
+| test_fresnel.FresnelTests.test_sampling_path_limit_and_cancellation_remain_explicit | passed | 0 |
+| test_fresnel.FresnelTests.test_two_fresnel_steps_and_lens_form_fourier_transform | passed | 1.1999e-15 |
+| test_fresnel.FresnelTests.test_unequal_4f_image_and_negative_b_transform | passed | 3.07961e-16 |
+| test_laser_stop.LaserStopTests.test_missed_laser_does_not_become_an_infinite_wall | passed | 0 |
+| test_laser_stop.LaserStopTests.test_other_laser_is_also_opaque | passed | 0 |
+| test_laser_stop.LaserStopTests.test_reflected_slm_order_guides_stop_at_laser | passed | 0 |
+| test_laser_stop.LaserStopTests.test_return_stops_at_emitting_laser_before_rear_screen | passed | 0 |
+| test_laser_stop.LaserStopTests.test_slm_presets_have_no_segment_past_a_hit_laser | passed | 0 |
 | test_manual_wave.ManualWaveTests.test_cancel_and_close_are_cooperative | passed | 0 |
 | test_manual_wave.ManualWaveTests.test_only_button_starts_one_job_and_worker_keeps_ui_alive | passed | 0 |
 | test_manual_wave.ManualWaveTests.test_resize_selection_and_repaint_use_fixed_preview | passed | 0 |
