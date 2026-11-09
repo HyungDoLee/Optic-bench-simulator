@@ -95,8 +95,15 @@ test_image_conjugacy_not_just_waist (test_wave_optics.WaveTests.test_image_conju
 test_phase_sample_changes_fourier_but_not_ideal_image_intensity (test_wave_optics.WaveTests.test_phase_sample_changes_fourier_but_not_ideal_image_intensity) ... ok
 test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_sampling_guards_and_cumulative_cap) ... ok
 test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
+test_compact_layout_and_collapsible_details (test_wave_progress.ProgressGUITests.test_compact_layout_and_collapsible_details) ... ok
+test_failed_calculation_does_not_retry_or_finish_bar (test_wave_progress.ProgressGUITests.test_failed_calculation_does_not_retry_or_finish_bar) ... ok
+test_real_completion_history_and_no_redraw_computation (test_wave_progress.ProgressGUITests.test_real_completion_history_and_no_redraw_computation) ... ok
+test_running_heartbeat_global_badge_and_cancel (test_wave_progress.ProgressGUITests.test_running_heartbeat_global_badge_and_cancel) ... ok
+test_elapsed_time_and_historical_eta_are_honest (test_wave_progress.ProgressStateTests.test_elapsed_time_and_historical_eta_are_honest) ... ok
+test_engine_callbacks_are_monotonic_and_preserve_fields (test_wave_progress.ProgressStateTests.test_engine_callbacks_are_monotonic_and_preserve_fields) ... ok
+test_monotonic_stages_and_terminal_outcomes (test_wave_progress.ProgressStateTests.test_monotonic_stages_and_terminal_outcomes) ... ok
 
 ----------------------------------------------------------------------
-Ran 97 tests in 54.401s
+Ran 104 tests in 58.208s
 
 OK

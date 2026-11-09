@@ -100,7 +100,7 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
 
 ## GUI 사용
 
-1. Load 720 nm SLM 4f를 누른다. incidence=5°, carrier=0.128 mm,
+1. `720 nm · LCOS SLM 4f`를 누른다. incidence=5°, carrier=0.128 mm,
    Propagation=Fresnel, input Grid=512/FOV=6 mm다. 이 N은 실제 LCOS 픽셀 수가 아니다.
    legacy slm_blaze/slm_vortex JSON은 기존 ASM/Grid2048 설정을 유지한다.
 2. LCOS Properties의 Preset incidence를 바꾸면 입력 source 위치/방향만 바꿔 output axis를
@@ -135,6 +135,11 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
    Intensity/Phase 전환 및 Save를 지원한다. 전체 FOV는 Full FOV로 복원한다.
    여러 창은 같은 결과를 공유하거나 서로 다른 계산을 고정해 비교할 수 있으며,
    장면/선택/새 계산으로 이미 열린 창이 바뀌지 않는다. 조작은 FFT를 재실행하지 않는다.
+10. 빔 분석 패널은 계산 설정/실행/결과 카드로 나뉜다. 로딩바는 실제 완료한 단계,
+    경과 시간은 wall clock을 표시한다. 이전 동일 설정의 성공 기록이 있으면 예상 남은 시간을
+    표시하고, 첫 실행에는 예상값을 만들지 않는다. FFT 한 번의 내부 진행률은 알 수 없으므로
+    해당 단계에서는 bar가 잠시 멈춰도 경과 시간은 계속 갱신된다.
+    상단 상태 배지를 누르면 분석 탭으로 돌아온다. 1D 단면과 상세 q/ABCD/광파워는 펼쳐서 본다.
 
 waveGrid와 wavePropagation은 JSON에 저장한다. 모델 키가 없는 예전 scene은 ASM으로 연다.
 기존 slm_blaze_720nm.json/slm_vortex_720nm.json은 새 경사 입사 배치로 갱신했다.

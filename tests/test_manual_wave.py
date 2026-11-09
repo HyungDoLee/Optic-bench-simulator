@@ -26,11 +26,11 @@ class ManualWaveTests(Measurements,unittest.TestCase):
     def test_only_button_starts_one_job_and_worker_keeps_ui_alive(self):
         a=self.app;started=threading.Event();release=threading.Event()
         original=a._compute_wave_snapshot;captured=[]
-        def held(scene,result,reading,grid,cancel):
+        def held(scene,result,reading,grid,cancel,**kwargs):
             started.set()
             if not release.wait(5):raise AssertionError('Test gate timed out')
             captured.append(next(c for c in scene['components'] if c['id']=='lens-1')['focalMm'])
-            return original(scene,result,reading,grid,cancel)
+            return original(scene,result,reading,grid,cancel,**kwargs)
         with patch.object(a,'_compute_wave_snapshot',side_effect=held) as compute:
             a.wave_mode.set(True)
             for _ in range(3):a._render_screen();a._refresh()
@@ -66,6 +66,7 @@ class ManualWaveTests(Measurements,unittest.TestCase):
             self.measure('wave raster reused across mode toggle',int(a.heatmap_image is image),1)
             a._select('lens-1');a._select('return-screen');a.update()
             self.measure('selection causes no recalculation',compute.call_count,1)
+            a.show_readout.set(True);a._toggle_readout();a.update()
             self.measure('profile readout can scroll at laptop height',int(a.analysis_canvas.yview()[1]<1.),1)
 
     def test_scene_grid_and_plane_changes_mark_stale_until_click(self):
@@ -93,7 +94,7 @@ class ManualWaveTests(Measurements,unittest.TestCase):
 
     def test_cancel_and_close_are_cooperative(self):
         a=self.app;started=threading.Event();finished=threading.Event()
-        def cancellable(scene,result,reading,grid,cancel):
+        def cancellable(scene,result,reading,grid,cancel,**kwargs):
             started.set();cancel.wait(3);finished.set();raise CancelledError()
         with patch.object(a,'_compute_wave_snapshot',side_effect=cancellable):
             a.compute_wave_button.invoke();self.assertTrue(started.wait(2))

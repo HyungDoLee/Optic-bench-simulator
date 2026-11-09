@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-11-09T20:09:59+09:00",
+  "model": "ASM",
+  "n": 2048,
+  "input_fov_mm": 6.0,
+  "target": "fourier-plane",
+  "first_duration_seconds": 2.7857087969896384,
+  "capture": {
+    "stage_fraction": 0.44999999999999996,
+    "elapsed_seconds": 1.9189781389723066,
+    "display": "\uacbd\uacfc 1.9\ucd08 \u00b7 \uc608\uc0c1 \ub0a8\uc740 \uc2dc\uac04 \uc57d 0.9\ucd08 (\uc774\uc804 \ub3d9\uc77c \uc124\uc815 \uae30\uc900)"
+  },
+  "second_duration_seconds": 2.6751998429826926,
+  "staged_percent_is_not_time_fraction": true
+}

@@ -56,7 +56,7 @@ def fresnel_transform(field,grid,wavelength_nm,matrix):
     return out,output_grid
 
 
-def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
+def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None,progress_callback=None):
     """One existing coplanar ray route, with ideal unlimited linear optics.
 
     A still-unmodulated Gaussian is evaluated analytically at the first phase
@@ -65,6 +65,8 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
     intermediate lens chirps. Detuned B!=0 systems retain their chirps.
     """
     config=scene.get('waveGrid',{})
+    report=progress_callback or (lambda fraction,stage:None)
+    report(0.,'Fresnel 입력 광장 준비')
     grid=grid or Grid(config.get('n',512),config.get('widthMm',4.))
     components={c['id']:c for c in scene['components']}
     source=components[reading.source_id];lam=float(source['lambdaNm'])
@@ -74,6 +76,7 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
     field=None;pending=ABCD();factor=1.+0j
     source_q=q_from_source(source)
     arrivals=[];blocks=[];bypassed=[]
+    units=len(segments)+1
 
     def cancelled():
         if cancel_event is not None and cancel_event.is_set():raise CancelledError('Wave calculation cancelled')
@@ -81,6 +84,7 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
     def materialize(component,segment):
         nonlocal field,grid,pending,factor
         cancelled()
+        report(i/units,'Fresnel 광장 계산 · '+component['id'])
         before_grid=grid
         if field is None:
             field=gaussian(grid,lam,pending.apply_q(source_q),float(source['powerMw']))*factor
@@ -107,6 +111,7 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
 
     for i,segment in enumerate(segments):
         cancelled()
+        report(i/units,f'Fresnel 전파 단계 {i+1}/{len(segments)}')
         pending=propagation_matrix(segment.length_mm) @ pending
         hit=next((h for h in result.hits if h[2]==segment.branch_id and abs(h[1].x-segment.end.x)<1e-7 and abs(h[1].y-segment.end.y)<1e-7),None)
         if not hit:raise ValueError('Missing optical interaction')
@@ -115,7 +120,8 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
         if kind in ('lens','sample','screen','probe','spatial_filter') and cosine<.99999:
             raise ValueError('Fresnel path needs near-normal lens/sample/detector incidence')
         if i==len(segments)-1:
-            materialize(component,segment);break
+            materialize(component,segment)
+            report((i+1)/units,component['id']+' 도착');break
         if kind=='lens':
             n=normal(float(component.get('angle',0)))
             forward=n if segment.direction.dot(n)>=0 else n*(-1)
@@ -146,6 +152,7 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
                 factor*=1j*math.sqrt(r) if reflected else math.sqrt(1-r)
             elif kind=='mirror':factor*=math.sqrt(float(component.get('reflectivity',1)))
             if reflected and field is not None:field=field[:,(-np.arange(grid.n))%grid.n]
+        report((i+1)/units,component['id']+' 처리 완료')
 
     target=components[reading.screen_id];p=power(field,grid)
     responsivity=float(target.get('responsivityAW',0))
@@ -154,4 +161,5 @@ def trace_fresnel(scene,result,reading,grid=None,*,cancel_event=None):
         filter_losses=[],propagation_method='fresnel',method_label='Fresnel ideal',
         blocks=blocks,bypassed_apertures=bypassed+[target['id']+' detector aperture'],
         model_note='Ideal Fresnel; lens/sample/detector apertures and pinholes bypassed. SLM active area/pixels retained.')
+    report(1.,'Fresnel 광파워와 진단 계산 완료')
     return out

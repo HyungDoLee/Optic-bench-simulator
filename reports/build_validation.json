@@ -2,8 +2,8 @@
   "status": "passed",
   "platform": "Linux x86_64",
   "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
-  "sha256": "67b5d0e6e56ef1534ba5ee309151c07c272abce201adc2868c40e2f316601712",
-  "source_base_commit": "3d388d2b3e76c66810ea63783d19b7b52e845715",
+  "sha256": "47afc24231d2ebdad1d7796071ec1b1780582408c9bbcec16e9074c0cd113c4c",
+  "source_base_commit": "e13ef07e326901f419f35afd8be991bf86285fa8",
   "source_has_uncommitted_changes": true,
   "python": "3.13.5",
   "windows_exe_tested": false,
@@ -13,6 +13,7 @@
     "select plane without auto calculation",
     "click calculate and render scaled Fourier intensity",
     "switch cached phase display with real key/mouse events",
+    "native stage progress completion displayed",
     "open independent Matplotlib figure",
     "real mouse-wheel zoom in packaged figure",
     "real toolbar Pan and mouse drag in packaged figure"

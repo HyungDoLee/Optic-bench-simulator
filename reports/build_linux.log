@@ -1,92 +1,92 @@
-46 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.9
-46 INFO: Python: 3.13.5
-48 INFO: Platform: Linux-6.18.57-x86_64-with-glibc2.41
-48 INFO: Python environment: /workspace/scratch/optic-build-venv
-49 INFO: Module search paths (PYTHONPATH):
+66 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.9
+67 INFO: Python: 3.13.5
+69 INFO: Platform: Linux-6.18.57-x86_64-with-glibc2.41
+69 INFO: Python environment: /workspace/scratch/optic-build-venv
+70 INFO: Module search paths (PYTHONPATH):
 ['/workspace/Optic-bench-simulator',
  '/usr/lib/python313.zip',
  '/usr/lib/python3.13',
  '/usr/lib/python3.13/lib-dynload',
  '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages',
  '/workspace/Optic-bench-simulator']
-213 INFO: Appending 'datas' from .spec
-213 INFO: checking Analysis
-222 INFO: Building because /workspace/Optic-bench-simulator/profile_figure.py changed
-222 INFO: Looking for Python shared library...
-233 INFO: Using Python shared library: /lib/x86_64-linux-gnu/libpython3.13.so.1.0
-233 INFO: Running Analysis Analysis-00.toc
-233 INFO: Target bytecode optimization level: 0
-233 INFO: Initializing module dependency graph...
-234 INFO: Initializing module graph hook caches...
-238 INFO: Analyzing modules for base_library.zip ...
-757 INFO: Processing standard module hook 'hook-encodings.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-1130 INFO: Processing standard module hook 'hook-math.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-2162 INFO: Processing standard module hook 'hook-pickle.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-2799 INFO: Processing standard module hook 'hook-heapq.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-3120 INFO: Caching module dependency graph...
-3147 INFO: Analyzing /workspace/Optic-bench-simulator/app.py
-3214 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_find_module_path'
-3214 INFO: TclTkInfo: initializing cached Tcl/Tk info...
-3353 INFO: Processing standard module hook 'hook-_tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-3422 INFO: Processing standard module hook 'hook-PIL.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-3513 INFO: Processing standard module hook 'hook-PIL.Image.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-3693 INFO: Processing standard module hook 'hook-numpy.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-3971 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
-3971 INFO: SetuptoolsInfo: initializing cached setuptools info...
-4451 INFO: Processing standard module hook 'hook-platform.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-4482 INFO: Processing standard module hook 'hook-_ctypes.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-4629 INFO: Processing standard module hook 'hook-sysconfig.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-4876 INFO: Processing standard module hook 'hook-webbrowser.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-5743 INFO: Processing standard module hook 'hook-difflib.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-5911 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-6036 INFO: Processing standard module hook 'hook-xml.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-7568 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-7742 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-8051 INFO: Processing standard module hook 'hook-matplotlib.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-8478 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
-8836 INFO: Processing standard module hook 'hook-matplotlib.backend_bases.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-9651 INFO: Processing standard module hook 'hook-matplotlib.backends.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-9727 INFO: Processing standard module hook 'hook-matplotlib.pyplot.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-9845 INFO: Processing standard module hook 'hook-matplotlib.figure.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-10540 INFO: Processing standard module hook 'hook-dateutil.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/_pyinstaller_hooks_contrib/stdhooks'
-10546 INFO: Processing standard module hook 'hook-zoneinfo.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/_pyinstaller_hooks_contrib/stdhooks'
-12731 INFO: Processing pre-safe-import-module hook 'hook-gi.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
-12839 INFO: Analyzing hidden import 'PIL._tkinter_finder'
-12840 INFO: Processing module hooks (post-graph stage)...
-12845 INFO: Processing standard module hook 'hook-_tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-12877 INFO: Processing standard module hook 'hook-matplotlib.backends.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-12878 INFO: Matplotlib backend selection method: user-provided name(s)
-13279 INFO: Selected matplotlib backends: ['TkAgg']
-13279 INFO: Extra dists for selected matplotlib backends: []
-13522 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-13562 INFO: Performing binary vs. data reclassification (535 entries)
-13569 INFO: Looking for ctypes DLLs
-13626 WARNING: Library user32 required via ctypes not found
-13641 INFO: Analyzing run-time hooks ...
-13646 INFO: Including run-time hook 'pyi_rth_inspect.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
-13648 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
-13649 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
-13650 INFO: Including run-time hook 'pyi_rth_mplconfig.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
-13651 INFO: Processing pre-find-module-path hook 'hook-_pyi_rth_utils.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_find_module_path'
-13652 INFO: Processing standard module hook 'hook-_pyi_rth_utils.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
-13653 INFO: Including run-time hook 'pyi_rth__tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
-13671 INFO: Creating base_library.zip...
-13685 INFO: Looking for dynamic libraries
-14181 INFO: Warnings written to /workspace/scratch/optic-wave-build/OpticalBench/warn-OpticalBench.txt
-14203 INFO: Graph cross-reference written to /workspace/scratch/optic-wave-build/OpticalBench/xref-OpticalBench.html
-14222 INFO: checking PYZ
-14226 INFO: Building because /workspace/Optic-bench-simulator/profile_figure.py changed
-14226 INFO: Building PYZ (ZlibArchive) /workspace/scratch/optic-wave-build/OpticalBench/PYZ-00.pyz
-14901 INFO: Building PYZ (ZlibArchive) /workspace/scratch/optic-wave-build/OpticalBench/PYZ-00.pyz completed successfully.
-14920 INFO: checking PKG
-14924 INFO: Building because toc changed
-14924 INFO: Building PKG (CArchive) OpticalBench.pkg
-28441 INFO: Building PKG (CArchive) OpticalBench.pkg completed successfully.
-28448 INFO: Bootloader /workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/bootloader/Linux-64bit-intel/run
-28448 INFO: checking EXE
-28452 INFO: Building because toc changed
-28452 INFO: Building EXE from EXE-00.toc
-28454 INFO: Copying bootloader EXE to /workspace/scratch/optic-wave-dist/OpticalBench
-28455 INFO: Appending PKG archive to custom ELF section in EXE
-28508 INFO: Building EXE from EXE-00.toc completed successfully.
-28514 INFO: Build complete! The results are available in: /workspace/scratch/optic-wave-dist
+354 INFO: Appending 'datas' from .spec
+354 INFO: checking Analysis
+367 INFO: Building because /workspace/Optic-bench-simulator/app.py changed
+367 INFO: Looking for Python shared library...
+379 INFO: Using Python shared library: /lib/x86_64-linux-gnu/libpython3.13.so.1.0
+379 INFO: Running Analysis Analysis-00.toc
+379 INFO: Target bytecode optimization level: 0
+379 INFO: Initializing module dependency graph...
+379 INFO: Initializing module graph hook caches...
+385 INFO: Analyzing modules for base_library.zip ...
+1572 INFO: Processing standard module hook 'hook-encodings.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+1856 INFO: Processing standard module hook 'hook-math.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+3153 INFO: Processing standard module hook 'hook-pickle.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+4202 INFO: Processing standard module hook 'hook-heapq.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+4659 INFO: Caching module dependency graph...
+4700 INFO: Analyzing /workspace/Optic-bench-simulator/app.py
+4802 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_find_module_path'
+4803 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+5037 INFO: Processing standard module hook 'hook-_tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+5128 INFO: Processing standard module hook 'hook-PIL.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+5272 INFO: Processing standard module hook 'hook-PIL.Image.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+5540 INFO: Processing standard module hook 'hook-numpy.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+5987 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
+5987 INFO: SetuptoolsInfo: initializing cached setuptools info...
+6625 INFO: Processing standard module hook 'hook-platform.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+6680 INFO: Processing standard module hook 'hook-_ctypes.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+6856 INFO: Processing standard module hook 'hook-sysconfig.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+7177 INFO: Processing standard module hook 'hook-webbrowser.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+8275 INFO: Processing standard module hook 'hook-difflib.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+8466 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+8577 INFO: Processing standard module hook 'hook-xml.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+10086 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+10320 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+10668 INFO: Processing standard module hook 'hook-matplotlib.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+11075 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
+11588 INFO: Processing standard module hook 'hook-matplotlib.backend_bases.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+12568 INFO: Processing standard module hook 'hook-matplotlib.backends.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+12644 INFO: Processing standard module hook 'hook-matplotlib.pyplot.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+12830 INFO: Processing standard module hook 'hook-matplotlib.figure.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+13663 INFO: Processing standard module hook 'hook-dateutil.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+13669 INFO: Processing standard module hook 'hook-zoneinfo.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+15891 INFO: Processing pre-safe-import-module hook 'hook-gi.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_safe_import_module'
+15972 INFO: Analyzing hidden import 'PIL._tkinter_finder'
+15973 INFO: Processing module hooks (post-graph stage)...
+15979 INFO: Processing standard module hook 'hook-_tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+16048 INFO: Processing standard module hook 'hook-matplotlib.backends.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+16048 INFO: Matplotlib backend selection method: user-provided name(s)
+16626 INFO: Selected matplotlib backends: ['TkAgg']
+16626 INFO: Extra dists for selected matplotlib backends: []
+16936 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+17004 INFO: Performing binary vs. data reclassification (535 entries)
+17015 INFO: Looking for ctypes DLLs
+17072 WARNING: Library user32 required via ctypes not found
+17087 INFO: Analyzing run-time hooks ...
+17090 INFO: Including run-time hook 'pyi_rth_inspect.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
+17092 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
+17094 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
+17095 INFO: Including run-time hook 'pyi_rth_mplconfig.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
+17096 INFO: Processing pre-find-module-path hook 'hook-_pyi_rth_utils.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/pre_find_module_path'
+17096 INFO: Processing standard module hook 'hook-_pyi_rth_utils.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks'
+17098 INFO: Including run-time hook 'pyi_rth__tkinter.py' from '/workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/hooks/rthooks'
+17118 INFO: Creating base_library.zip...
+17132 INFO: Looking for dynamic libraries
+17748 INFO: Warnings written to /workspace/scratch/optic-wave-build/OpticalBench/warn-OpticalBench.txt
+17789 INFO: Graph cross-reference written to /workspace/scratch/optic-wave-build/OpticalBench/xref-OpticalBench.html
+17808 INFO: checking PYZ
+17812 INFO: Building because toc changed
+17812 INFO: Building PYZ (ZlibArchive) /workspace/scratch/optic-wave-build/OpticalBench/PYZ-00.pyz
+18568 INFO: Building PYZ (ZlibArchive) /workspace/scratch/optic-wave-build/OpticalBench/PYZ-00.pyz completed successfully.
+18594 INFO: checking PKG
+18598 INFO: Building because toc changed
+18598 INFO: Building PKG (CArchive) OpticalBench.pkg
+33096 INFO: Building PKG (CArchive) OpticalBench.pkg completed successfully.
+33105 INFO: Bootloader /workspace/scratch/optic-build-venv/lib/python3.13/site-packages/PyInstaller/bootloader/Linux-64bit-intel/run
+33105 INFO: checking EXE
+33110 INFO: Building because toc changed
+33110 INFO: Building EXE from EXE-00.toc
+33118 INFO: Copying bootloader EXE to /workspace/scratch/optic-wave-dist/OpticalBench
+33119 INFO: Appending PKG archive to custom ELF section in EXE
+33224 INFO: Building EXE from EXE-00.toc completed successfully.
+33232 INFO: Build complete! The results are available in: /workspace/scratch/optic-wave-dist

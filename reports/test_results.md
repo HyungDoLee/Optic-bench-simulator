@@ -2,9 +2,9 @@
 
 작성일: 2026-11-09
 
-작성 시각: 19:27:41 KST (UTC+09:00)
+작성 시각: 20:08:35 KST (UTC+09:00)
 
-{'passed': 97, 'failed': 0, 'error': 0, 'skipped': 0}
+{'passed': 104, 'failed': 0, 'error': 0, 'skipped': 0}
 
 Errors are absolute differences in the measurement units. The maximum per test mixes units; see JSON for each measurement and tolerance.
 Existing regression assertions retain their original verdict/tolerance. Inequality error means constraint violation. N/A means the test has no scalar numerical comparison (e.g. JSON validation or list comparison).
@@ -108,3 +108,10 @@ Existing regression assertions retain their original verdict/tolerance. Inequali
 | test_wave_optics.WaveTests.test_phase_sample_changes_fourier_but_not_ideal_image_intensity | passed | 4.31879e-07 |
 | test_wave_optics.WaveTests.test_sampling_guards_and_cumulative_cap | passed | 0 |
 | test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory | passed | 2.01157e-11 |
+| test_wave_progress.ProgressGUITests.test_compact_layout_and_collapsible_details | passed | 0 |
+| test_wave_progress.ProgressGUITests.test_failed_calculation_does_not_retry_or_finish_bar | passed | 0 |
+| test_wave_progress.ProgressGUITests.test_real_completion_history_and_no_redraw_computation | passed | 0 |
+| test_wave_progress.ProgressGUITests.test_running_heartbeat_global_badge_and_cancel | passed | 0 |
+| test_wave_progress.ProgressStateTests.test_elapsed_time_and_historical_eta_are_honest | passed | 0 |
+| test_wave_progress.ProgressStateTests.test_engine_callbacks_are_monotonic_and_preserve_fields | passed | 0 |
+| test_wave_progress.ProgressStateTests.test_monotonic_stages_and_terminal_outcomes | passed | 0 |

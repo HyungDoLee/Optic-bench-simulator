@@ -1,8 +1,23 @@
 # Optical Bench — Python Desktop v0.3
 
+## 계산 진행 표시와 GUI 정리
+
+**빔 분석** 패널을 `01 계산 설정 → 02 계산 실행 → 03 결과 보기` 순서로 정리했습니다.
+계산 중에는 단계 진행률·경과 시간이 표시됩니다. 이전에 동일한 설정으로 성공한 기록이 있을 때만
+예상 남은 시간을 표시하며, 첫 계산에서는 경과 시간만 확인할 수 있습니다.
+진행률은 완료한 계산 단계의 비율이며 남은 시간의 비율을 뜻하지 않습니다.
+
+- 상단 상태 배지는 다른 탭에서도 경과 시간을 표시합니다. 누르면 빔 분석으로 돌아갑니다.
+- 취소·실패는 완료와 구분하며, 성공한 결과를 받아야 100%가 됩니다.
+- 왼쪽 요소 추가 버튼은 2열로 정리하고, 상태별 색상과 버튼 간격을 통일했습니다.
+- 1D 단면과 q/ABCD/광파워는 **1D 단면 보기 / 상세 수치**를 펼쳐 확인합니다.
+- 계산은 수동 실행하며, 화면 갱신이나 창 조작으로 자동 재계산하지 않습니다.
+
+[로딩바·시간 표시·GUI 검증 보고서](reports/progress_gui_validation.md)를 참고하세요.
+
 ## 독립 2D profile figure
 
-Screen profile에서 **2D 프로파일 창 열기**를 누르거나 작은 heatmap을 더블클릭하면,
+빔 분석에서 **2D 프로파일 창 열기**를 누르거나 작은 heatmap을 더블클릭하면,
 MATLAB figure처럼 별도 창에서 원본 해상도의 결과를 볼 수 있습니다.
 Wave 모드에서는 먼저 **계산하기**를 눌러 결과를 만드세요. Gaussian q도 지원합니다.
 
@@ -18,14 +33,14 @@ Wave 모드에서는 먼저 **계산하기**를 눌러 결과를 만드세요. G
 ## Fresnel forward diffraction
 
 **GS 없이 입력한 SLM 위상이 만드는 광장을 전파합니다.**
-`Load 720 nm SLM 4f`는 이제 `Propagation: Fresnel`, 계산 격자 512×512/FOV 6 mm로 시작합니다.
+`720 nm · LCOS SLM 4f`는 `전파 방식: Fresnel`, 계산 격자 512×512/FOV 6 mm로 시작합니다.
 Screen·Sample·Fourier 면 선택 → **계산하기** → `2D display: Intensity / Phase`로 확인하세요.
 보기 전환은 FFT를 다시 실행하지 않습니다. `examples/slm_fresnel_720nm.json`도 같은 설정입니다.
 
 Fresnel 이상 모드는 렌즈·시료·검출기의 clipping과 pinhole 차단을 생략하고,
 자유 전파/렌즈의 Fresnel 적분을 계산합니다. SLM active area·pixel response는 유지합니다.
 입출력 N은 같아도 샘플 간격/FOV는 달라지며 출력 좌표는 readout에 표시합니다.
-기존 유한 구경 계산은 `Propagation: ASM`으로 선택할 수 있습니다.
+기존 유한 구경 계산은 `전파 방식: ASM`으로 선택할 수 있습니다.
 레이저에 되돌아온 경로는 레이저에서 흡수 종단되며 뒤쪽으로 연장되지 않습니다.
 
 [Fresnel 구현·수치/GUI 검증 보고서](reports/fresnel_forward_validation.md)를 참고하세요.
@@ -38,7 +53,7 @@ LCOS 경로 분리용 splitter를 제거하고, 시료 반사 검출용 pick-off
 ASM 모드에서 0차/+1차 경로와 각 ROI의 광파워를 별도로 표시합니다. 입사각과 차수 선택은
 서로 다른 기능입니다. [현재 배치·가정·검증·제한](docs/slm.md)을 먼저 참고하세요.
 
-**Load 720 nm SLM 4f** 또는 **+ SLM**으로 **반사형 phase-only LCOS**를 추가합니다.
+**720 nm · LCOS SLM 4f** 또는 **+ LCOS SLM**으로 **반사형 phase-only LCOS**를 추가합니다.
 위상 패턴과 균일 반사 효율·위상 양자화·pixel pitch·fill factor를 설정할 수 있고
 위상 이미지 import와 preview를 지원합니다. 변조 결과는 **Scalar wave profile**로
 Fourier 면/Screen에서 확인하세요. [SLM 사용법·샘플링·한계](docs/slm.md)를 참고하세요.
@@ -63,7 +78,7 @@ Fourier 면/Screen에서 확인하세요. [SLM 사용법·샘플링·한계](doc
 
 ## 720 nm 반사형 4f 예제
 
-`Load 720 nm reflection 4f` 버튼 또는 `examples/reflection_4f_720nm.json`으로
+`720 nm · Reflection 4f` 버튼 또는 `examples/reflection_4f_720nm.json`으로
 200/100 mm 릴레이를 불러옵니다. 시료의 이상적 정반사와 가상 object/Fourier
 측정면을 추가했으며, Screen·Sample·Probe 클릭 시 프로파일과 q/ABCD를 표시합니다.
 시료 waist 반경은 0.25 mm, 반사광 검출기는 시료의 공액면에 있습니다.
@@ -104,6 +119,7 @@ examples/               JSON 예제
 wave_optics.py         별도 scalar ASM/복소 광장 엔진
 fresnel_optics.py      이상적 Fresnel/Collins 전파와 초점면 scaled FFT
 wave_view.py           수동 계산 결과의 고정 미리보기 준비
+wave_progress.py       단계 진행·경과 시간·이전 동일 설정 기반 예상 시간
 profile_data.py        독립 figure의 원본 해상도/물리 단위 고정 데이터
 profile_figure.py      Matplotlib/Tk 독립 figure와 확대·이동·색상·저장
 hologram_validation.py 국소 pixel-array/GS 검증 모델
@@ -121,7 +137,7 @@ tests/test_optics.py    물리 계산 회귀 테스트
 - 부품 드래그, 위치/각도/f/diameter 등 파라미터 수정 후 `Apply parameters`.
 - R/Shift+R 5도 회전, Delete 삭제(입력칸에 포커스가 없을 때).
 - 조정하면 경로·Gaussian envelope·waist 위치가 재계산됩니다.
-- Screen 클릭 시 자동으로 `Screen profile` 탭으로 전환됩니다.
+- Screen 클릭 시 자동으로 `빔 분석` 탭으로 전환됩니다.
   - Gaussian q 모드는 프로파일을 즉시 표시하며, Scalar wave 모드는 **계산하기**로 갱신
   - 중심 ray의 도달 경로길이, 입사각, 1/e² 반경, 투영 반경, 출력과 peak irradiance
   - Beam splitter에서 Screen으로 여러 경로가 올 경우 branch를 드롭다운으로 선택

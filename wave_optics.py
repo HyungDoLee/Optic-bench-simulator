@@ -195,7 +195,7 @@ def grating_orders(wavelength_nm,period_nm,efficiencies,incidence_deg=0.,collect
     return rows
 
 
-def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
+def trace_wave(scene,result,reading,grid=None,*,cancel_event=None,progress_callback=None):
     """Propagate one existing ray branch; paraxial local planes in air only.
 
     Gaussian rays provide routing, NOT fields clipped into missing geometric
@@ -205,7 +205,7 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
     method=scene.get('wavePropagation','asm')
     if method=='fresnel':
         from fresnel_optics import trace_fresnel
-        return trace_fresnel(scene,result,reading,grid,cancel_event=cancel_event)
+        return trace_fresnel(scene,result,reading,grid,cancel_event=cancel_event,progress_callback=progress_callback)
     if method!='asm':raise ValueError('Unknown wave propagation method')
     from optics import MAX_PROPAGATION_MM,q_from_source,normal,tangent,Vec
     config=scene.get('waveGrid',{})
@@ -213,14 +213,18 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
     components={c['id']:c for c in scene['components']}
     source=components[reading.source_id]
     lam=float(source['lambdaNm'])
+    report=progress_callback or (lambda fraction,stage:None)
+    report(0.,'ASM 입력 광장 생성')
     field=gaussian(grid,lam,q_from_source(source),float(source['powerMw']))
     segments=[s for s in result.branch_segments(reading.branch_id) if s.path_end_mm<=reading.path_mm+1e-8]
     if not segments or segments[-1].path_end_mm>MAX_PROPAGATION_MM:
         raise ValueError('No supported wave path within 2500 mm')
     filter_losses=[]
     arrivals=[]
+    units=len(segments)+1
     for i,segment in enumerate(segments):
         if cancel_event is not None and cancel_event.is_set():raise CancelledError('Wave calculation cancelled')
+        report(i/units,f'ASM 광장 전파 {i+1}/{len(segments)}')
         arrival={}
         field=propagate(field,grid,lam,segment.length_mm,diagnostics=arrival)
         if cancel_event is not None and cancel_event.is_set():raise CancelledError('Wave calculation cancelled')
@@ -239,7 +243,9 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
         cosine=abs(segment.direction.dot(normal(float(component.get('angle',0)))))
         if kind in ('lens','sample','screen','probe','spatial_filter') and cosine<.99999:
             raise ValueError('Wave path needs near-normal lens/sample/detector incidence')
-        if i==len(segments)-1:break  # Return the incident field at the selected plane.
+        if i==len(segments)-1:
+            report((i+1)/units,component['id']+' 도착')
+            break  # Return the incident field at the selected plane.
         if kind=='lens':
             n=normal(float(component.get('angle',0)))
             forward=n if segment.direction.dot(n)>=0 else n*(-1)
@@ -271,6 +277,7 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
                 field*=1j*math.sqrt(r) if reflected else math.sqrt(1-r)
             elif kind=='mirror':field*=math.sqrt(float(component.get('reflectivity',1)))
             if reflected:field=field[:,(-np.arange(grid.n))%grid.n]
+        report((i+1)/units,component['id']+' 처리 완료')
     target=components[reading.screen_id]
     values=detector(field,grid,float(target.get('diameterMm',25.4))/2,
                     float(target.get('responsivityAW',0)),reading.offset_mm)
@@ -286,4 +293,5 @@ def trace_wave(scene,result,reading,grid=None,*,cancel_event=None):
                    has_carrier=bool(linked and carrier_period(linked)),
                    selected_roi_mw=power(field*pupil(grid,radius,-center),grid),
                    zero_roi_mw=power(field*pupil(grid,radius,reading.offset_mm*orientation),grid))
+    report(1.,'검출 광파워와 진단 계산 완료')
     return out

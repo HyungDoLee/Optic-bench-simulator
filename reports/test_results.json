@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-09T19:27:41.200157+09:00",
+  "generated_at": "2026-11-09T20:08:35.404834+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 97,
+    "passed": 104,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -3290,7 +3290,7 @@
         },
         {
           "name": "wheel zoom reduces physical span",
-          "actual": 0.7999999999999999,
+          "actual": 0.8000000000000002,
           "expected": 0.8,
           "absolute_error": 1.1102230246251565e-16,
           "relative_error": 1.3877787807814457e-16,
@@ -4775,6 +4775,442 @@
         }
       ],
       "max_absolute_error": 2.0115714649548977e-11
+    },
+    {
+      "test": "test_wave_progress.ProgressGUITests.test_compact_layout_and_collapsible_details",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "progress bar visible at laptop height",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "compute button visible at laptop height",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "details collapsed initially",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "1D profile collapsed initially",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "details can be expanded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "1D profile can be expanded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_progress.ProgressGUITests.test_failed_calculation_does_not_retry_or_finish_bar",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "failed outcome recorded",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "failure not displayed as completion",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "failure not automatically retried",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "failure leaves no timing history",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "error detail still visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_progress.ProgressGUITests.test_real_completion_history_and_no_redraw_computation",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "completed bar value",
+          "actual": 100.0,
+          "expected": 100.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.01e-08,
+          "passed": true
+        },
+        {
+          "name": "successful run recorded for exact key",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "progress repaint starts no new computation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "same settings reuse duration estimate",
+          "actual": 0.043257951008854434,
+          "expected": 0.043257951008854434,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0432579510088545e-10,
+          "passed": true
+        },
+        {
+          "name": "different grid does not reuse ETA",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_wave_progress.ProgressGUITests.test_running_heartbeat_global_badge_and_cancel",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "elapsed clock advances during active job",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "global running badge stays mapped",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "badge returns to analysis panel",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cancel outcome visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cancel does not fabricate 100 percent",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "cancel does not record misleading ETA",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "one worker only",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_progress.ProgressStateTests.test_elapsed_time_and_historical_eta_are_honest",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "first run has no fabricated ETA",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "elapsed time [s]",
+          "actual": 3.0,
+          "expected": 3.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4e-10,
+          "passed": true
+        },
+        {
+          "name": "estimate uses previous duration",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "overrun shown instead of negative ETA",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "late progress cannot overwrite cancellation",
+          "actual": 0.4,
+          "expected": 0.4,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.4e-10,
+          "passed": true
+        },
+        {
+          "name": "cancel state stays visible",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_wave_progress.ProgressStateTests.test_engine_callbacks_are_monotonic_and_preserve_fields",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "asm field unchanged by progress callback",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "asm callback starts at zero",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "asm callback ends at one",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "asm callback monotonic",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fresnel field unchanged by progress callback",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "fresnel callback starts at zero",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        },
+        {
+          "name": "fresnel callback ends at one",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "fresnel callback monotonic",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_wave_progress.ProgressStateTests.test_monotonic_stages_and_terminal_outcomes",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "stage progress never goes backwards",
+          "actual": 0.4,
+          "expected": 0.4,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.4e-10,
+          "passed": true
+        },
+        {
+          "name": "100 percent reserved for accepted result",
+          "actual": 0.99,
+          "expected": 0.99,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.99e-10,
+          "passed": true
+        },
+        {
+          "name": "success reaches exactly 100 percent",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "final elapsed time freezes [s]",
+          "actual": 5.0,
+          "expected": 5.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 6e-10,
+          "passed": true
+        },
+        {
+          "name": "failed does not claim full completion",
+          "actual": 0.6,
+          "expected": 0.6,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.6000000000000002e-10,
+          "passed": true
+        },
+        {
+          "name": "cancelled does not claim full completion",
+          "actual": 0.6,
+          "expected": 0.6,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.6000000000000002e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
     }
   ]
 }

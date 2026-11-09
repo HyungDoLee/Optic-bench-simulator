@@ -1,110 +1,104 @@
 Op
 
-al Bench Python desktop + ABCD Gaussian
+al Bench Pay: Gaussian q: Wave optics / 25 m path limit
 
-2.50 m path cap
+12-018
 
-[ sony || sonar || ase
+JSON A | JSON 271 | oa a!
 
-OPTICAL COMPONENTS
+OA 2127]
 
 Optical breadboard
 
 1200 x 900 mm | holes 25 mm
 
-Load 720 nm reflection 4f
+720 nm: Reflection 4f
 
-SCREEN BEAM PROFILE
+BEAM ANALYSIS
 
-Load 720 nm SLM 4f
+720 nm-LCOS SLM 4f
 
-Fresnel ideal 74! 242 (0.04s): fourier-plane /
+Fresnel ideal 4|{t 2t3 (0.05s): fourier-plane
 
-laser-720 / branch 1
+/laser-720 / branch
 
-+ Laser
+Baar a7
 
-Detected branch|Branch1/laser-720 _ |v|
+O1 Alt ae
 
-+ Thin lens
+empSeet
 
-§® Scalar wave profile (FFT/ASM)
+-Fresnel / ASM
 
-+ Mirror
+a
 
-+ Beam splitter
+A= |Branch1/laser-720 >|
+
+Amp BAY
+
+Fresnel Ml
 
 Gaussian ray / top view
 
-Grid [512 |x| FOV [mm]
+Grid [512 |r) FOVImm] | 60
 
-+ Screen
+Fresnel Old €12, #2218 ale}
 
-Propagation
+02 Alt Bat
 
-Fresnel |
+aa
 
-Fresnel: ideal lenses, no clipping/pinhole.
+Fas
 
-+ Sample (specular)
-
-ASM: existing finite-aperture model
-
-2D display
-
-Intensity |v]
-
-+ Virtual plane probe
-
-+ LCOS SLM (phase only)
-
-+ Fourier spatial filter
-
-2D intensity * I /lo
-
-COMPONENT LIST
+|
 
 Laser
 
 705, 548
 
+EA B18 100% - ALA Ste
+
 Loos SLM
 
+Bat os
+
 1000, 600
-
-returns
-
-reen
 
 Thin lens
 
 800, 600
 
+03 23} 7]
+
+a
+
 Fourier
+
+2D Bete F S7|
 
 Thin lens
 
 500, 600
 
-View 2.9 mm; 100.00% power
-
 Beam splitte
 
 450, 600
 
-¢
+return’
 
-sareplentsppderto® fourier-plane
+reen
 
-lens-1
+oje|47]
 
-slm-t
+Intensity Ml
 
 Sample (spe
 
 400, 600
 
-1D profile - screen-local u
+2D intensity
+
+Whe
 
 Thin lens
 
@@ -118,67 +112,25 @@ Screen
 
 450, 850
 
-beam-local u [mm], normalized to peak
+sareplentsppaerto® fourier-plane
+
+lens-1
+
+slm-t
+
+View 2.9 mm; 100.00% power
 
 illumination-dump
 
-Path
+(1D EFA 7]
 
-700 mm
+DSA 44] -q/ ABCD / BIA
 
-512512
+4a: 0/484 Gaussian 71 - Wave: scalar AP
 
-Output grid
+Se 2a Aa
 
-dx / FOV
-
-24 ym / 12.288 mm
-
-q ideal w
-
-0.0916732 mm
-
-q [mm] 0+36
-
-674
-
-ABCD source
-
--> plane
-
-[0, 200 mm]
-
--1.5]
-
-[-0.005/mm,
-
-Wave 20 u,v
-
-0.26572, @.091673 m
-
-Ae Se Aa
-
-Centroid u,v
-
--1.1154, 2.0211e-18
-
-mm
-
-Mean angle u,v
-
--5.3361e-18,
-
-5.3361e-18 deg
-
-VIEW OPTIONS
-
-Wave incident
-
-8.1 mW
-
-Collected
-
-8.1 mW
+Bea
 
 1D Gaussian envelope
 
@@ -186,51 +138,27 @@ Collected
 
 Je? radius
 
-PD current
-
-not configured
-
 Beam radius along optical path
-
-Wave peak
-
-605774 W/m?
 
 (125mm Bol AY
 
 0.6 jw [mm]
 
-Ideal Fresne
-
-no clipping /
-
-pinhole.
-
 SLM 0/ +1 guides (ASM)
 
 0.48
 
-SLM active area / pixels retained.
-
 os
 
-Phase: reference piston omitted;
-
 Envelope exaggeration
-
-dark where I/Ipeak < le-6.
 
 016
 
 EE
 
-4: Ideal Gaussian, Wave: scalar local planes;
-
 °
 
-no RCWA, polarization or branch interference.
-
-Hae Me}. S2h7 og
+Hae Me} S2h7 Os
 
 °
 
@@ -238,18 +166,20 @@ Hae Me}. S2h7 og
 
 700 mm
 
-R /Shift+R 318 - Delete At
+R /ShifteR 318 - Delete At
 
-10elements | 15 segments | 2screen hits | O capped at 2.5 m | 1stopped at laser | 2 warnings
+10.elements | 15 segments | 2screen hits | O capped at 2.5 m | 1stopped at laser | 2 warnings
 
 --- Independent profile figure ---
 Fresnel ideal | fourier-plane / laser-720 / branch 1
 
-DY AB} - 2026-11-09 19:32:16 KST (UTC+09:00) - 512x512 samples
+ay a7
 
-Fresnel ideal Mt 2t& (0.04s): fourier-plane / laser-720 / branch 1
+aA ay
 
-| Scale [Linear
+2026-11-09 20:11:52 KST (UTC+09:00) - 512x512 samples
+
+Fresnel ideal | Mt t& (0.05s): fourier-plane / laser-720 / branch 1
 
 >|
 
@@ -259,13 +189,15 @@ Auto colors
 
 View [Intensity
 
->| Units |W/m*
+‘>| Units |W/m?
+
+>| Scale [Linear
 
 ‘| Colormap [viridis
 
 Color limits
 
-0
+°
 
 605774.421
 
@@ -311,138 +243,124 @@ Fresnel ideal — fourier-plane / laser-720 / branch 1
 
 ulmm]
 
-Movin tha anienne nuine a nival tn innnnnt ite sialon
+Mowe the nrirenr aver a nivel ta inenant ite valiie
 
 --- Phase view ---
-JSON A
+W.
 
-Optical Bench *ython desktop - ABCD Gaussian » 250m path cap
+Optical Bench ay: Gaussians
 
-sone || ose
+fave optics /
 
-OPTICAL COMPONENTS
+| 25m path limit
+
+22-048
+
+JSON At | JSON 271 | Ol
+
+OA 2127]
 
 Optical breadboard
 
-1200 x 900 mm | holes 25 mm
+1200 x 900 mm | holes 25 mm.
 
 Zoom
 
-Properties Screen profile
+QAR
 
-Load 720 nm reflection 4f
+wey
 
-SCREEN BEAM PROFILE
+720 nm: Reflection 4f
 
-Load 720 nm SLM 4f
+BEAM ANALYSIS
 
-Fresnel ideal Ast 23 (0.04s): fourier-plane /
+720 nm-LCOS SLM 4f
 
-laser-720 / branch 1
+Fresnel ideal 44# 2+ (0.05s): fourier-plane
 
-+ Laser
+/laser-720 / branch
 
-Detected branch|Branch1/laser-720 _|>|
+Betas 47
 
-+ Thin lens
+O1 Alt ae
 
-® Scalar wave profile (FFT/ASM)
+®I}SES - Fresnel / ASM
 
-+ Mirror
+a
 
-La |
+A= |Branch1/laser-720 >|
 
-+ Beam splitter
+am al
+
+Fresnel Ml
 
 Gaussian ray
 
-0p view
+op view
 
-Grid [512 |e] FOV [mm
+Grid [512 |r) FOVImm] | 60
 
-+ Screen
+Fi
 
-Propagation
+1 ols AZ, FabBl
 
-Fres
+ue
 
-Fresnel:
+02 Alt Bat
 
-eal lense
+FS a4
 
-no clipping/pinhole.
-
-+ Sample (specular)
-
-ASM:
-
-isting fini
-
-em
-
-el.
-
-2D display
-
-[Phase
-
-+ Virtual plane probe
-
-+ LCOS SLM (phase only)
-
-+ Fourier spatial filter
-
-2D phase
-
-~n.n rad (dark: low intensity)
-
-COMPONENT LIST
+|
 
 Laser
 
 705, 548
 
+EA B18 100% - ALA Ste
+
+.
+
 Loos SLM
 
-1000, 600
+Samos
 
-return@screen
+1000, 600
 
 Thin lens
 
 800, 600
 
+03 23} 7]
+
+Foui
+
+spat
+
+600, 600
+
+2D Bate #27]
+
 Thin lens
 
 500, 600
-
-a
-
-vi
-
-{9 mm; 100,00% p
 
 Beam splitte
 
 450, 600
 
-Loe
+return@creen
 
-4
+oje|47]
 
-sareplentsppaerto2 —fourier-plan
-
-lens-1
-
-sim
-
-screen-local u
+a)
 
 Sample (spe
 
 400, 600
 
-1D profile
+20 phase
+
+~nmt rad (dark: low intensity)
 
 Thin lens
 
@@ -452,77 +370,37 @@ Screen
 
 450, 450
 
+Loe
+
+S.
+
 Screen
 
 450, 850
 
-beam-local u [mm], normalized to peak
+sarelentspparto2 — fourier-plan
+
+lens-1
+
+sim
 
 illumination-dump
 
-Path
+View 2.9 mm; 100.00%
 
-700 mm
+‘00.00!
 
-512x512
+(1D EFA 7]
 
-Output grid
+DSA 44] -q/ ABCD / BIA
 
-dx / FOV
+scalar
 
-24 wm / 12.288 mm
+D/A Gaussian
 
-q ideal w
+Ae 9e al
 
-0.0916732 mm
-
-q [mm] 0+36
-
-674
-
-ABCD source
-
--> plane
-
-[0, 200 mm]
-
--1.5]
-
-[-0.005/mm,
-
-Wave 20 u,v
-
-0.26572,
-
-0.091673
-
-m
-
-Met Ata
-
-Centroid u,v
-
--1.1154,
-
-2.0211e-18
-
-mm
-
-Mean angle u,v
-
--5.3361e-18,
-
-3361e-18 deg
-
-VIEW OPTIONS
-
-Wave incident
-
-8.1 mW
-
-Collected
-
-8.1 mv
+w7/g4
 
 1D Gaussian envelope
 
@@ -532,82 +410,40 @@ w(s)
 
 dius
 
-PD current
-
-not configured
-
 Beam radius along optical path
 
-Wave peak
+125 mm Boll AY
 
-605774 W/m?
-
-(125mm Bol AY
-
-0.6 jw {mm
-
-Ideal Fresne
-
-no clipping /
-
-pinhole.
+0.6 jw [mm]
 
 SLM 0/ +1 guides (ASM)
 
 0.45
 
-SLM active area / pixels retained.
-
 os
 
 os
-
-Phase: reference piston omitted;
 
 Envelope exaggeration
 
-dark where I/Ipeak < le-6.
-
 EE
 
-015
+0.15
 
-al Gaussian
+= a
 
-Wai
+64
 
-ar
+9/2 Og
 
-pl
+mulated propagation s
 
-no Ri
-
-JA, polarization or branch inte
-
-y
-
-o
-
-aa
-
-42 Og
-
-mula
-
-f
-
-opagation s
-
-Foo
+yoo
 
 700 mm
 
-R/shifter 3
+Shifter 3
 
-a
+aL
 
-‘i
-
-a)
-
-1O elements | 15 segments | 2screenhits | O capped at 2.5 m | 1stopped at laser | 2 warnings
+1O elements | 15 segments | 2screenhits | O capped at 2.5 m | 1 stopped at laser | 2 warnings

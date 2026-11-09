@@ -25,15 +25,16 @@ from optics import (
     simulate, validate_scene, four_f_scene, slm_four_f_scene,
 )
 from slm import PATTERNS, slm_component, validate_slm, slm_mask
+from wave_progress import WaveProgress
 
 ROOT = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
 ASSETS = ROOT/'assets'
-BG = '#f4f5f6'
+BG = '#f2f5f8'
 PANEL = '#ffffff'
-INK = '#28323c'
-MUTED = '#6b7680'
-LINE = '#dce1e5'
-ACCENT = '#356f9c'
+INK = '#24364a'
+MUTED = '#687a8c'
+LINE = '#dce4ed'
+ACCENT = '#3267a5'
 RAY = '#bc574d'
 LABEL = {'laser':'Laser','lens':'Thin lens','mirror':'Mirror',
          'splitter':'Beam splitter','screen':'Screen',
@@ -130,6 +131,11 @@ class BenchApp(tk.Tk):
         self._wave_cancel=None
         self._wave_queue=None
         self._wave_photo_data=None
+        self.wave_progress=WaveProgress();self._wave_durations={}
+        self.progress_value=tk.DoubleVar(value=0.)
+        self.progress_stage=tk.StringVar();self.progress_timing=tk.StringVar()
+        self.job_status=tk.StringVar(value='준비')
+        self.show_readout=tk.BooleanVar(value=False)
         self._closing=False
         self.profile_windows=[];self._profile_figure_number=0
         self.show_orders=tk.BooleanVar(value=True)
@@ -150,9 +156,12 @@ class BenchApp(tk.Tk):
         style.configure('TLabel',background=PANEL,foreground=INK)
         style.configure('Muted.TLabel',foreground=MUTED)
         style.configure('Title.TLabel',font=('Segoe UI',13,'bold'))
-        style.configure('TButton',padding=(8,6),font=('Segoe UI',9))
-        style.configure('Primary.TButton',background='#e7f0f7',foreground='#245a82')
-        style.map('Primary.TButton',background=[('active','#d8e8f3')])
+        style.configure('TButton',padding=(8,7),font=('Segoe UI',9),borderwidth=1)
+        style.configure('Primary.TButton',background=ACCENT,foreground='#ffffff',padding=(10,9))
+        style.map('Primary.TButton',background=[('disabled','#dbe3ec'),('active','#28568b')],
+                  foreground=[('disabled','#8290a0')])
+        style.configure('Compact.TButton',padding=(4,6),font=('Segoe UI',9))
+        style.configure('Wave.Horizontal.TProgressbar',background=ACCENT,troughcolor='#e7edf4',borderwidth=0)
         style.configure('Treeview',rowheight=27,background='#fff',fieldbackground='#fff',borderwidth=0)
         style.configure('Treeview.Heading',font=('Segoe UI',9,'bold'))
         style.configure('TNotebook',background=PANEL,borderwidth=0)
@@ -183,11 +192,16 @@ class BenchApp(tk.Tk):
         return self.image_cache[key]
 
     def _create_ui(self):
-        head=tk.Frame(self,bg=PANEL,height=58,highlightthickness=1,highlightbackground=LINE)
+        head=tk.Frame(self,bg=PANEL,height=62,highlightthickness=1,highlightbackground=LINE)
         head.pack(fill='x'); head.pack_propagate(False)
         tk.Label(head,text='Optical Bench',font=('Segoe UI',16,'bold'),bg=PANEL,fg=INK).pack(side='left',padx=(17,8))
-        tk.Label(head,text='Python desktop  •  ABCD Gaussian  •  2.50 m path cap',
+        tk.Label(head,text='Ray · Gaussian q · Wave optics  /  2.5 m path limit',
                  font=('Segoe UI',9),bg=PANEL,fg=MUTED).pack(side='left')
+        self.job_badge=tk.Label(head,textvariable=self.job_status,bg='#eef3f9',fg=ACCENT,
+            padx=12,pady=6,font=('Segoe UI',9,'bold'))
+        self.job_badge.pack(side='left',padx=18)
+        self.job_badge.configure(cursor='hand2')
+        self.job_badge.bind('<Button-1>',lambda _e:self.notebook.select(self.analysis_tab))
         for title,command in [('예제 복원',self._reset),('JSON 열기',self._open),('JSON 저장',self._save)]:
             ttk.Button(head,text=title,command=command).pack(side='right',padx=(1,10 if title=='예제 복원' else 2),pady=11)
 
@@ -213,21 +227,23 @@ class BenchApp(tk.Tk):
                  fg=INK,bg=PANEL).pack(fill='x',padx=13,pady=(14,7))
 
     def _create_left(self,parent):
-        self._section_label(parent,'OPTICAL COMPONENTS')
+        self._section_label(parent,'예제 불러오기')
         self.tool_icons={}
-        ttk.Button(parent,text='Load 720 nm reflection 4f',
-                   command=self._load_four_f).pack(fill='x',padx=10,pady=(5,8))
-        ttk.Button(parent,text='Load 720 nm SLM 4f',
-                   command=self._load_slm_four_f).pack(fill='x',padx=10,pady=(0,4))
-        for kind in ('laser','lens','mirror','splitter','screen','sample','probe','slm','spatial_filter'):
-            frame=tk.Frame(parent,bg=PANEL)
-            frame.pack(fill='x',padx=10,pady=2)
+        self.load_four_f_button=ttk.Button(parent,text='720 nm · Reflection 4f',command=self._load_four_f)
+        self.load_four_f_button.pack(fill='x',padx=10,pady=(2,5))
+        self.load_slm_button=ttk.Button(parent,text='720 nm · LCOS SLM 4f',command=self._load_slm_four_f)
+        self.load_slm_button.pack(fill='x',padx=10,pady=(0,4))
+        self._section_label(parent,'광학 요소 추가')
+        tools=tk.Frame(parent,bg=PANEL);tools.pack(fill='x',padx=10)
+        tools.columnconfigure((0,1),weight=1,uniform='components')
+        names=('Laser','Thin lens','Mirror','Splitter','Screen','Sample','Probe','LCOS SLM','Filter')
+        for index,(kind,name) in enumerate(zip(('laser','lens','mirror','splitter','screen','sample','probe','slm','spatial_filter'),names)):
             icon=self._component_image({'type':kind,'angle':0,'focalMm':200})
             if icon: self.tool_icons[kind]=icon
-            btn=ttk.Button(frame,text='+  '+LABEL[kind],command=lambda k=kind:self._add(k))
-            btn.pack(fill='x')
+            btn=ttk.Button(tools,text='+ '+name,style='Compact.TButton',command=lambda k=kind:self._add(k))
+            btn.grid(row=index//2,column=index%2,sticky='ew',padx=(0,4) if index%2==0 else (4,0),pady=3)
         ttk.Separator(parent).pack(fill='x',pady=(15,0))
-        self._section_label(parent,'COMPONENT LIST')
+        self._section_label(parent,'구성 요소')
         cols=('position',)
         self.tree=ttk.Treeview(parent,columns=cols,show='tree headings',selectmode='browse',height=6)
         self.tree.heading('#0',text='Name',anchor='w');self.tree.heading('position',text='(X,Y) mm')
@@ -237,7 +253,7 @@ class BenchApp(tk.Tk):
         self.tree.bind('<<TreeviewSelect>>',self._on_tree_select)
         ttk.Button(parent,text='선택 부품 삭제',command=self._remove).pack(fill='x',padx=9,pady=(5,14))
         ttk.Separator(parent).pack(fill='x')
-        self._section_label(parent,'VIEW OPTIONS')
+        self._section_label(parent,'보기 옵션')
         ttk.Checkbutton(parent,text='Gaussian envelope',variable=self.envelope,
                         command=self._draw_board).pack(anchor='w',padx=13,pady=3)
         ttk.Checkbutton(parent,text='25 mm 홀에 스냅',variable=self.snap).pack(anchor='w',padx=13,pady=3)
@@ -288,8 +304,8 @@ class BenchApp(tk.Tk):
         self.notebook=notebook
         self.properties_tab=tk.Frame(notebook,bg=PANEL)
         self.analysis_tab=tk.Frame(notebook,bg=PANEL)
-        notebook.add(self.properties_tab,text='Properties')
-        notebook.add(self.analysis_tab,text='Screen profile')
+        notebook.add(self.properties_tab,text='요소 설정')
+        notebook.add(self.analysis_tab,text='빔 분석')
         prop_scroll=ttk.Scrollbar(self.properties_tab,orient='vertical')
         prop_scroll.pack(side='right',fill='y')
         self.props_canvas=tk.Canvas(self.properties_tab,bg=PANEL,highlightthickness=0,
@@ -309,70 +325,112 @@ class BenchApp(tk.Tk):
         analysis_body=tk.Frame(self.analysis_canvas,bg=PANEL)
         analysis_window=self.analysis_canvas.create_window(0,0,window=analysis_body,anchor='nw')
         self.analysis_canvas.bind('<Configure>',lambda e:self.analysis_canvas.itemconfigure(analysis_window,width=e.width))
-        analysis_body.bind('<Configure>',lambda _e:self.analysis_canvas.configure(scrollregion=self.analysis_canvas.bbox('all')))
-        self._section_label(analysis_body,'SCREEN BEAM PROFILE')
+        analysis_body.bind('<Configure>',self._analysis_layout)
+        self.analysis_body=analysis_body
+        self._section_label(analysis_body,'BEAM ANALYSIS')
         self.analysis_status=tk.StringVar(value='Screen을 선택하세요')
         self.analysis_state=tk.Label(analysis_body,textvariable=self.analysis_status,
-            bg='#eef3f7',fg='#426077',wraplength=280,justify='left',anchor='w',
-            font=('Segoe UI',9),padx=8,pady=8)
-        self.analysis_state.pack(fill='x',padx=10,pady=3)
-        branch_row=tk.Frame(analysis_body,bg=PANEL)
-        branch_row.pack(fill='x',padx=10,pady=(8,3))
-        tk.Label(branch_row,text='Detected branch',bg=PANEL,fg=MUTED).pack(side='left')
-        self.branch_combo=ttk.Combobox(branch_row,state='readonly',width=18)
-        self.branch_combo.pack(side='right')
+            bg='#eef3f9',fg=ACCENT,wraplength=270,justify='left',anchor='w',
+            font=('Segoe UI',9),padx=10,pady=9)
+        self.analysis_state.pack(fill='x',padx=10,pady=(0,7))
+
+        def card(title):
+            outer=tk.Frame(analysis_body,bg=PANEL,highlightthickness=1,highlightbackground=LINE)
+            outer.pack(fill='x',padx=10,pady=(0,8))
+            tk.Label(outer,text=title,bg=PANEL,fg=MUTED,font=('Segoe UI',9,'bold')).pack(anchor='w',padx=10,pady=(9,5))
+            inner=tk.Frame(outer,bg=PANEL);inner.pack(fill='x',padx=10,pady=(0,10))
+            return inner
+
+        setup=card('01  계산 설정')
+        ttk.Checkbutton(setup,text='파동광학 · Fresnel / ASM',variable=self.wave_mode,
+            command=self._render_screen).pack(anchor='w',pady=(0,5))
+        branch_row=ttk.Frame(setup);branch_row.pack(fill='x',pady=3)
+        ttk.Label(branch_row,text='경로').pack(side='left')
+        self.branch_combo=ttk.Combobox(branch_row,state='readonly',width=19)
+        self.branch_combo.pack(side='right',fill='x',expand=True,padx=(8,0))
         self.branch_combo.bind('<<ComboboxSelected>>',self._branch_changed)
-        ttk.Checkbutton(analysis_body,text='Scalar wave profile (FFT/ASM)',
-                        variable=self.wave_mode,command=self._render_screen).pack(anchor='w',padx=12,pady=4)
-        compute_row=ttk.Frame(analysis_body);compute_row.pack(fill='x',padx=12,pady=3)
-        self.compute_wave_button=ttk.Button(compute_row,text='계산하기',command=self._calculate_wave)
-        self.compute_wave_button.pack(side='left',fill='x',expand=True)
-        self.cancel_wave_button=ttk.Button(compute_row,text='취소',command=self._cancel_wave,state='disabled')
-        self.cancel_wave_button.pack(side='left',padx=(5,0))
-        grid_row=ttk.Frame(analysis_body);grid_row.pack(fill='x',padx=12,pady=2)
+        method_row=ttk.Frame(setup);method_row.pack(fill='x',pady=3)
+        ttk.Label(method_row,text='전파 방식').pack(side='left')
+        method_combo=ttk.Combobox(method_row,textvariable=self.wave_method,
+            values=('ASM','Fresnel'),state='readonly',width=13)
+        method_combo.pack(side='right')
+        method_combo.bind('<<ComboboxSelected>>',self._wave_method_changed)
+        grid_row=ttk.Frame(setup);grid_row.pack(fill='x',pady=3)
         ttk.Label(grid_row,text='Grid').pack(side='left')
         grid_combo=ttk.Combobox(grid_row,textvariable=self.wave_n,values=(256,512,1024,2048),state='readonly',width=5)
-        grid_combo.pack(side='left',padx=4)
+        grid_combo.pack(side='left',padx=(5,10))
         grid_combo.bind('<<ComboboxSelected>>',lambda _e:self._render_screen())
         ttk.Label(grid_row,text='FOV [mm]').pack(side='left')
         grid_entry=ttk.Entry(grid_row,textvariable=self.wave_width,width=6)
-        grid_entry.pack(side='left',padx=4)
+        grid_entry.pack(side='right')
         grid_entry.bind('<Return>',lambda _e:self._render_screen())
-        method_row=ttk.Frame(analysis_body);method_row.pack(fill='x',padx=12,pady=2)
-        ttk.Label(method_row,text='Propagation').pack(side='left')
-        method_combo=ttk.Combobox(method_row,textvariable=self.wave_method,
-            values=('ASM','Fresnel'),state='readonly',width=10)
-        method_combo.pack(side='right')
-        method_combo.bind('<<ComboboxSelected>>',self._wave_method_changed)
-        tk.Label(analysis_body,text='Fresnel: ideal lenses, no clipping/pinhole.\nASM: existing finite-aperture model.',
-            bg=PANEL,fg=MUTED,justify='left',font=('Segoe UI',8)).pack(anchor='w',padx=12,pady=2)
-        quantity_row=ttk.Frame(analysis_body);quantity_row.pack(fill='x',padx=12,pady=2)
-        ttk.Label(quantity_row,text='2D display').pack(side='left')
+        self.model_hint=tk.Label(setup,text='',bg=PANEL,fg=MUTED,justify='left',wraplength=250,font=('Segoe UI',8))
+        self.model_hint.pack(anchor='w',pady=(6,0))
+
+        run=card('02  계산 실행')
+        compute_row=ttk.Frame(run);compute_row.pack(fill='x',pady=(0,8))
+        self.compute_wave_button=ttk.Button(compute_row,text='계산하기',style='Primary.TButton',command=self._calculate_wave)
+        self.compute_wave_button.pack(side='left',fill='x',expand=True)
+        self.cancel_wave_button=ttk.Button(compute_row,text='취소',command=self._cancel_wave,state='disabled')
+        self.cancel_wave_button.pack(side='left',padx=(6,0))
+        self.wave_progress_bar=ttk.Progressbar(run,variable=self.progress_value,maximum=100,
+            mode='determinate',style='Wave.Horizontal.TProgressbar')
+        self.wave_progress_bar.pack(fill='x',pady=(0,6))
+        self.progress_label=tk.Label(run,textvariable=self.progress_stage,bg=PANEL,fg=INK,
+            font=('Segoe UI',9),wraplength=250,justify='left',anchor='w')
+        self.progress_label.pack(fill='x')
+        self.timing_label=tk.Label(run,textvariable=self.progress_timing,bg=PANEL,fg=MUTED,
+            font=('Segoe UI',8),wraplength=250,justify='left',anchor='w')
+        self.timing_label.pack(fill='x',pady=(3,0))
+
+        result=card('03  결과 보기')
+        self.figure_button=ttk.Button(result,text='2D 프로파일 창 열기',command=self._open_profile_window,state='disabled')
+        self.figure_button.pack(fill='x',pady=(0,6))
+        quantity_row=ttk.Frame(result);quantity_row.pack(fill='x',pady=3)
+        ttk.Label(quantity_row,text='미리보기').pack(side='left')
         quantity_combo=ttk.Combobox(quantity_row,textvariable=self.wave_quantity,
-            values=('Intensity','Phase'),state='readonly',width=10)
+            values=('Intensity','Phase'),state='readonly',width=11)
         quantity_combo.pack(side='right')
         quantity_combo.bind('<<ComboboxSelected>>',lambda _e:self._render_screen())
-        self.figure_button=ttk.Button(analysis_body,text='2D 프로파일 창 열기',command=self._open_profile_window,state='disabled')
-        self.figure_button.pack(fill='x',padx=12,pady=(4,3))
-        self.heatmap_caption=tk.StringVar(value='2D intensity  ·  I / I₀')
-        tk.Label(analysis_body,textvariable=self.heatmap_caption,bg=PANEL,fg=INK,
-                 font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
-        self.heatmap=tk.Canvas(analysis_body,width=264,height=250,bg='#fff',highlightthickness=1,
-                               highlightbackground=LINE)
-        self.heatmap.pack(padx=10,pady=0,fill='x')
+        self.heatmap_caption=tk.StringVar(value='2D intensity · I / I₀')
+        tk.Label(result,textvariable=self.heatmap_caption,bg=PANEL,fg=INK,wraplength=250,
+            font=('Segoe UI',8,'bold')).pack(anchor='w',pady=(5,4))
+        self.heatmap=tk.Canvas(result,width=250,height=250,bg='#fff',highlightthickness=1,highlightbackground=LINE)
+        self.heatmap.pack(fill='x')
         self.heatmap.bind('<Double-Button-1>',lambda _e:self._open_profile_window())
-        tk.Label(analysis_body,text='1D profile  ·  screen-local u',bg=PANEL,fg=INK,
-                 font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(12,3))
-        self.profile=tk.Canvas(analysis_body,height=145,bg='#fff',highlightthickness=1,
-                               highlightbackground=LINE)
-        self.profile.pack(padx=10,fill='x')
+        self.show_profile=tk.BooleanVar(value=False)
+        ttk.Checkbutton(result,text='1D 단면 보기',variable=self.show_profile,command=self._toggle_profile).pack(anchor='w',pady=(7,0))
+        self.profile_area=tk.Frame(result,bg=PANEL)
+        self.profile=tk.Canvas(self.profile_area,height=145,bg='#fff',highlightthickness=1,highlightbackground=LINE)
+        self.profile.pack(fill='x',pady=(6,0))
         self.profile.bind('<Configure>',lambda _e:self._render_screen())
+        ttk.Checkbutton(analysis_body,text='상세 수치 · q / ABCD / 광파워',variable=self.show_readout,
+            command=self._toggle_readout).pack(anchor='w',padx=12,pady=(0,5))
+        self.readout_frame=tk.Frame(analysis_body,bg='#f7f9fc',highlightthickness=1,highlightbackground=LINE)
         self.readout=tk.StringVar(value='—')
-        tk.Label(analysis_body,textvariable=self.readout,justify='left',anchor='nw',
-                 bg=PANEL,fg=INK,font=('Consolas',9),wraplength=280).pack(fill='x',padx=12,pady=(11,2))
-        tk.Label(analysis_body,
-          text='q: ideal Gaussian. Wave: scalar local planes;\nno RCWA, polarization or branch interference.',
-          bg=PANEL,fg=MUTED,justify='left',font=('Segoe UI',8)).pack(anchor='w',padx=12,pady=(5,10))
+        self.readout_label=tk.Label(self.readout_frame,textvariable=self.readout,justify='left',anchor='nw',
+            bg='#f7f9fc',fg=INK,font=('Consolas',9),wraplength=260,padx=10,pady=9)
+        self.readout_label.pack(fill='x')
+        self.analysis_footer=tk.Label(analysis_body,text='q: 이상적 Gaussian 기준 · Wave: scalar 근사',bg=PANEL,fg=MUTED,
+            font=('Segoe UI',8),wraplength=270,justify='left')
+        self.analysis_footer.pack(anchor='w',padx=12,pady=(2,10))
+        self._update_wave_progress()
+
+    def _analysis_layout(self,event):
+        self.analysis_canvas.configure(scrollregion=self.analysis_canvas.bbox('all'))
+        if not hasattr(self,'progress_label'):return
+        inner=max(180,event.width-44)
+        for label in (self.progress_label,self.timing_label,self.model_hint):label.configure(wraplength=inner)
+        self.analysis_state.configure(wraplength=max(180,event.width-40))
+
+    def _toggle_profile(self):
+        if self.show_profile.get():self.profile_area.pack(fill='x')
+        else:self.profile_area.pack_forget()
+        self._render_screen()
+
+    def _toggle_readout(self):
+        if self.show_readout.get():self.readout_frame.pack(fill='x',padx=10,pady=(0,8),before=self.analysis_footer)
+        else:self.readout_frame.pack_forget()
 
     def _bind_shortcuts(self):
         self.bind('<Control-s>',lambda _e:self._save())
@@ -825,17 +883,39 @@ class BenchApp(tk.Tk):
         self._draw_board()
         self._render_screen()
 
+    def _update_wave_progress(self):
+        now=time.monotonic();state=self.wave_progress.state
+        stage,timing=self.wave_progress.labels(now)
+        self.progress_value.set(self.wave_progress.fraction*100)
+        self.progress_stage.set(stage);self.progress_timing.set(timing)
+        elapsed=self.wave_progress.elapsed(now)
+        if state in ('running','cancelling'):
+            self.job_status.set(('취소 대기' if state=='cancelling' else '계산 중')+f' · {elapsed:.1f}s')
+            self.job_badge.configure(bg='#fff3df' if state=='cancelling' else '#eef3f9',
+                fg='#916723' if state=='cancelling' else ACCENT)
+        else:
+            labels={'idle':'준비','succeeded':f'완료 · {elapsed:.1f}s','cancelled':'취소됨','failed':'계산 오류'}
+            self.job_status.set(labels[state])
+            colors={'idle':('#eef3f9',MUTED),'succeeded':('#eaf5ee','#2d7650'),
+                    'cancelled':('#fff3df','#916723'),'failed':('#fceceb','#a4423d')}
+            bg,fg=colors[state];self.job_badge.configure(bg=bg,fg=fg)
+
     @staticmethod
-    def _compute_wave_snapshot(scene,result,reading,grid,cancel_event):
+    def _compute_wave_snapshot(scene,result,reading,grid,cancel_event,*,progress_callback=None):
         from wave_optics import trace_wave
         from wave_view import prepare_wave_view
         start=time.monotonic()
-        data=trace_wave(scene,result,reading,grid,cancel_event=cancel_event)
+        report=progress_callback or (lambda fraction,stage:None)
+        report(.02,'입력 광장과 경로 준비')
+        data=trace_wave(scene,result,reading,grid,cancel_event=cancel_event,
+            progress_callback=lambda fraction,stage:report(.04+.82*fraction,stage))
         target=next(c for c in scene['components'] if c['id']==reading.screen_id)
         data['target_label']=f'{reading.screen_id} / {reading.source_id} / branch {reading.branch_id}'
         from profile_data import timestamp_kst
         data['calculated_at']=timestamp_kst()
+        report(.90,'강도·위상 프로파일 준비')
         data['preview']=prepare_wave_view(data,reading,target)
+        report(.98,'결과 표시 준비')
         data['seconds']=time.monotonic()-start
         return data
 
@@ -853,27 +933,44 @@ class BenchApp(tk.Tk):
         reading=copy.deepcopy(reading)
         cancel=threading.Event();messages=queue.Queue()
         self._wave_cancel=cancel;self._wave_queue=messages;self.wave_busy=True;self.wave_error=None
+        self.wave_progress.begin(time.monotonic(),self._wave_durations.get(key))
         compute=self._compute_wave_snapshot
+        def progress(fraction,stage):messages.put(('progress',fraction,stage))
         def worker():
-            try:messages.put((key,compute(scene,result,reading,grid,cancel),None))
-            except Exception as error:messages.put((key,None,error))
+            try:
+                data=compute(scene,result,reading,grid,cancel,progress_callback=progress)
+                messages.put(('result',key,data,None))
+            except Exception as error:messages.put(('result',key,None,error))
         threading.Thread(target=worker,daemon=True,name='optical-wave-calculation').start()
         self._render_screen()
         self._wave_poll_id=self.after(40,self._poll_wave)
 
     def _poll_wave(self):
         if self._closing:return
-        try:key,data,error=self._wave_queue.get_nowait()
-        except queue.Empty:
-            self._wave_poll_id=self.after(40,self._poll_wave);return
+        while True:
+            try:message=self._wave_queue.get_nowait()
+            except queue.Empty:
+                self._update_wave_progress()
+                self._wave_poll_id=self.after(60,self._poll_wave);return
+            if message[0]=='result':_,key,data,error=message;break
+            _,fraction,stage=message
+            self.wave_progress.advance(fraction,stage)
         self._wave_poll_id=None;self.wave_busy=False
-        if not self._wave_cancel.is_set():
-            if error is not None:self.wave_error=(key,str(error))
-            else:self.wave_cache=(key,data);self.wave_error=None
+        if self._wave_cancel.is_set():self.wave_progress.finish(time.monotonic(),'cancelled')
+        elif error is not None:
+            self.wave_error=(key,str(error));self.wave_progress.finish(time.monotonic(),'failed')
+        else:
+            self.wave_cache=(key,data);self.wave_error=None
+            self.wave_progress.finish(time.monotonic(),'succeeded')
+            self._wave_durations.pop(key,None)
+            self._wave_durations[key]=self.wave_progress.elapsed(time.monotonic())
+            if len(self._wave_durations)>20:self._wave_durations.pop(next(iter(self._wave_durations)))
         self._render_screen()
 
     def _cancel_wave(self):
+        if not self.wave_busy:return
         if self._wave_cancel:self._wave_cancel.set()
+        self.wave_progress.request_cancel();self._update_wave_progress()
         self.analysis_status.set('취소 요청됨 — 현재 연산이 끝나면 중단합니다.')
 
     def destroy(self):
@@ -921,6 +1018,7 @@ class BenchApp(tk.Tk):
         self.compute_wave_button.configure(state='normal' if request and not self.wave_busy else 'disabled')
         key=request[0] if request else None
         if not self.wave_busy and self.wave_error and self.wave_error[0]==key:
+            self.analysis_state.configure(bg='#fceceb',fg='#a4423d')
             self.analysis_status.set('Wave unavailable: '+self.wave_error[1])
             self.readout.set('계산 실패. 설정을 수정하고 계산하기를 누르세요.')
             self.heatmap.delete('all');self.profile.delete('all');return
@@ -931,6 +1029,8 @@ class BenchApp(tk.Tk):
             if self.wave_busy:message='계산 중 — 이전 결과 표시: '+data['target_label']
             elif cached_key!=key:message='이전 설정 결과 / 재계산 필요: '+data['target_label']
             else:message=f'{data.get("method_label","Scalar ASM")} 계산 완료 ({data["seconds"]:.2f}s): '+data['target_label']
+            bg,fg=('#eef3f9',ACCENT) if self.wave_busy else (('#fff3df','#916723') if cached_key!=key else ('#eaf5ee','#2d7650'))
+            self.analysis_state.configure(bg=bg,fg=fg)
             self.analysis_status.set(message)
             self.readout.set(data['preview']['readout'])
             self._draw_wave_profile()
@@ -941,6 +1041,12 @@ class BenchApp(tk.Tk):
 
     def _render_screen(self):
         if not hasattr(self,'analysis_status'):return
+        self.compute_wave_button.configure(text='계산 중…' if self.wave_busy else '계산하기')
+        self.analysis_state.configure(bg='#eef3f9',fg=ACCENT)
+        self._update_wave_progress()
+        self.model_hint.configure(text=('Gaussian q · 즉시 미리보기' if not self.wave_mode.get() else
+            'Fresnel · 이상 렌즈, 구경·핀홀 생략' if self.wave_method.get()=='Fresnel' else
+            'ASM · 유한 구경·핀홀 포함'))
         readings=self._screen_selection()
         self.wave_display=None
         self.figure_button.configure(state='disabled')
@@ -963,6 +1069,7 @@ class BenchApp(tk.Tk):
         self.branch_combo.current(self.selected_branch_index)
         r=readings[self.selected_branch_index]
         if self.wave_mode.get():
+            self.heatmap_caption.set('2D phase · rad' if self.wave_quantity.get()=='Phase' else '2D intensity · I / I₀')
             self._render_wave_state();return
         self.figure_button.configure(state='normal')
         self.heatmap_caption.set('2D intensity  ·  I / I₀ (Gaussian)')
