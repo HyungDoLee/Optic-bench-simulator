@@ -130,6 +130,11 @@ Target의 Fourier bandwidth가 넓어지면 400 µm hole이 원하는 광장도 
    평균 횡방향 파수와 법선에 대한 평균 입사각도 각 도착면의 계산 데이터에 기록한다.
    0/+1이 공존하는 면의 평균 방향은 +1 chief ray와 같지 않다. 필터 이후 선택 차수의
    방향과 guide를 비교한다. q 경로는 계속 기준 축이며 광장 중심 경로로 바꾸지 않는다.
+9. **2D 프로파일 창 열기** 또는 작은 heatmap 더블클릭으로 독립 Matplotlib figure를 연다.
+   휠 확대, Pan/Zoom, Home/Back, 물리 mm 좌표·강도 확인, 선형/로그·색상 범위와
+   Intensity/Phase 전환 및 Save를 지원한다. 전체 FOV는 Full FOV로 복원한다.
+   여러 창은 같은 결과를 공유하거나 서로 다른 계산을 고정해 비교할 수 있으며,
+   장면/선택/새 계산으로 이미 열린 창이 바뀌지 않는다. 조작은 FFT를 재실행하지 않는다.
 
 waveGrid와 wavePropagation은 JSON에 저장한다. 모델 키가 없는 예전 scene은 ASM으로 연다.
 기존 slm_blaze_720nm.json/slm_vortex_720nm.json은 새 경사 입사 배치로 갱신했다.

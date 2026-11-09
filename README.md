@@ -1,5 +1,20 @@
 # Optical Bench — Python Desktop v0.3
 
+## 독립 2D profile figure
+
+Screen profile에서 **2D 프로파일 창 열기**를 누르거나 작은 heatmap을 더블클릭하면,
+MATLAB figure처럼 별도 창에서 원본 해상도의 결과를 볼 수 있습니다.
+Wave 모드에서는 먼저 **계산하기**를 눌러 결과를 만드세요. Gaussian q도 지원합니다.
+
+- 자유로운 창 크기 조절, 여러 결과 창을 동시에 열어 비교.
+- 툴바 Pan/Zoom/Home/Back/Forward, 마우스 휠로 커서 중심 확대·축소.
+- mm 좌표와 픽셀의 실제 강도 W/m² 확인, 선형/로그 표시, 정규화와 colormap/color limits 조절.
+- Wave 결과의 phase 보기와 색상 범례, 툴바 Save로 PNG/PDF/SVG 등 저장.
+- 각 창은 열었을 때의 고정 결과를 유지합니다. 확대·이동·저장은 광학 전파/FFT를 다시 실행하지 않습니다.
+
+새 의존성 **Matplotlib**을 포함해 `python -m pip install -r requirements.txt`로 갱신하세요.
+[독립 figure 구현·검증 보고서](reports/profile_figure_validation.md)를 참고하세요.
+
 ## Fresnel forward diffraction
 
 **GS 없이 입력한 SLM 위상이 만드는 광장을 전파합니다.**
@@ -89,8 +104,10 @@ examples/               JSON 예제
 wave_optics.py         별도 scalar ASM/복소 광장 엔진
 fresnel_optics.py      이상적 Fresnel/Collins 전파와 초점면 scaled FFT
 wave_view.py           수동 계산 결과의 고정 미리보기 준비
+profile_data.py        독립 figure의 원본 해상도/물리 단위 고정 데이터
+profile_figure.py      Matplotlib/Tk 독립 figure와 확대·이동·색상·저장
 hologram_validation.py 국소 pixel-array/GS 검증 모델
-requirements.txt        NumPy 계산 및 Pillow 이미지 표시
+requirements.txt        NumPy·Pillow·Matplotlib
 OpticalBench.pyw        Windows GUI 더블클릭 실행
 run_windows.bat         소스 프로그램 시작
 build_windows_exe.bat   Windows EXE 빌드

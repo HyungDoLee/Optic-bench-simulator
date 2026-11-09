@@ -2,9 +2,9 @@
 
 작성일: 2026-11-09
 
-작성 시각: 17:59:39 KST (UTC+09:00)
+작성 시각: 19:27:41 KST (UTC+09:00)
 
-{'passed': 92, 'failed': 0, 'error': 0, 'skipped': 0}
+{'passed': 97, 'failed': 0, 'error': 0, 'skipped': 0}
 
 Errors are absolute differences in the measurement units. The maximum per test mixes units; see JSON for each measurement and tolerance.
 Existing regression assertions retain their original verdict/tolerance. Inequality error means constraint violation. N/A means the test has no scalar numerical comparison (e.g. JSON validation or list comparison).
@@ -70,6 +70,11 @@ Existing regression assertions retain their original verdict/tolerance. Inequali
 | test_optics.OpticsTests.test_screen_radius_matches_manual_abcd | passed | 0 |
 | test_optics.OpticsTests.test_screen_tilt_projected_beam | passed | 0 |
 | test_optics.OpticsTests.test_splitter_branch_powers | passed | 0 |
+| test_profile_figure.ProfileDataTests.test_full_resolution_units_orientation_and_snapshot_ownership | passed | 9.09495e-13 |
+| test_profile_figure.ProfileDataTests.test_gaussian_screen_flux_and_projection_are_preserved | passed | 0 |
+| test_profile_figure.ProfileFigureGUITests.test_independent_windows_zoom_pan_history_and_cursor_without_fft | passed | 1.11022e-16 |
+| test_profile_figure.ProfileFigureGUITests.test_log_normalized_colors_phase_and_toolbar_png_save | passed | 0 |
+| test_profile_figure.ProfileFigureGUITests.test_open_snapshot_survives_recalculation_and_gaussian_mode | passed | 0 |
 | test_review_diagnostics.GSReviewTests.test_gs_phase_improves_reconstruction_and_filter_tradeoff | passed | 0 |
 | test_review_diagnostics.ReviewDiagnosticsTests.test_n_and_fov_convergence_are_checked_separately | passed | 1.00344e-08 |
 | test_review_diagnostics.ReviewDiagnosticsTests.test_pixel_envelope_predicts_16_pixel_blaze_main_order | passed | 2.498e-14 |

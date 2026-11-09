@@ -2,8 +2,8 @@
   "status": "passed",
   "platform": "Linux x86_64",
   "binary": "/workspace/scratch/optic-wave-dist/OpticalBench",
-  "sha256": "971e065632559cd5de4c06c3749b34a3cbb9683111a526f1edc4b8887796f651",
-  "source_base_commit": "222180564e8fea5c526f61ba80e4f339520d4263",
+  "sha256": "67b5d0e6e56ef1534ba5ee309151c07c272abce201adc2868c40e2f316601712",
+  "source_base_commit": "3d388d2b3e76c66810ea63783d19b7b52e845715",
   "source_has_uncommitted_changes": true,
   "python": "3.13.5",
   "windows_exe_tested": false,
@@ -12,10 +12,16 @@
     "load ideal Fresnel SLM preset",
     "select plane without auto calculation",
     "click calculate and render scaled Fourier intensity",
-    "switch cached phase display with real key/mouse events"
+    "switch cached phase display with real key/mouse events",
+    "open independent Matplotlib figure",
+    "real mouse-wheel zoom in packaged figure",
+    "real toolbar Pan and mouse drag in packaged figure"
   ],
   "screenshots": [
     "/workspace/Optic-bench-simulator/reports/screenshots/packaged-fresnel-intensity.png",
-    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-fresnel-phase.png"
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-fresnel-phase.png",
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-profile-figure.png",
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-profile-zoom.png",
+    "/workspace/Optic-bench-simulator/reports/screenshots/packaged-profile-pan.png"
   ]
 }

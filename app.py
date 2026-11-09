@@ -131,6 +131,7 @@ class BenchApp(tk.Tk):
         self._wave_queue=None
         self._wave_photo_data=None
         self._closing=False
+        self.profile_windows=[];self._profile_figure_number=0
         self.show_orders=tk.BooleanVar(value=True)
         self.wave_n=tk.IntVar(value=512)
         self.wave_width=tk.DoubleVar(value=4.)
@@ -351,12 +352,15 @@ class BenchApp(tk.Tk):
             values=('Intensity','Phase'),state='readonly',width=10)
         quantity_combo.pack(side='right')
         quantity_combo.bind('<<ComboboxSelected>>',lambda _e:self._render_screen())
+        self.figure_button=ttk.Button(analysis_body,text='2D 프로파일 창 열기',command=self._open_profile_window,state='disabled')
+        self.figure_button.pack(fill='x',padx=12,pady=(4,3))
         self.heatmap_caption=tk.StringVar(value='2D intensity  ·  I / I₀')
         tk.Label(analysis_body,textvariable=self.heatmap_caption,bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(8,3))
         self.heatmap=tk.Canvas(analysis_body,width=264,height=250,bg='#fff',highlightthickness=1,
                                highlightbackground=LINE)
         self.heatmap.pack(padx=10,pady=0,fill='x')
+        self.heatmap.bind('<Double-Button-1>',lambda _e:self._open_profile_window())
         tk.Label(analysis_body,text='1D profile  ·  screen-local u',bg=PANEL,fg=INK,
                  font=('Segoe UI',9,'bold')).pack(anchor='w',padx=13,pady=(12,3))
         self.profile=tk.Canvas(analysis_body,height=145,bg='#fff',highlightthickness=1,
@@ -828,8 +832,10 @@ class BenchApp(tk.Tk):
         start=time.monotonic()
         data=trace_wave(scene,result,reading,grid,cancel_event=cancel_event)
         target=next(c for c in scene['components'] if c['id']==reading.screen_id)
-        data['preview']=prepare_wave_view(data,reading,target)
         data['target_label']=f'{reading.screen_id} / {reading.source_id} / branch {reading.branch_id}'
+        from profile_data import timestamp_kst
+        data['calculated_at']=timestamp_kst()
+        data['preview']=prepare_wave_view(data,reading,target)
         data['seconds']=time.monotonic()-start
         return data
 
@@ -879,6 +885,30 @@ class BenchApp(tk.Tk):
             self._wave_poll_id=None
         super().destroy()
 
+    def _open_profile_window(self):
+        if self._closing:return
+        try:
+            from profile_data import wave_profile,gaussian_profile
+            from profile_figure import ProfileFigure
+            if self.wave_mode.get():
+                if self.wave_display is None:return
+                snapshot=wave_profile(self.wave_display)
+                context=self.analysis_status.get()
+                quantity=self.wave_quantity.get()
+            else:
+                readings=self._screen_selection()
+                if not readings:return
+                reading=readings[min(self.selected_branch_index,len(readings)-1)]
+                snapshot=gaussian_profile(reading,self._plot_halfspan(reading))
+                context='Gaussian q 결과의 고정된 프로파일입니다.';quantity='Intensity'
+            self._profile_figure_number+=1
+            window=ProfileFigure(self,snapshot,self._profile_figure_number,quantity,context,
+                on_close=lambda figure:self.profile_windows.remove(figure) if figure in self.profile_windows else None)
+            self.profile_windows.append(window)
+            return window
+        except ImportError as error:
+            messagebox.showerror('Figure dependency',f'{error}\npython -m pip install -r requirements.txt')
+
     def _render_wave_state(self):
         self.wave_display=None
         self.cancel_wave_button.configure(state='normal' if self.wave_busy else 'disabled')
@@ -897,6 +927,7 @@ class BenchApp(tk.Tk):
         if self.wave_cache and request:
             cached_key,data=self.wave_cache
             self.wave_display=data
+            self.figure_button.configure(state='normal')
             if self.wave_busy:message='계산 중 — 이전 결과 표시: '+data['target_label']
             elif cached_key!=key:message='이전 설정 결과 / 재계산 필요: '+data['target_label']
             else:message=f'{data.get("method_label","Scalar ASM")} 계산 완료 ({data["seconds"]:.2f}s): '+data['target_label']
@@ -912,6 +943,7 @@ class BenchApp(tk.Tk):
         if not hasattr(self,'analysis_status'):return
         readings=self._screen_selection()
         self.wave_display=None
+        self.figure_button.configure(state='disabled')
         self.current_readings=readings
         self.branch_combo['values']=[f'Branch {r.branch_id} / {r.source_id}' for r in readings]
         self.compute_wave_button.configure(state='normal' if readings and not self.wave_busy else 'disabled')
@@ -932,6 +964,7 @@ class BenchApp(tk.Tk):
         r=readings[self.selected_branch_index]
         if self.wave_mode.get():
             self._render_wave_state();return
+        self.figure_button.configure(state='normal')
         self.heatmap_caption.set('2D intensity  ·  I / I₀ (Gaussian)')
         self.analysis_status.set(f'Beam detected  •  {r.source_id}  •  branch {r.branch_id}')
         self.readout.set(

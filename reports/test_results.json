@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-09T17:59:39.891426+09:00",
+  "generated_at": "2026-11-09T19:27:41.200157+09:00",
   "python": "3.13.5",
   "counts": {
-    "passed": 92,
+    "passed": 97,
     "failed": 0,
     "error": 0,
     "skipped": 0
@@ -3158,6 +3158,365 @@
             "args": [],
             "kwargs": {}
           }
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_profile_figure.ProfileDataTests.test_full_resolution_units_orientation_and_snapshot_ownership",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "physical intensity mW/mm\u00b2 -> W/m\u00b2",
+          "actual": 3999.999999999999,
+          "expected": 4000.0,
+          "absolute_error": 9.094947017729282e-13,
+          "relative_error": 2.2737367544323206e-16,
+          "tolerance": 4.0010000000000004e-07,
+          "passed": true
+        },
+        {
+          "name": "cursor preserves row/origin lower",
+          "actual": 40,
+          "expected": 40,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 4.1e-09,
+          "passed": true
+        },
+        {
+          "name": "cursor preserves column",
+          "actual": 50,
+          "expected": 50,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 5.1e-09,
+          "passed": true
+        },
+        {
+          "name": "positive v stays positive [mm]",
+          "actual": 0.5,
+          "expected": 0.5,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5e-10,
+          "passed": true
+        },
+        {
+          "name": "pixel phase [rad]",
+          "actual": 0.7,
+          "expected": 0.7,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.7e-10,
+          "passed": true
+        },
+        {
+          "name": "snapshot survives original field change",
+          "actual": 3999.999999999999,
+          "expected": 4000.0,
+          "absolute_error": 9.094947017729282e-13,
+          "relative_error": 2.2737367544323206e-16,
+          "tolerance": 4.0010000000000004e-07,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 9.094947017729282e-13
+    },
+    {
+      "test": "test_profile_figure.ProfileDataTests.test_gaussian_screen_flux_and_projection_are_preserved",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "Gaussian profile integrated power [mW]",
+          "actual": 10.0,
+          "expected": 10.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.1000000000000001e-08,
+          "passed": true
+        },
+        {
+          "name": "Gaussian center peak W/m\u00b2",
+          "actual": 15872.103761230775,
+          "expected": 15872.103761230775,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.5873103761230777e-06,
+          "passed": true
+        },
+        {
+          "name": "Gaussian phase not fabricated",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0.0
+    },
+    {
+      "test": "test_profile_figure.ProfileFigureGUITests.test_independent_windows_zoom_pan_history_and_cursor_without_fft",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "figure disabled before explicit wave calculation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "popup honors phase selected in main window",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "two independently resizable figures",
+          "actual": 2,
+          "expected": 2,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 3e-10,
+          "passed": true
+        },
+        {
+          "name": "wheel zoom reduces physical span",
+          "actual": 0.7999999999999999,
+          "expected": 0.8,
+          "absolute_error": 1.1102230246251565e-16,
+          "relative_error": 1.3877787807814457e-16,
+          "tolerance": 1.8e-10,
+          "passed": true
+        },
+        {
+          "name": "second window view unchanged",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Back restores previous span",
+          "actual": 2.9039999999999995,
+          "expected": 2.9039999999999995,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.9039999999999997e-10,
+          "passed": true
+        },
+        {
+          "name": "toolbar pan changes view",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Full FOV width [mm]",
+          "actual": 12.287999999999998,
+          "expected": 12.287999999999998,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.3288e-09,
+          "passed": true
+        },
+        {
+          "name": "Home restores initial beam view",
+          "actual": 2.9039999999999995,
+          "expected": 2.9039999999999995,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 3.9039999999999997e-10,
+          "passed": true
+        },
+        {
+          "name": "physical cursor value shown",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "closing one figure preserves the other",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "all figure references released on close",
+          "actual": 0,
+          "expected": 0,
+          "absolute_error": 0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "test": "test_profile_figure.ProfileFigureGUITests.test_log_normalized_colors_phase_and_toolbar_png_save",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "figure disabled before explicit wave calculation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "normalized color maximum",
+          "actual": 1.0,
+          "expected": 1.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "colormap preserves custom color limits",
+          "actual": 0.001,
+          "expected": 0.001,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.0010000000000001e-10,
+          "passed": true
+        },
+        {
+          "name": "colormap preserves maximum",
+          "actual": 0.8,
+          "expected": 0.8,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1.8e-10,
+          "passed": true
+        },
+        {
+          "name": "color edits preserve view",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "invalid log limit rejected",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "phase bounds retained [rad]",
+          "actual": 3.141592653589793,
+          "expected": 3.141592653589793,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 4.1415926535897935e-10,
+          "passed": true
+        },
+        {
+          "name": "toolbar exports large actual figure",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "saved image contains plotted data",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "display controls never modify physical intensity",
+          "actual": 0.0,
+          "expected": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": null,
+          "tolerance": 1e-10,
+          "passed": true
+        }
+      ],
+      "max_absolute_error": 0
+    },
+    {
+      "test": "test_profile_figure.ProfileFigureGUITests.test_open_snapshot_survives_recalculation_and_gaussian_mode",
+      "status": "passed",
+      "measurements": [
+        {
+          "name": "figure disabled before explicit wave calculation",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "new calculation differs from old frozen figure",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Gaussian q has its own standalone figure",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "Gaussian view has no fabricated phase",
+          "actual": 1,
+          "expected": 1,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 2e-10,
+          "passed": true
+        },
+        {
+          "name": "all comparison figures remain open",
+          "actual": 3,
+          "expected": 3,
+          "absolute_error": 0,
+          "relative_error": 0.0,
+          "tolerance": 4e-10,
+          "passed": true
         }
       ],
       "max_absolute_error": 0

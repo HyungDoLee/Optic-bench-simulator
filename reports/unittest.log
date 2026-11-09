@@ -57,6 +57,11 @@ test_reject_bad_scene (test_optics.OpticsTests.test_reject_bad_scene) ... ok
 test_screen_radius_matches_manual_abcd (test_optics.OpticsTests.test_screen_radius_matches_manual_abcd) ... ok
 test_screen_tilt_projected_beam (test_optics.OpticsTests.test_screen_tilt_projected_beam) ... ok
 test_splitter_branch_powers (test_optics.OpticsTests.test_splitter_branch_powers) ... ok
+test_full_resolution_units_orientation_and_snapshot_ownership (test_profile_figure.ProfileDataTests.test_full_resolution_units_orientation_and_snapshot_ownership) ... ok
+test_gaussian_screen_flux_and_projection_are_preserved (test_profile_figure.ProfileDataTests.test_gaussian_screen_flux_and_projection_are_preserved) ... ok
+test_independent_windows_zoom_pan_history_and_cursor_without_fft (test_profile_figure.ProfileFigureGUITests.test_independent_windows_zoom_pan_history_and_cursor_without_fft) ... ok
+test_log_normalized_colors_phase_and_toolbar_png_save (test_profile_figure.ProfileFigureGUITests.test_log_normalized_colors_phase_and_toolbar_png_save) ... ok
+test_open_snapshot_survives_recalculation_and_gaussian_mode (test_profile_figure.ProfileFigureGUITests.test_open_snapshot_survives_recalculation_and_gaussian_mode) ... ok
 test_gs_phase_improves_reconstruction_and_filter_tradeoff (test_review_diagnostics.GSReviewTests.test_gs_phase_improves_reconstruction_and_filter_tradeoff) ... ok
 test_n_and_fov_convergence_are_checked_separately (test_review_diagnostics.ReviewDiagnosticsTests.test_n_and_fov_convergence_are_checked_separately) ... ok
 test_pixel_envelope_predicts_16_pixel_blaze_main_order (test_review_diagnostics.ReviewDiagnosticsTests.test_pixel_envelope_predicts_16_pixel_blaze_main_order) ... ok
@@ -92,6 +97,6 @@ test_sampling_guards_and_cumulative_cap (test_wave_optics.WaveTests.test_samplin
 test_traced_4f_wave_against_independent_theory (test_wave_optics.WaveTests.test_traced_4f_wave_against_independent_theory) ... ok
 
 ----------------------------------------------------------------------
-Ran 92 tests in 50.002s
+Ran 97 tests in 54.401s
 
 OK

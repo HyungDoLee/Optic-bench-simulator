@@ -1,6 +1,7 @@
 # 검증 보고서
 
-최신 통합 보고서: [Fresnel forward diffraction 및 레이저 귀환광 종단 검증](fresnel_forward_validation.md).
+최신 기능 보고서: [독립 2D profile figure 구현 및 검증](profile_figure_validation.md).
+물리 모델 보고서: [Fresnel forward diffraction 및 레이저 귀환광 종단 검증](fresnel_forward_validation.md).
 전체 테스트: [요약](test_results.md), [측정값·오차·허용값](test_results.json).
 
 ## 날짜·시간 표기 규칙

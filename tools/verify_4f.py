@@ -18,6 +18,13 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
 
+def json_scalar(value):
+    """Matplotlib/NumPy measurements may carry scalar bool/int/float types."""
+    import numpy as np
+    if isinstance(value,np.generic):return value.item()
+    raise TypeError(f'Unsupported report value: {type(value).__name__}')
+
+
 class RecordedResult(unittest.TextTestResult):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -91,7 +98,7 @@ def main():
     generated=datetime.now(timezone(timedelta(hours=9),name='KST'))
     payload=dict(generated_at=generated.isoformat(),
                  python=sys.version.split()[0],counts=counts,tests=result.records)
-    (args.output/'test_results.json').write_text(json.dumps(payload,indent=2),encoding='utf-8')
+    (args.output/'test_results.json').write_text(json.dumps(payload,indent=2,default=json_scalar),encoding='utf-8')
     lines=['# 720 nm 4f automated verification','',
            f'작성일: {generated:%Y-%m-%d}','',
            f'작성 시각: {generated:%H:%M:%S} KST (UTC+09:00)','',
